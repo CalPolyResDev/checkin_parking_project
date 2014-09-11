@@ -262,11 +262,16 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.staticfiles',
     'raven.contrib.django.raven_compat',
-    'dajaxice',
+    'django_ajax',
     'rmsconnector',
+    'checkin_parking.administration',
     'checkin_parking.core',
     'checkin_parking.core.templatetags',
-    'south',
+    'checkin_parking.pdfs',
+    'checkin_parking.residents',
+    'checkin_parking.sessions',
+    'checkin_parking.statistics',
+    'checkin_parking.zones',
 )
 
 # ======================================================================================================== #
