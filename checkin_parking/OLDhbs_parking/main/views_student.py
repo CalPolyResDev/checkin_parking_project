@@ -15,40 +15,6 @@ from PIL import Image
 import datetime
 
 #
-# hbs_parking student views
-# These views control the display and modification of hbs_parking.main's student pages
-#
-# Author: Chase Voorhees
-# Email:  chase@cjvoorhees.com
-# Author: Alex Kavanaugh
-# Email : kavanaugh.development@outlook.com
-#
-
-
-#
-# The following views are permissions tests - this determines what permissions a user must have to be able to access a view.
-# It returns either true or false, based on whether or not the test is passed. This allows for major code reduction by using
-# the @user_passes_test decorator.
-#
-# For more information, see "Limiting Access to Users Who Pass a Test" in chapter 14 of the DjangoBook 2.0
-#     http://www.djangobook.com/en/2.0/chapter14/
-def reserve_test(user):
-    if user.is_authenticated():
-        if user.has_reserved:
-            return False
-        else:
-            return True
-    return False
-
-def view_reservation_test(user):
-    if user.is_authenticated():
-        if user.has_reserved:
-            return True
-        elif user.is_developer or user.is_staff:
-            return True
-    return False
-
-#
 # Allows students to reserve sessions
 # Does not display full sessions, past sessions, and sessions outside of currentUser building zone
 #

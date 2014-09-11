@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.generic import RedirectView
 
-from checkin_parking.settings.base import ral_manager_access_test
+from .settings.base import ral_manager_access_test
 from .core.views import IndexView, LoginView, logout
 
 
@@ -64,8 +64,7 @@ urlpatterns = patterns('',
 
 # Sessions
 urlpatterns = patterns('',
-    url(r'^sessions/list/$', login_required(), name='list_sessions'),
-    url(r'^sessions/update/$', login_required(), name='update_sessions'),
+    url(r'^sessions/list/$', login_required(ral_manager_access()), name='list_sessions'),
     url(r'^sessions/create/$', login_required(ral_manager_access()), name='create_sessions'),
     url(r'^sessions/edit/$', login_required(ral_manager_access()), name='edit_session'),
     url(r'^sessions/delete/$', login_required(ral_manager_access()), name='delete_session'),
@@ -73,6 +72,7 @@ urlpatterns = patterns('',
     url(r'^sessions/reservation/detail/$', login_required(), name='view_reservation'),
     url(r'^sessions/reservation/change/$', login_required(), name='change_reservation'),
     url(r'^sessions/reservation/cancel/$', login_required(), name='cancel_reservation'),
+    url(r'^sessions/update/$', login_required(), name='update_sessions'),
 )
 
 # Zones

@@ -16,28 +16,6 @@ from django.conf import settings
 import os, datetime, time
 
 #
-# hbs_parking admin views
-# These views control the display and modification of hbs_parking.main's admin pages
-#
-# Author: Chase Voorhees
-# Email:  chase@cjvoorhees.com
-# Author: Alex Kavanaugh
-# Email : kavanaugh.development@outlook.com
-#
-
-#
-# The following views are permissions tests - this determines what permissions a user must have to be able to access a view.
-# It returns either true or false, based on whether or not the test is passed. This allows for major code reduction by using
-# the @user_passes_test decorator.
-#
-# For more information, see "Limiting Access to Users Who Pass a Test" in chapter 14 of the DjangoBook 2.0
-#     http://www.djangobook.com/en/2.0/chapter14/
-def admin_test(user):
-    if user.is_authenticated() and (user.is_developer or user.is_staff):
-        return True
-    return False
-
-#
 # Lists session data
 #
 @user_passes_test(admin_test)
