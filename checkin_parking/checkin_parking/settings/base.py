@@ -242,6 +242,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'resnet_internal.core.context_processors.specializations',
     'django.contrib.messages.context_processors.messages',
+    'checkin_parking.core.context_processors.display_name',
+    'checkin_parking.core.context_processors.reservation_status',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -321,9 +323,19 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': False,
         },
-        'dajaxice': {
-            'handlers': ['console'],
+        'django_auth_ldap': {
             'level': 'INFO',
+            'handlers': ['sentry'],
+            'propagate': True,
+        },
+        'django_ajax': {
+            'level': 'INFO',
+            'handlers': ['sentry'],
+            'propagate': True,
+        },
+        'django_datatables_view': {
+            'level': 'INFO',
+            'handlers': ['sentry'],
             'propagate': True,
         },
     }
