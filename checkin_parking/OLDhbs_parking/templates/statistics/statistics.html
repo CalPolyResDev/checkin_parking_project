@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load dict_filters %}
+
+{% block meta %}
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.fancybox.css" media="screen" />
+<script type="text/javascript" src="/static/js/jquery.fancybox.pack.js"></script>
+<script type="text/javascript" src="/static/js/highcharts.js"></script>
+<script type="text/javascript">
+	$(document).ready( function(){
+		$(".fancybox").fancybox({
+	        padding    : 0,
+	        margin     : 5,
+	        type       : 'iframe',
+	        width      : '80%',
+	        nextEffect : 'none',
+	        prevEffect : 'none',
+		});
+	    $('#dateSelector').change( function(){
+			$('#chart0frame').attr('src', '0/' + $('#dateSelector').val());
+			$('#chart1frame').attr('src', '1/' + $('#dateSelector').val());
+			$('#chart0link').attr('href', 'full/0/' + $('#dateSelector').val());
+			$('#chart1link').attr('href', 'full/1/' + $('#dateSelector').val());			
+	    });
+	});
+</script>
+{% endblock %}
+
+{% block subtitle %} | Statistics{% endblock %}
+
+{% block content %}
+	<div id="content">
+		<div id="mainLeftFull">
+			<h1>Reservation Statistics</h1>
+			<h3>Sort by date:</h3>
+			<select id="dateSelector">
+				<option value="all" selected="selected">All</option>
+				{% for i in dates|length|getrange %}
+	        	{% with dates|keyvalue:i as date %}
+	        	<option value="{{ date.value }}">{{ date.display|date }}</option>
+	        	{% endwith %}
+	        	{% endfor %}
+			</select>
+			<div class="clear"></div>
+			<iframe style="padding-top: 5px" id="chart0frame" src="{% url 'stats-chart-0' 'all' %}" width="100%" height="440px" sandbox="" seamless="seamless"></iframe>
+			<p>
+				<a href="{% url 'stats-chart-0-full' 'all' %}" class="fancybox fancybox.iframe" id="chart0link">Pop out the above chart</a>
+			</p>
+			<div class="clear"></div>
+			<iframe style="padding-top: 5px" id="chart1frame" src="{% url 'stats-chart-1' 'all' %}" width="100%" height="440px" sandbox="" seamless="seamless"></iframe>
+			<p>
+				<a href="{% url 'stats-chart-1-full' 'all' %}" class="fancybox fancybox.iframe" id="chart1link">Pop out the above chart</a>
+			</p>
+		</div>
+	</div>
+{% endblock %}

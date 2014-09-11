@@ -1,0 +1,140 @@
+@charset "UTF-8";
+table{
+	font-family:"Calibri",Arial,Helvetica,sans-serif;
+	font-size:14px;
+	color:#363636;
+}
+
+table p{
+	color:#363636
+}
+
+#mainLeft table a:link,#mainLeft table a:visited,#mainLeftFull table a:link,#mainLeftFull table a:visited,#mainColFull table a:link,#mainColFull table a:visited{
+	text-decoration:underline;
+	line-height:17px;
+	font-size:14px;
+	color:#555
+}
+
+table a:hover,table a:focus,table a:active,#mainLeft table a:hover,#mainLeft table a:focus,#mainLeft table a:active,#mainLeftFull table a:hover,#mainLeftFull table a:focus,#mainLeftFull table a:active,#mainColFull table a:hover,#mainColFull table a:focus,#mainColFull table a:active{
+	text-decoration:underline;
+	color:#17476f
+}
+
+#mainLeft table p a:link,#mainLeft table p a:visited,#mainLeftFull table p a:link,#mainLeftFull table p a:visited,#mainColFull table p a:link,#mainColFull table p a:visited{
+	text-decoration:underline;
+	line-height:17px;
+	font-size:14px;
+	color:#555
+}
+
+table p a:hover,table p a:focus,table p a:active,#mainLeft table p a:hover,#mainLeft table p a:focus,#mainLeft table p a:active,#mainLeftFull table p a:hover,#mainLeftFull table p a:focus,#mainLeftFull table p a:active,#mainColFull table p a:hover,#mainColFull table p a:focus,#mainColFull table p a:active{
+	text-decoration:underline;
+	color:#17476f
+}
+
+th,th p,#mainColFull table th a,#mainLeftFull table th a,#mainLeft table th a,#mainColFull table th p,#mainLeftFull table th p,#mainLeft table th p,#mainColFull table th p a,#mainLeftFull table th p a,#mainLeft table th p a{
+	background-color:#29551a;
+	color:#fff;
+	font-weight:bold;
+	text-transform:uppercase;
+	letter-spacing:1px;
+	margin:0
+}
+
+#mainLeft table th a:link,#mainLeft table th a:visited,#mainLeftFull table th a:link,#mainLeftFull table th a:visited,#mainColFull table th a:link,#mainColFull table th a:visited{
+	border-bottom:0;
+	text-decoration:underline;
+	color:#FFF
+}
+
+#mainLeft table th a:hover,#mainLeft table th a:focus,#mainLeft table th a:active,#mainLeftFull table th a:hover,#mainLeftFull table th a:focus,#mainLeftFull table th a:active,#mainColFull table th a:hover,#mainColFull table th a:focus,#mainColFull table th a:active{
+	color:#FFF;
+	text-decoration:underline
+}
+
+tr{
+	height:25px
+}
+
+td,th{
+	text-align:left;
+	line-height:17px
+}
+
+td p{
+	margin:0;
+	font-size:14px
+}
+
+table td.table_text_center,table th.table_text_center{
+	text-align:center
+}
+
+table td.table_text_right,table th.table_text_right{
+	text-align:right
+}
+
+table img{
+	margin:0
+}
+
+table th img.image_left_noborder,table td img.image_left_noborder{
+	margin:0
+}
+
+table th img.image_center,table td img.image_center{
+	display:block;
+	margin:0 auto
+}
+
+table th img.image_right_noborder,table td img.image_right_noborder{
+	margin:0
+}
+
+table caption{
+	color:#6a6a6a;
+	font-size:13px;
+	line-height:1.2em;
+	padding-bottom:12px
+}
+
+table caption strong{
+	font-weight:bold
+}
+
+table caption em{
+	font-style:italic
+}
+
+table .odd{
+	background-color:#f6f3ec
+}
+
+table .even{
+	background-color:#e6e4dc
+}
+
+table .table_greenText th{
+	color:#29551a;
+	font-weight:bold;
+	text-transform:uppercase;
+	letter-spacing:1px;
+	background-color:#fffefa
+}
+
+table.table_directory{
+	background-color:#fffefa
+}
+
+table.table_directory tr{
+	background-color:#f9f6ef
+}
+
+table.table_directory tr:hover{
+	background-color:#e6e4dc
+}
+
+table.table_noStyle td,tr{
+	background-color:#fffefa
+}

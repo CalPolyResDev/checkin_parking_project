@@ -1,0 +1,12 @@
+Django==1.7
+git+https://code.resdev.calpoly.edu/scm/rmsc/rmsconnector.git@866af46#egg=rmsconnector==3.1.3
+unipath==1.0
+colorama==0.3.2
+django-auth-ldap==1.2.1
+djangoajax=2.2.11
+raven==5.0.0
+
+# Manual Install
+python-ldap==2.4.15
+mysql-python==1.2.5
+cx_Oracle==5.1.3

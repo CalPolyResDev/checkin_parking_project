@@ -1,0 +1,100 @@
+@charset "UTF-8";
+/* CSS Document (charset statement must appear first)*/
+
+/*========================================================================
+Cal Poly Template Custom Web Stylesheet - screen.css for screen display
+
+Alex Kavanaugh - Cal Poly ResNet Development Team
+=========================================================================*/
+
+#mainColFull {
+    border-top: none;
+}
+
+#mainColFull p {
+    width:auto;
+}
+
+#header #loginDisplay ul li a{
+    text-decoration:none;
+    color:#363636;
+    margin:0;
+    padding:0;
+    font-weight:bolder;
+    float:none;
+}
+
+#header #loginDisplay ul li a:active,#header #loginDisplay ul li a:hover,#header #loginDisplay ul li a:focus{
+    color:#6f6345;
+}
+
+form input[type="text"] {
+    width:auto;
+    padding:0px;
+}
+
+form fieldset {
+    padding:2% 5%;
+}
+
+#search_form fieldset p {
+    float: left;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 0px;
+}
+
+#fd_generation_form fieldset p {
+    float: left;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 0px;
+}
+
+#search_form input[type="text"] {
+    height:23px;
+}
+
+#locationContainer ul {
+    list-style-type: none;
+    margin: 10px 0 10px 20px;
+    padding: 5px;
+    min-height: 1em;
+    border: 2px dashed #c9ebbe;
+    background-color: #FAFAF4;
+}
+#locationContainer li {
+    margin: 5px 0 10px 25px;
+    padding: 10px;
+    text-align: center;
+    width:180px;
+    font-weight:bolder;
+    color:#343634;
+    border: 2px solid #29551a;
+    background-color: #fffefa;
+}
+
+#locationBox fieldset ul{
+    margin: 0;
+    padding: 0;
+    vertical-align:top;
+    border:none;
+    background:none;
+}
+
+#locationBox fieldset li{
+    display:inline-block;
+}
+
+.left_column {
+    padding: 0 10% 0 0;
+    border-right: 1px solid rgb(209, 207, 199);
+    margin-right: 1%;
+    width: 40%;
+    float: left;
+}
+
+.right_column {
+    width: 40%;
+    float: right;
+}

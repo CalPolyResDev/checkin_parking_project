@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load dict_filters %}
+
+{% block subtitle %} | PDF Map Upload{% endblock %}
+
+{% block content %}
+	<div id="content">
+		<div id="mainLeftFull">
+			<h1>PDF Map Upload</h1>
+			<p>The following fields may be used to upload informational PDF maps. Links to these maps are displayed when a student views his/her reservation.</p>
+			<form method="post" enctype="multipart/form-data" id="zone_text_form">
+				<p>
+					{{ form.non_field_errors }}
+				</p>
+					{% for field in form %}
+			        <p>
+			        	{{ field.errors }}
+			            <h3><label for="id_<field-name>">{{ field.label }}:</label></h3>
+			            {{ field }}
+			        </p>
+				    {% endfor %}
+				<p>
+					<input type="submit" value="Upload" />
+				</p>
+				{% csrf_token %}
+			</form>
+		</div>
+	</div>
+{% endblock %}

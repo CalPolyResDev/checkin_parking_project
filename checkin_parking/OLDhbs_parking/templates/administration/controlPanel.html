@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load dict_filters %}
+
+{% block meta %}
+<link href="/static/css/jquery.switch.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/js/jquery.switch.min.js"></script>
+<script type="text/javascript">
+	$(document).ready( function(){
+		$('#rStatus').switchify();
+		$('#wMode').switchify();
+		
+	    $('#rStatus').switchify().data('switch').bind('switch:slide', function(e, type) {
+	        Dajaxice.hbs_parking.main.request_controlPanel(Dajax.process,{'switch':'rStatus', 'toggle':type});
+	    });
+	    $('#wMode').switchify().data('switch').bind('switch:slide', function(e, type) {
+	        Dajaxice.hbs_parking.main.request_controlPanel(Dajax.process,{'switch':'wMode','toggle':type});
+	    });
+	});
+	function dumpData() {
+		var response = confirm('Warning: This action will permanently delete all Session and Student data from the database. There is no going back. Are you sure you wish to continue?'); 
+		if (response) {
+			Dajaxice.hbs_parking.main.request_purgeTables(Dajax.process);
+		} else {
+			return false;
+		}
+	};
+	function dumpRegs() {
+		var response = confirm('Warning: This action will permanently delete all Student data and Registrations. There is no going back. Are you sure you wish to continue?'); 
+		if (response) {
+			Dajaxice.hbs_parking.main.request_purgeRegs(Dajax.process);
+		} else {
+			return false;
+		}
+	};
+</script>
+{% endblock %}
+
+{% block subtitle %} | Control Panel{% endblock %}
+
+{% block content %}
+	<div id="content">
+	    <div id="mainLeftFull">
+	        <h1>Control Panel</h1>
+	        <h2>Reservation Status</h2>
+	        <p>This controls whether or not students are allowed to reserve new sessions.</p>
+	            <select id="rStatus">
+				    <option value="open"{% if request.session.settings.status_is_open %}selected="selected"{% endif %}>Open</option>
+				    <option value="closed"{% if not request.session.settings.status_is_open %}selected="selected"{% endif %}>Closed</option>
+			    </select>
+			<h2 style="padding-top: 30px">Website Mode</h2>
+	        <p>This changes the mode of the website between Move-in and Move-out.</p>
+		        <select id="wMode">
+				    <option value="move_in"{% if request.session.settings.mode_is_move_in %}selected="selected"{% endif %}>Move-in</option>
+				    <option value="move_out"{% if not request.session.settings.mode_is_move_in %}selected="selected"{% endif %}>Move-out</option>
+			    </select>
+			<h2 style="padding-top: 30px">Term Code</h2>
+	        <p>The RMS term code. This setting is used to determine which students are allowed to reserve sessions.</p>
+			    <form method="post" id="term_code_form">
+				<p>
+					{{ form.non_field_errors }}
+				</p>
+		        <p>
+		        	{{ form.term_code.errors }}
+		            {{ form.term_code }}&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Update" />
+		        </p>
+				{% csrf_token %}
+			</form>
+			<h2 style="padding-top: 30px">Purge Session Data</h2>
+			<p>The following button purges the session AND user tables of the database. This action is irreversible.</p>
+			<form>
+				<p>
+					<input type="button" value="Dump Session Data" onclick="dumpData();"/>
+				</p>
+			</form>
+			<h2 style="padding-top: 30px">Purge Registration Data</h2>
+			<p>The following button purges the user tables AND registration data from the database. This action is irreversible.</p>
+			<form>
+				<p>
+					<input type="button" value="Dump Registration Data" onclick="dumpRegs();"/>
+				</p>
+			</form>
+	    </div>        
+	</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load dict_filters %}
+
+{% block meta %}
+<script type="text/javascript">
+	$(function() {
+		/* Sortable Zones */
+		$('{% for i in zones|length|getrange %}{% with zones|keyvalue:i as zone %}#sortable_zone_{{ zone.key }}, {% endwith %}{% endfor %}#sortable_zone_{{ locations.key }}').sortable({
+				connectWith: ".sortable_zone",
+				opacity: 0.6,
+				cursor: 'move',
+				update: function(){
+					var listContent = $(this).sortable('toArray');
+					var zoneKey = $(this).attr('id');
+					Dajaxice.hbs_parking.main.request_modifyZone(Dajax.process,{'locationList':listContent, 'zoneKey':zoneKey});
+				},
+			}).disableSelection();
+		});
+</script>
+{% endblock %}
+
+{% block subtitle %} | Zone List{% endblock %}
+
+{% block content %}
+	<div id="content">  
+	    <div id="mainLeftFull">
+	        <h1>Zone List</h1>
+	        <p>The following is a list of locations, along with prospective zones. To move a location into a zone, simply drag it from its current position. You may build up to 11 zones (0-10). Any zones left blank will be unused</p>
+	        <div id="locationContainer">
+	        	{# Sortable Unassigned Zones #}
+	        	<form id="locationBox"><fieldset><legend>{{ locations.title }}</legend>
+					<ul id="sortable_zone_{{ locations.key }}" class="sortable_zone">
+		        	{% for location in locations.locations %}
+						<li id="{{ location.key }}">{{ location.name }}</li>
+					{% endfor %}
+					</ul>
+				</fieldset></form>
+				
+				{# Sortable Assigned Zones #}
+				{% for i in zones|length|getrange %}
+		        {% with zones|keyvalue:i as zone %}
+		        	<h3>{{ zone.title }}</h3>
+		        	<ul id="sortable_zone_{{ zone.key }}" class="sortable_zone">
+			        {% for location in zone.locations %}
+						<li id="{{ location.key }}">{{ location.name }}</li>
+					{% endfor %}
+					</ul>
+		        {% endwith %}
+		        {% endfor %}
+		  	</div>
+	    </div>        
+	</div>
+{% endblock %}
