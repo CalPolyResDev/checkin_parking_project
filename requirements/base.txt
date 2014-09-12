@@ -3,7 +3,7 @@ git+https://code.resdev.calpoly.edu/scm/rmsc/rmsconnector.git@866af46#egg=rmscon
 unipath==1.0
 colorama==0.3.2
 django-auth-ldap==1.2.1
-djangoajax=2.2.11
+djangoajax==2.2.11
 raven==5.0.0
 
 # Manual Install

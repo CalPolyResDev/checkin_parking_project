@@ -14,5 +14,8 @@ from django.db.models.fields import BooleanField, IntegerField
 class AdminSettings(Model):
     """ Administrative settings."""
 
-    reservation_open = BooleanField(default=True, verbose_name=u'Reservation Status')
+    reservation_open = BooleanField(default=True, verbose_name=u'Reservation Open')
     term_code = IntegerField(max_length=4, verbose_name=u'Term Code')
+
+    class Meta:
+        verbose_name_plural = "AdminSettings"
