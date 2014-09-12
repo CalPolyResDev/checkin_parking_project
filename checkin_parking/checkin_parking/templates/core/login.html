@@ -12,7 +12,17 @@
 					<legend>
 						Residents
 					</legend>
-						{{ rms_form.as_p }}
+						{{ rms_form.non_field_errors }}
+						<p>
+							{{ rms_form.alias.errors }}
+							<label for="id_alias">{{ rms_form.alias.label }}:</label>
+						    {{ rms_form.alias }}&nbsp;&nbsp;<strong>@calpoly.edu</strong>
+						</p>
+						<p>
+							{{ rms_form.dob.errors }}
+							<label for="id_dob">{{ rms_form.dob.label }}:</label>
+						    {{ rms_form.dob }}
+						</p>
 				</fieldset>
 				<p>
 					<input type="hidden" name="user_type" value="resident"/>

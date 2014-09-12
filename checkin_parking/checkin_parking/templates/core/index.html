@@ -1,12 +1,10 @@
 {% extends "base.html" %}
-{% load url from future %}
-{% load dict_filters %}
 
 {% block content %}
 	<div id="content">
 	    <div id="mainLeftFull">
 	        <h1>Information</h1>
-	        {% if request.reservation_open %}
+	        {% if reservation_open %}
 	        	<p>Due to the limited parking surrounding Cal Poly's on-campus apartments, residents must schedule a short-term loading/unloading time for their assigned building.</p>
 		        <h3>Move-in Dates (Subject to Change)</h3>
 		        <table border="1" class="table_directory">

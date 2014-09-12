@@ -70,7 +70,7 @@ class CheckinParkingUser(AbstractBaseUser, PermissionsMixin):
     #
     # Session reservation
     #
-    reservation = ForeignKey('sessions.Session', null=True, blank=True, default=None)
+    reservation = ForeignKey('checkin_sessions.Session', null=True, blank=True, default=None)
 
     class Meta:
         verbose_name = u'Checkin Parking Reservation User'

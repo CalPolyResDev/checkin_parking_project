@@ -63,9 +63,6 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
-# Dajax media setting
-DAJAXICE_MEDIA_PREFIX = "dajaxice"
-
 ROOT_URLCONF = 'checkin_parking.urls'
 
 # ======================================================================================================== #
@@ -126,7 +123,7 @@ SERVER_EMAIL = 'ResDev Mail Relay Server <resdev@calpoly.edu>'
 #                                              Access Permissions                                          #
 # ======================================================================================================== #
 
-ral_manager_access_test = (lambda user: user.is_developer or user.is_rn_staff or user.is_ral_manager)
+ral_manager_access_test = (lambda user: user.is_developer or user.is_ral_manager)
 developer_access_test = (lambda user: user.is_developer)
 
 
@@ -214,7 +211,6 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'dajaxice.finders.DajaxiceFinder',
 #   'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -240,10 +236,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.core.context_processors.request',
-    'resnet_internal.core.context_processors.specializations',
-    'django.contrib.messages.context_processors.messages',
     'checkin_parking.core.context_processors.display_name',
     'checkin_parking.core.context_processors.reservation_status',
+    'django.contrib.messages.context_processors.messages',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -271,7 +266,7 @@ INSTALLED_APPS = (
     'checkin_parking.core.templatetags.__init__.default_app_config',
     'checkin_parking.pdfs',
     'checkin_parking.residents',
-    'checkin_parking.sessions.__init__.default_app_config',
+    'checkin_parking.checkin_sessions',
     'checkin_parking.statistics',
     'checkin_parking.zones',
 )

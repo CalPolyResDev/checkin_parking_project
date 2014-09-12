@@ -1,5 +1,5 @@
 """
-.. module:: checkin_parking.sessions.models
+.. module:: checkin_parking.checkin_sessions.models
    :synopsis: Checkin Parking Reservation Session Models.
 
 .. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>

@@ -10,7 +10,6 @@
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.urlresolvers import reverse_lazy
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.cache import never_cache
@@ -20,7 +19,6 @@ from django.views.generic import TemplateView
 from django.utils.decorators import method_decorator
 
 from rmsconnector.forms import RMSAuthenticationForm
-from rmsconnector.utils import Resident
 
 
 class IndexView(TemplateView):
@@ -67,10 +65,14 @@ class LoginView(FormView):
 
         if self.request.POST["user_type"] == "resident":
             if rms_form.is_valid():
-                return self.form_valid(rms_form)
+                return self.rms_form_valid(rms_form)
+            else:
+                return self.rms_form_invalid(rms_form)
         else:
             if form.is_valid():
                 return self.form_valid(form)
+            else:
+                return self.form_invalid(form)
 
         return self.forms_invalid(form, rms_form)
 
@@ -94,21 +96,17 @@ class LoginView(FormView):
         user = authenticate(alias=alias, dob=dob)
 
         if user.is_authenticated():
-            resident = Resident(alias=alias)
-
-            try:
-                resident.get_address()
-            except ObjectDoesNotExist:
-                raise ValidationError("The alias provided does not match University Housing records for the current term.")
-            else:
-                auth_login(self.request, user)
+            auth_login(self.request, user)
 
         self.success_url = self.request.GET.get("next", reverse_lazy('home'))
 
         return super(LoginView, self).form_valid(form)
 
-    def forms_invalid(self, form, rms_form):
-        return self.render_to_response(self.get_context_data(form=form, rms_form=rms_form))
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form, rms_form=self.rms_form_class()))
+
+    def rms_form_invalid(self, rms_form):
+        return self.render_to_response(self.get_context_data(form=self.form_class(), rms_form=rms_form))
 
 
 def logout(request):
