@@ -10,7 +10,7 @@ import re
 
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
 from django.db.models.base import Model
-from django.db.models.fields import CharField, EmailField, BooleanField, IntegerField
+from django.db.models.fields import CharField, EmailField, BooleanField
 from django.db.models.fields.related import ForeignKey
 from django.utils.http import urlquote
 from django.core.mail import send_mail
@@ -70,7 +70,7 @@ class CheckinParkingUser(AbstractBaseUser, PermissionsMixin):
     #
     # Session reservation
     #
-    reservation = ForeignKey()
+    reservation = ForeignKey('sessions.Session', null=True, blank=True, default=None)
 
     class Meta:
         verbose_name = u'Checkin Parking Reservation User'

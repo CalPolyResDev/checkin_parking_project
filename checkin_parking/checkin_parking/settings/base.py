@@ -268,10 +268,10 @@ INSTALLED_APPS = (
     'rmsconnector',
     'checkin_parking.administration',
     'checkin_parking.core',
-    'checkin_parking.core.templatetags',
+    'checkin_parking.core.templatetags.__init__.default_app_config',
     'checkin_parking.pdfs',
     'checkin_parking.residents',
-    'checkin_parking.sessions',
+    'checkin_parking.sessions.__init__.default_app_config',
     'checkin_parking.statistics',
     'checkin_parking.zones',
 )

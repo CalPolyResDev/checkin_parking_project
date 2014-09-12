@@ -22,5 +22,9 @@ class Zone(Model):
     def __unicode__(self):
         return str(self.community) + " " + str(self.number)
 
+    def _get_building_list(self):
+        return str(self.buildings.all())
+    building_list = property(_get_building_list)
+
     class Meta:
         unique_together = ('number', 'community')

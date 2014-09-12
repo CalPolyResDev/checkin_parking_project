@@ -24,7 +24,7 @@ class Session(Model):
     date = DateField(verbose_name="Date")
     time = TimeField(verbose_name="Time")
     zone = ForeignKey(Zone, verbose_name="Zone")
-    class_level = SmallIntegerField(default=CLASS_LEVEL_CHOICES.index('All'), choices=CLASS_LEVEL_CHOICES, verbose_name='Class Level')
+    class_level = SmallIntegerField(default=CLASS_LEVELS.index('All'), choices=CLASS_LEVEL_CHOICES, verbose_name='Class Level')
     duration = PositiveSmallIntegerField(default=40, verbose_name="Duration (Minutes)")
 
     def _get_datetime(self):

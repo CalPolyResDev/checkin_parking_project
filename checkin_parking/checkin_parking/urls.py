@@ -62,46 +62,48 @@ urlpatterns = patterns('',
     url(r'^logout/$', logout, name='logout'),
 )
 
-# Sessions
-urlpatterns = patterns('',
-    url(r'^sessions/list/$', login_required(ral_manager_access()), name='list_sessions'),
-    url(r'^sessions/create/$', login_required(ral_manager_access()), name='create_sessions'),
-    url(r'^sessions/edit/$', login_required(ral_manager_access()), name='edit_session'),
-    url(r'^sessions/delete/$', login_required(ral_manager_access()), name='delete_session'),
-    url(r'^sessions/reservation/reserve/$', login_required(), name='reserve_session'),
-    url(r'^sessions/reservation/detail/$', login_required(), name='view_reservation'),
-    url(r'^sessions/reservation/change/$', login_required(), name='change_reservation'),
-    url(r'^sessions/reservation/cancel/$', login_required(), name='cancel_reservation'),
-    url(r'^sessions/update/$', login_required(), name='update_sessions'),
-)
-
-# Zones
-urlpatterns = patterns('',
-    url(r'^zones/list/$', login_required(ral_manager_access()), name='list_zones'),
-)
-
-# PDFs
-urlpatterns = patterns('',
-    url(r'^pdfs/maps/list/$', login_required(ral_manager_access()), name='list_maps'),
-    url(r'^pdfs/parking_pass/edit/$', login_required(ral_manager_access()), name='edit_parking_pass'),
-    url(r'^pdfs/parking_pass/generate/$', login_required(), name='generate_parking_pass'),
-)
-
-# Residents
-urlpatterns = patterns('',
-    url(r'^residents/lookup/$', login_required(ral_manager_access()), name='lookup_residents'),
-)
-
-# Statistics
-urlpatterns = patterns('',
-    url(r'^statistics/$', login_required(ral_manager_access()), name='statistics'),
-)
-
-# Administration
-urlpatterns = patterns('',
-    url(r'^admin/settings/$', login_required(ral_manager_access()), name='settings'),
-    url(r'^admin/purge/$', login_required(ral_manager_access()), name='purge'),
-)
+# # Sessions
+# urlpatterns = patterns('',
+#     url(r'^sessions/list/$', login_required(ral_manager_access()), name='list_sessions'),
+#     url(r'^sessions/create/$', login_required(ral_manager_access()), name='create_sessions'),
+#     url(r'^sessions/(?P<id>\d+)/$', login_required(ral_manager_access()), name='edit_session'),
+#     url(r'^sessions/(?P<id>\d+)/delete/$', login_required(ral_manager_access()), name='delete_session'),
+#     url(r'^sessions/reservation/reserve/$', login_required(), name='reserve_session'),
+#     url(r'^sessions/reservation/detail/$', login_required(), name='view_reservation'),
+#     url(r'^sessions/reservation/change/$', login_required(), name='change_reservation'),
+#     url(r'^sessions/reservation/cancel/$', login_required(), name='cancel_reservation'),
+#     url(r'^sessions/update/$', login_required(), name='update_sessions'),
+# )
+#
+# # Zones
+# urlpatterns = patterns('',
+#     url(r'^zones/list/$', login_required(ral_manager_access()), name='list_zones'),
+#     url(r'^zones/create/$', login_required(ral_manager_access()), name='create_zone'),
+#     url(r'^zones/(?P<id>\d+)/$', login_required(ral_manager_access()), name='edit_zone'),
+#     url(r'^zones/(?P<id>\d+)/delete/$', login_required(ral_manager_access()), name='delete_zone'),
+# )
+#
+# # PDFs
+# urlpatterns = patterns('',
+#     url(r'^pdfs/maps/list/$', login_required(ral_manager_access()), name='list_maps'),
+#     url(r'^pdfs/parking_pass/generate/$', login_required(), name='generate_parking_pass'),
+# )
+#
+# # Residents
+# urlpatterns = patterns('',
+#     url(r'^residents/lookup/$', login_required(ral_manager_access()), name='lookup_residents'),
+# )
+#
+# # Statistics
+# urlpatterns = patterns('',
+#     url(r'^statistics/$', login_required(ral_manager_access()), name='statistics'),
+# )
+#
+# # Administration
+# urlpatterns = patterns('',
+#     url(r'^admin/settings/$', login_required(ral_manager_access()), name='settings'),
+#     url(r'^admin/purge/$', login_required(ral_manager_access()), name='purge'),
+# )
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
