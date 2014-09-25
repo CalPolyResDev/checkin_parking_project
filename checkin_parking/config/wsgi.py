@@ -2,8 +2,6 @@ import os
 import sys
 import site
 
-from django.core.handlers.wsgi import WSGIHandler
-
 from colorama import init as color_init
 from colorama import Fore, Style
 from unipath import Path
@@ -49,7 +47,11 @@ sys.path.append(filepath.ancestor(2).child(project_dir))
 activate_env = virtualenv_dir.child(repo_dir, "Scripts", "activate_this.py")
 execfile(activate_env, dict(__file__=activate_env))
 
+import django
+from django.core.handlers.wsgi import WSGIHandler
 from raven.contrib.django.raven_compat.middleware.wsgi import Sentry
+
+django.setup()
 
 # Send any wsgi errors to Sentry
 application = Sentry(WSGIHandler())
