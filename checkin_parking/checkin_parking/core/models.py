@@ -12,11 +12,12 @@ from django.contrib.auth.models import AbstractBaseUser, UserManager, Permission
 from django.db.models.base import Model
 from django.db.models.fields import CharField, EmailField, BooleanField
 from django.db.models.fields.related import ForeignKey
+from django.db.models.deletion import SET_NULL
 from django.utils.http import urlquote
 from django.core.mail import send_mail
 
 
-class Community(Model):
+class MasterCommunity(Model):
     """Housing Community."""
 
     name = CharField(max_length=30, verbose_name="Community Name")
@@ -31,11 +32,11 @@ class Community(Model):
         verbose_name_plural = u'Communities'
 
 
-class Building(Model):
+class MasterBuilding(Model):
     """Housing Building."""
 
     name = CharField(max_length=30, verbose_name="Building Name")
-    community = ForeignKey(Community, verbose_name="Community")
+    community = ForeignKey(MasterCommunity, verbose_name="Community")
 
     def __unicode__(self):
         return str(self.community) + " " + self.name
@@ -70,7 +71,7 @@ class CheckinParkingUser(AbstractBaseUser, PermissionsMixin):
     #
     # Session reservation
     #
-    reservation = ForeignKey('checkin_sessions.Session', null=True, blank=True, default=None)
+    reservation = ForeignKey('checkin_sessions.Session', null=True, blank=True, default=None, on_delete=SET_NULL)
 
     class Meta:
         verbose_name = u'Checkin Parking Reservation User'

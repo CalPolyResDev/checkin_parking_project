@@ -26,6 +26,7 @@ class Session(Model):
     zone = ForeignKey(Zone, verbose_name="Zone")
     class_level = SmallIntegerField(default=CLASS_LEVELS.index('All'), choices=CLASS_LEVEL_CHOICES, verbose_name='Class Level')
     duration = PositiveSmallIntegerField(default=40, verbose_name="Duration (Minutes)")
+    capacity = PositiveSmallIntegerField(default=30, verbose_name="Capacity")
 
     def _get_datetime(self):
         combined = datetime.combine(self.date, self.time)
