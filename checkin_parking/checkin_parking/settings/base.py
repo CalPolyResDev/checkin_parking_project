@@ -63,9 +63,6 @@ USE_I18N = True
 # calendars according to the current locale
 USE_L10N = True
 
-# Dajax media setting
-DAJAXICE_MEDIA_PREFIX = "dajaxice"
-
 ROOT_URLCONF = 'checkin_parking.urls'
 
 # ======================================================================================================== #
@@ -126,7 +123,7 @@ SERVER_EMAIL = 'ResDev Mail Relay Server <resdev@calpoly.edu>'
 #                                              Access Permissions                                          #
 # ======================================================================================================== #
 
-ral_manager_access_test = (lambda user: user.is_developer or user.is_rn_staff or user.is_ral_manager)
+ral_manager_access_test = (lambda user: user.is_developer or user.is_ral_manager)
 developer_access_test = (lambda user: user.is_developer)
 
 
@@ -214,7 +211,6 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'dajaxice.finders.DajaxiceFinder',
 #   'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -240,7 +236,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.core.context_processors.request',
-    'resnet_internal.core.context_processors.specializations',
+    'checkin_parking.core.context_processors.display_name',
+    'checkin_parking.core.context_processors.reservation_status',
     'django.contrib.messages.context_processors.messages',
 )
 
@@ -266,10 +263,10 @@ INSTALLED_APPS = (
     'rmsconnector',
     'checkin_parking.administration',
     'checkin_parking.core',
-    'checkin_parking.core.templatetags',
+    'checkin_parking.core.templatetags.__init__.default_app_config',
     'checkin_parking.pdfs',
     'checkin_parking.residents',
-    'checkin_parking.sessions',
+    'checkin_parking.checkin_sessions',
     'checkin_parking.statistics',
     'checkin_parking.zones',
 )
@@ -321,9 +318,19 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': False,
         },
-        'dajaxice': {
-            'handlers': ['console'],
+        'django_auth_ldap': {
             'level': 'INFO',
+            'handlers': ['sentry'],
+            'propagate': True,
+        },
+        'django_ajax': {
+            'level': 'INFO',
+            'handlers': ['sentry'],
+            'propagate': True,
+        },
+        'django_datatables_view': {
+            'level': 'INFO',
+            'handlers': ['sentry'],
             'propagate': True,
         },
     }

@@ -7,27 +7,26 @@
 	<div id="mainColFull">
 		<h1>Authentication</h1>
 		<div class="left_column">
-			<form method="post" action="{% url 'login' %}" id="login_form_student">
+			<form method="post" action="{% url 'login' %}" id="login_form_resident">
 				<fieldset>
 					<legend>
-						Students
+						Residents
 					</legend>
-						{{ form_student.non_field_errors }}
+						{{ rms_form.non_field_errors }}
 						<p>
-							{{ form_student.alias.errors }}
-							<label for="id_<field-name>">{{ form_student.alias.label }}:</label>
-						    {{ form_student.alias }}&nbsp;&nbsp;&nbsp;&nbsp;<strong>@calpoly.edu</strong>
+							{{ rms_form.alias.errors }}
+							<label for="id_alias">{{ rms_form.alias.label }}:</label>
+						    {{ rms_form.alias }}&nbsp;&nbsp;<strong>@calpoly.edu</strong>
 						</p>
 						<p>
-							{{ form_student.dob.errors }}
-							<label for="id_<field-name>">{{ form_student.dob.label }}:</label>
-						    {{ form_student.dob }}
+							{{ rms_form.dob.errors }}
+							<label for="id_dob">{{ rms_form.dob.label }}:</label>
+						    {{ rms_form.dob }}
 						</p>
 				</fieldset>
 				<p>
-					<input type="hidden" name="user_type" value="student"/>
+					<input type="hidden" name="user_type" value="resident"/>
 					<input type="submit" value="Submit" />
-					<input type="reset" value="Reset" />
 				</p>
 				{% csrf_token %}
 			</form>
@@ -38,12 +37,11 @@
 					<legend>
 						Administrators
 					</legend>
-					{{ form_admin.as_p }}
+					{{ form.as_p }}
 				</fieldset>
 				<p>
-					<input type="hidden" name="user_type" value="admin"/>
+					<input type="hidden" name="user_type" value="administrator"/>
 					<input type="submit" value="Submit" />
-					<input type="reset" value="Reset" />
 				</p>
 				{% csrf_token %}
 			</form>
