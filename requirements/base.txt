@@ -1,12 +1,12 @@
 Django==1.7
-git+https://code.resdev.calpoly.edu/scm/rmsc/rmsconnector.git@866af46#egg=rmsconnector==3.1.3
-unipath==1.0
+git+https://code.resdev.calpoly.edu/scm/rmsc/rmsconnector.git#egg=rmsconnector==3.1.5
+git+https://github.com/wrightmx/Unipath
 colorama==0.3.2
-django-auth-ldap==1.2.1
-djangoajax==2.2.11
+hg+https://kavanaugh_development@bitbucket.org/kavanaugh_development/django-auth-ldap@python3-ldap
+djangoajax==2.2.12
 raven==5.0.0
+python3-ldap==0.9.5.4
+mysqlclient==1.3.3
 
 # Manual Install
-python-ldap==2.4.15
-mysql-python==1.2.5
 cx_Oracle==5.1.3

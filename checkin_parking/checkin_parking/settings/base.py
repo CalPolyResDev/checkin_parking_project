@@ -78,6 +78,14 @@ DATABASES = {
         'HOST': 'data.resdev.calpoly.edu',
         'PORT': '3306',
     },
+    'common': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'common',
+        'USER': 'common',
+        'PASSWORD': get_env_variable('CHECKIN_PARKING_DB_COMMON_PASSWORD'),
+        'HOST': 'data.resdev.calpoly.edu',
+        'PORT': '3306',
+    },
     'rms': {
         'ENGINE': 'django.db.backends.oracle',
         'NAME': 'mercprd',
@@ -90,6 +98,7 @@ DATABASES = {
 
 DATABASE_ROUTERS = (
     'rmsconnector.routers.RMSRouter',
+    'checkin_parking.core.routers.CommonRouter',
 )
 
 # ======================================================================================================== #
@@ -163,10 +172,10 @@ AUTH_USER_MODEL = 'core.CheckinParkingUser'
 
 AUTH_LDAP_USER_FLAGS_BY_GROUP = {
     'is_ral_manager': 'CN=UH-RAL-Managers,OU=User Groups,OU=Websites,OU=Groups,OU=UH,OU=Delegated,DC=ad,DC=calpoly,DC=edu',
-    'is_developer': 'CN=UH-RN-DevTeam,OU=User Groups,OU=Websites,OU=Groups,OU=UH,OU=Delegated,DC=ad,DC=calpoly,DC=edu',
+    'is_developer': 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,DC=ad,DC=calpoly,DC=edu',
 
-    'is_staff': 'CN=UH-RN-DevTeam,OU=User Groups,OU=Websites,OU=Groups,OU=UH,OU=Delegated,DC=ad,DC=calpoly,DC=edu',
-    'is_superuser': 'CN=UH-RN-DevTeam,OU=User Groups,OU=Websites,OU=Groups,OU=UH,OU=Delegated,DC=ad,DC=calpoly,DC=edu',
+    'is_staff': 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,DC=ad,DC=calpoly,DC=edu',
+    'is_superuser': 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,DC=ad,DC=calpoly,DC=edu',
 }
 
 # ======================================================================================================== #

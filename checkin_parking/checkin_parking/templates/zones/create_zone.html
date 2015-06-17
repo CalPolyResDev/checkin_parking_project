@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block subtitle %} | Create Zone{% endblock %}
+
+{% block content %}
+	<div id="content">
+	    <div id="mainLeftFull">
+	        <h1>Create a New Zone</h1>
+	        <p>Use the following form to create a new parking zone. Parking zones are only accessible to residents who live in the community and building(s) designated in the form below.</p>
+	        <form method="post" id="create_zone_form">
+				<fieldset>
+					<legend>
+						New Parking Zone
+					</legend>
+					{{ form.as_p }}
+				</fieldset>
+				<p>
+					<input type="submit" value="Submit" />
+				</p>
+				{% csrf_token %}
+			</form>
+	    </div>
+	</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+	$(document).ready(function () {
+		$("#id_buildings").html("");
+		{% if form.buildings.value %}
+			ajaxPost("{% url 'ajax_update_building' %}", {'community_id': '{{ form.community.value }}', 'building_selections': '{{ form.buildings.value }}'});
+		{% endif %}
+	});
+
+	$("#id_community").change(function () {
+		ajaxPost("{% url 'ajax_update_building' %}", {'community_id': $(this).val()});
+	});
+</script>
+{% endblock %}

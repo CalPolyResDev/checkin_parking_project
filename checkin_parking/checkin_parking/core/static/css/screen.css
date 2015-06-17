@@ -37,6 +37,11 @@ form fieldset {
     padding:2% 5%;
 }
 
+form .horizontal_fields p {
+	float: left;
+	padding-right: 5%;
+}
+
 #search_form fieldset p {
     float: left;
     padding-left: 20px;

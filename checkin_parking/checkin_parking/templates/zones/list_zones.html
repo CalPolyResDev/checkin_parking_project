@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block subtitle %} | Zones{% endblock %}
+
+{% block content %}
+	<div id="content">
+	    <div id="mainLeftFull">
+	        <h1>Parking Zones</h1>
+	        <p>Parking zones are only accessible to residents who live in the community and building(s) designated in the form below.</p>
+	        <table border="1" class="table_directory">
+	            <tbody>
+	                <tr>
+	                    <th>Community</th>
+	                    <th>Zone Number</th>
+	                    <th>Building(s)</th>
+	                </tr>
+	                {% for zone in zones %}
+	                <tr>
+	                    <td>{{ zone.community }}</td>
+	                    <td>{{ zone.number }}</td>
+	                    <td>{{ zone.building_list }}</td>
+	                </tr>
+	                {% else %}
+	                <tr>
+	                	<td></td>
+	                	<td></td>
+	                	<td></td>
+	                </tr>
+	                {% endfor %}
+
+	            </tbody>
+	        </table>
+	    </div>
+	</div>
+{% endblock %}

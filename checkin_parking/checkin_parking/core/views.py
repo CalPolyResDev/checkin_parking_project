@@ -33,15 +33,7 @@ class IndexView(TemplateView):
 
 
 class LoginView(FormView):
-    """
-
-    Displays the login form and handles the login action.
-
-    Sets user's display name and specializations as session variables upon authentication:
-       request.session["user_display_name"] and
-       request.session["user_specializations"]
-
-    """
+    """Displays the login forms and handles the login action."""
 
     template_name = 'core/login.html'
     form_class = AuthenticationForm
