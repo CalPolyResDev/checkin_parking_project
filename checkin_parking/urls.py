@@ -11,17 +11,19 @@ import logging
 
 from django.conf import settings
 from django.conf.urls.static import static as static_url
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.core.exceptions import PermissionDenied
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.views.generic import RedirectView
+from django.views.defaults import server_error, permission_denied, page_not_found
+
+from .apps.core.views import IndexView, LoginView, logout
+from .apps.zones.views import ZoneCreateView
+from .apps.zones.ajax import update_building
 
 from .settings.base import ral_manager_access_test
-from .core.views import IndexView, LoginView, logout
-from .zones.views import ZoneCreateView
-from .zones.ajax import update_building
 
 
 def permissions_check(test_func, raise_exception=True):
@@ -57,16 +59,16 @@ logger = logging.getLogger(__name__)
 
 
 # Core
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', IndexView.as_view(), name='home'),
     url(r'^favicon\.ico$', RedirectView.as_view(url=static('images/icons/favicon.ico')), name='favicon'),
     url(r'^flugzeug/', include(admin.site.urls)),  # admin site urls, masked
     url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', logout, name='logout'),
-)
+]
 
 # Sessions
-urlpatterns += patterns('',
+urlpatterns += [
     url(r'^sessions/list/$', login_required(ral_manager_access(IndexView.as_view())), name='list_sessions'),
     url(r'^sessions/create/$', login_required(ral_manager_access(IndexView.as_view())), name='create_sessions'),
     url(r'^sessions/(?P<id>\d+)/$', login_required(ral_manager_access(IndexView.as_view())), name='edit_session'),
@@ -76,38 +78,45 @@ urlpatterns += patterns('',
     url(r'^sessions/reservation/change/$', login_required(IndexView.as_view()), name='change_reservation'),
     url(r'^sessions/reservation/cancel/$', login_required(IndexView.as_view()), name='cancel_reservation'),
     url(r'^sessions/update/$', login_required(IndexView.as_view()), name='update_sessions'),
-)
+]
 
 # Zones
-urlpatterns += patterns('',
+urlpatterns += [
     url(r'^zones/list/$', login_required(ral_manager_access(IndexView.as_view())), name='list_zones'),
     url(r'^zones/create/$', login_required(ral_manager_access(ZoneCreateView.as_view())), name='create_zone'),
     url(r'^zones/(?P<id>\d+)/$', login_required(ral_manager_access(IndexView.as_view())), name='edit_zone'),
     url(r'^zones/(?P<id>\d+)/delete/$', login_required(ral_manager_access(IndexView.as_view())), name='delete_zone'),
     url(r'^zones/ajax/update_building/$', login_required(update_building), name='ajax_update_building'),
-)
+]
 
 # PDFs
-urlpatterns += patterns('',
+urlpatterns += [
     url(r'^pdfs/maps/list/$', login_required(ral_manager_access(IndexView.as_view())), name='list_maps'),
     url(r'^pdfs/parking_pass/generate/$', login_required(IndexView.as_view()), name='generate_parking_pass'),
-)
+]
 
 # Residents
-urlpatterns += patterns('',
+urlpatterns += [
     url(r'^residents/lookup/$', login_required(ral_manager_access(IndexView.as_view())), name='lookup_residents'),
-)
+]
 
 # Statistics
-urlpatterns += patterns('',
+urlpatterns += [
     url(r'^statistics/$', login_required(ral_manager_access(IndexView.as_view())), name='statistics'),
-)
+]
 
 # Administration
-urlpatterns += patterns('',
+urlpatterns += [
     url(r'^admin/settings/$', login_required(ral_manager_access(IndexView.as_view())), name='settings'),
     url(r'^admin/purge/$', login_required(ral_manager_access(IndexView.as_view())), name='purge'),
-)
+]
+
+# Raise errors on purpose
+urlpatterns += [
+    url(r'^500/$', server_error),
+    url(r'^403/$', permission_denied),
+    url(r'^404/$', page_not_found),
+]
 
 if settings.DEBUG:
     urlpatterns += static_url(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

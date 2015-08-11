@@ -1,12 +1,15 @@
-Django==1.7
-git+https://code.resdev.calpoly.edu/scm/rmsc/rmsconnector.git#egg=rmsconnector==3.1.5
-git+https://github.com/wrightmx/Unipath
-colorama==0.3.2
-hg+https://kavanaugh_development@bitbucket.org/kavanaugh_development/django-auth-ldap@python3-ldap
+Django==1.7.8
+django-cas-ng==3.4.2
+
+git+https://code.resdev.calpoly.edu/scm/rmsc/rmsconnector
+colorama==0.3.3
+termcolor==1.1.0
+
 djangoajax==2.2.12
-raven==5.0.0
-python3-ldap==0.9.5.4
+raven==5.3.1
+ldap-groups==4.1.0
+dj_database_url==0.3.0
 mysqlclient==1.3.3
 
-# Manual Install
+# The only non-pure python package!
 cx_Oracle==5.1.3

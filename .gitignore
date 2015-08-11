@@ -6,6 +6,7 @@
 
 # Python bytecode:
 *.py[co]
+__pycache__
 
 # Packaging files:
 *.egg*
@@ -25,3 +26,4 @@ build
 
 # Secret Files
 *.secret
+.env
