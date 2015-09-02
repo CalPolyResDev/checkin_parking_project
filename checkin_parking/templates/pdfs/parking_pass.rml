@@ -48,8 +48,8 @@
             <strong>Additional passes may be acquired if needed at the check-in desk as space permits.</strong>
         </para>
 
-        <para style="date">{{ parking.time_interval }}</para>
-        <para style="time_interval">{{ parking.date }}</para>
+        <para style="date">{{ parking.date }}</para>
+        <para style="time_interval">{{ parking.start }} - {{ parking.end }}</para>
         <para style="zone_and_building">{{ parking.building }} - {{ parking.zone }}</para>
         <para style="dashboard_note">Display on Dashboard</para>        
     </story>
