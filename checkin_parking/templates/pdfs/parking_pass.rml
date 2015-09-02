@@ -1,0 +1,14 @@
+<!DOCTYPE document SYSTEM "rml.dtd">
+<document filename="parking_pass.pdf">
+
+    <template showBoundary="0">
+    
+    </template>
+    
+    <stylesheet>
+    </stylesheet>
+    
+    <story>
+    </story>
+    
+</document>
