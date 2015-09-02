@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block subtitle %} | HTTP 404{% endblock %}
+
+{% block sidenav %}{% endblock %}
+
+{% block content %}
+    <div id="mainColFull">
+        <h1>Page Not Found (HTTP 404)</h1>
+        <p>Hmm, it looks like the page you're looking for doesn't exist.</p>
+        <p>If you believe this to be incorrect, or if this is a frequent unexpected occurence, please consider notifying us via email at <a href="mailto:resdev@calpoly.edu">resdev@calpoly.edu</a> with a link to the page you're trying to visit and the reason you're trying to access it.
+        {% if request.sentry.id %}
+        Include the following Sentry ID in your description:<br /><br />
+        <b>SENTRY_ID = {{ request.sentry.id }}</b>
+        {% endif %}
+        </p>
+        <p>For more information on what an HTTP 404 error is and how it occurs, <a href="http://www.checkupdown.com/status/E404.html" target="_blank">click here</a>.</p>
+    </div>
+{% endblock %}

@@ -1,11 +1,9 @@
-from .base import *
+from .base import *  # noqa
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 SESSION_COOKIE_NAME = 'CPRKDevSessionID'
-
-CONCURRENT_RANDOM_DELAY = True
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -31,9 +29,9 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.templates.TemplatesPanel',
     'debug_toolbar.panels.cache.CachePanel',
     'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.profiling.ProfilingPanel',
     'debug_toolbar.panels.logging.LoggingPanel',
     'debug_toolbar.panels.redirects.RedirectsPanel',
-    'inspector_panel.panels.inspector.InspectorPanel',
 )
 
 DEBUG_TOOLBAR_CONFIG = {
@@ -45,11 +43,8 @@ DEBUG_TOOLBAR_CONFIG = {
 #                                  File/Application Handling Configuration                                 #
 # ======================================================================================================== #
 
-# DJDT doesn't work anymore, causes dajaxice to fail
-#MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 
 INSTALLED_APPS += (
-#    'debug_toolbar',
-    'devserver',
-#     'inspector_panel',
+    'debug_toolbar',
 )

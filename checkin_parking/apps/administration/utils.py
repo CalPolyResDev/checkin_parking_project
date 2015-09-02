@@ -3,7 +3,6 @@
    :synopsis: Checkin Parking Reservation Administration Utilities.
 
 .. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
-.. moduleauthor:: RJ Almada <robert.j.almada@gmail.com>
 
 """
 
@@ -20,7 +19,7 @@ def sync_zone_data():
     Community.objects.all().delete()
 
     # Copy data from master to slave
-    cursor.execute("INSERT INTO checkin_parking.zones_community SELECT * FROM common.community")
-    cursor.execute("INSERT INTO checkin_parking.zones_building SELECT * FROM common.building")
+    cursor.execute("INSERT INTO checkin_parking.zones_community SELECT * FROM resnet_internal.core_community")
+    cursor.execute("INSERT INTO checkin_parking.zones_building SELECT * FROM resnet_internal.core_building")
 
     transaction.commit_unless_managed()

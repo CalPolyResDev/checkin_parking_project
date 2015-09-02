@@ -1,5 +1,5 @@
 """
-.. module:: checkin_parking.core.templatetags
+.. module:: checkin_parking.apps.core.templatetags
    :synopsis: Checkin Parking Reservation Core Template Tags and Filters.
 
 .. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>

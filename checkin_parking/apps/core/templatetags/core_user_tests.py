@@ -1,5 +1,5 @@
 """
-.. module:: checkin_parking.core.templatetags
+.. module:: checkin_parking.apps.core.templatetags
    :synopsis: Checkin Parking Core User Tests.
 
 .. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
@@ -7,7 +7,7 @@
 
 from django import template
 
-from ...settings.base import ral_manager_access_test, developer_access_test
+from ....settings.base import ral_manager_access_test, developer_access_test
 
 register = template.Library()
 

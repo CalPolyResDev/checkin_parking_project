@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{% load core_user_tests %}
 {% load staticfiles %}
 <html>
 	<head>
@@ -70,7 +69,6 @@
 			{% block sidenav %}
             {% if request.user.is_authenticated %}
             <div id="rightCol">
-            	{% if not request.user.is_ral_manager %}
                 <h2>Resident Resources</h2>
                 <ul>
                 	{% if request.user.reservation %}
@@ -80,8 +78,7 @@
                     <li><a href="{% url 'reserve_session' %}">Reserve Session</a></li>
                     {% endif %}
                 </ul>
-                {% endif %}
-                {% if request.user|ral_manager_access %}
+                {% if request.user.is_admin %}
                 <h2>Administrator Resources</h2>
                 <ul>
                 	<li><a>Session Management</a>
@@ -121,7 +118,7 @@
                 </ul>
                 <div id="footer_deptinfo">
                     <p>
-                        &copy; 2014 ResNet Development Team
+                        &copy; 2015 ResNet Development Team
                         <br />
                         California Polytechnic State University &nbsp;<img src="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/images_html/footer/footer_separator.jpg" alt="" height="10" width="1" />&nbsp; San Luis Obispo, California 93407
                         <br />

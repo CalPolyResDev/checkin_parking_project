@@ -1,10 +1,11 @@
-import ldap
+import ldap3
 import os
+from pathlib import Path
 
 from django.core.exceptions import ImproperlyConfigured
 
 from django_auth_ldap.config import LDAPSearch, NestedActiveDirectoryGroupType
-from unipath import Path
+import dj_database_url
 
 
 def get_env_variable(name):
@@ -29,7 +30,7 @@ def get_env_variable(name):
 # ======================================================================================================== #
 
 ADMINS = (
-    ('Alex Kavanaugh', 'kavanaugh.development@outlook.com'),
+    ('ResDev', 'resdev@calpoly.edu'),
 )
 
 MANAGERS = ADMINS
@@ -64,40 +65,25 @@ USE_L10N = True
 
 ROOT_URLCONF = 'checkin_parking.urls'
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 # ======================================================================================================== #
 #                                          Database Configuration                                          #
 # ======================================================================================================== #
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'checkin_parking',
-        'USER': 'checkin_parking',
-        'PASSWORD': get_env_variable('CHECKIN_PARKING_DB_DEFAULT_PASSWORD'),
-        'HOST': 'data.resdev.calpoly.edu',
-        'PORT': '3306',
-    },
-    'common': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'common',
-        'USER': 'common',
-        'PASSWORD': get_env_variable('CHECKIN_PARKING_DB_COMMON_PASSWORD'),
-        'HOST': 'data.resdev.calpoly.edu',
-        'PORT': '3306',
-    },
+    'default': dj_database_url.config(default=get_env_variable('CHECKIN_PARKING_DB_DEFAULT_DATABASE_URL')),
+#     'resnet_internal': dj_database_url.config(default=get_env_variable('CHECKIN_PARKING_DB_COMMON_DATABASE_URL')),
     'rms': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'mercprd',
+        'NAME': 'mercprd.db.calpoly.edu:1521/mercprd',
         'USER': get_env_variable('CHECKIN_PARKING_DB_RMS_USERNAME'),
         'PASSWORD': get_env_variable('CHECKIN_PARKING_DB_RMS_PASSWORD'),
-        'HOST': 'mercprd.db.calpoly.edu',
-        'PORT': '1521',
     },
 }
 
 DATABASE_ROUTERS = (
     'rmsconnector.routers.RMSRouter',
-    'checkin_parking.core.routers.CommonRouter',
 )
 
 # ======================================================================================================== #
@@ -107,11 +93,11 @@ DATABASE_ROUTERS = (
 # Incoming email settings
 INCOMING_EMAIL = {
     'IMAP4': {  # IMAP4 is currently the only supported protocol. It must be included.
-        'HOST': 'mail.calpoly.edu',  # The host to use for receiving email. Set to empty string for localhost.
+        'HOST': 'outlook.office365.com',  # The host to use for receiving email. Set to empty string for localhost.
         'PORT': 993,  # The port to use. Set to empty string for default values: 143, 993(SSL).
         'USE_SSL': True,  # Whether or not to use SSL (Boolean)
-        'USER': get_env_variable('CHECKIN_PARKING_EMAIL_IN_USERNAME'),  # The username to use. The full email address is what most servers require.
-        'PASSWORD': get_env_variable('CHECKIN_PARKING_EMAIL_IN_PASSWORD'),  # The password to use. Note that only clearText authentication is supported.
+        'USER': get_env_variable('CHECKIN_PARKING_EMAIL_USERNAME'),  # The username to use. The full email address is what most servers require.
+        'PASSWORD': get_env_variable('CHECKIN_PARKING_EMAIL_PASSWORD'),  # The password to use. Note that only clearText authentication is supported.
     },
 }
 
@@ -125,14 +111,7 @@ EMAIL_HOST_PASSWORD = INCOMING_EMAIL['IMAP4']['PASSWORD']  # The password to use
 
 # Set the server's email address (for sending emails only)
 SERVER_EMAIL = 'ResDev Mail Relay Server <resdev@calpoly.edu>'
-
-
-# ======================================================================================================== #
-#                                              Access Permissions                                          #
-# ======================================================================================================== #
-
-ral_manager_access_test = (lambda user: user.is_developer or user.is_ral_manager)
-developer_access_test = (lambda user: user.is_developer)
+DEFAULT_FROM_EMAIL = SERVER_EMAIL
 
 
 # ======================================================================================================== #
@@ -144,38 +123,40 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/login/'
 
 AUTHENTICATION_BACKENDS = (
-    'django_auth_ldap.backend.LDAPBackend',
-    'rmsconnector.backend.RMSBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'checkin_parking.apps.core.backends.CASLDAPBackend',
 )
-
-AUTH_LDAP_BIND_DN = get_env_variable('CHECKIN_PARKING_LDAP_USER_DN')
-AUTH_LDAP_BIND_PASSWORD = get_env_variable('CHECKIN_PARKING_LDAP_PASSWORD')
-
-AUTH_LDAP_SERVER_URI = 'ldap://ad.calpoly.edu:3268'
-
-AUTH_LDAP_USER_SEARCH = LDAPSearch('DC=ad,DC=calpoly,DC=edu', ldap.SCOPE_SUBTREE, '(&(objectClass=user)(sAMAccountName=%(user)s))')
-AUTH_LDAP_GROUP_SEARCH = LDAPSearch('DC=ad,DC=calpoly,DC=edu', ldap.SCOPE_SUBTREE, '(objectClass=group)')
-AUTH_LDAP_GROUP_TYPE = NestedActiveDirectoryGroupType()
-AUTH_LDAP_FIND_GROUP_PERMS = True
-
-AUTH_LDAP_REQUIRE_GROUP = 'CN=checkinparking,OU=Websites,OU=Groups,OU=UH,OU=Delegated,DC=ad,DC=calpoly,DC=edu'
-
-AUTH_LDAP_USER_ATTR_MAP = {
-    'first_name': 'givenName',
-    'last_name': 'sn',
-    'email': 'mail',
-}
 
 AUTH_USER_MODEL = 'core.CheckinParkingUser'
 
-AUTH_LDAP_USER_FLAGS_BY_GROUP = {
-    'is_ral_manager': 'CN=UH-RAL-Managers,OU=User Groups,OU=Websites,OU=Groups,OU=UH,OU=Delegated,DC=ad,DC=calpoly,DC=edu',
-    'is_developer': 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,DC=ad,DC=calpoly,DC=edu',
+CAS_ADMIN_PREFIX = "flugzeug/"
+CAS_LOGOUT_COMPLETELY = False
 
-    'is_staff': 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,DC=ad,DC=calpoly,DC=edu',
-    'is_superuser': 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,DC=ad,DC=calpoly,DC=edu',
-}
+CAS_SERVER_URL = "https://mydev.calpoly.edu/cas/"
+# CAS_LOGOUT_URL = "https://my.calpoly.edu/cas/casClientLogout.jsp?logoutApp=Cal%20Poly%20Group%20Manager"
+
+
+# ======================================================================================================== #
+#                                        LDAP Groups Configuration                                         #
+# ======================================================================================================== #
+
+LDAP_GROUPS_SERVER_URI = 'ldap://ad.calpoly.edu'
+LDAP_GROUPS_BASE_DN = 'DC=ad,DC=calpoly,DC=edu'
+LDAP_GROUPS_USER_BASE_DN = 'OU=People,OU=Enterprise,OU=Accounts,' + LDAP_GROUPS_BASE_DN
+
+LDAP_GROUPS_USER_SEARCH_BASE_DN = 'OU=Enterprise,OU=Accounts,' + LDAP_GROUPS_BASE_DN
+LDAP_GROUPS_GROUP_SEARCH_BASE_DN = 'OU=Groups,' + LDAP_GROUPS_BASE_DN
+
+LDAP_GROUPS_BIND_DN = get_env_variable('CHECKIN_PARKING_LDAP_USER_DN')
+LDAP_GROUPS_BIND_PASSWORD = get_env_variable('CHECKIN_PARKING_LDAP_PASSWORD')
+
+LDAP_GROUPS_USER_LOOKUP_ATTRIBUTE = 'userPrincipalName'
+LDAP_GROUPS_GROUP_LOOKUP_ATTRIBUTE = 'name'
+LDAP_GROUPS_ATTRIBUTE_LIST = ['displayName', LDAP_GROUPS_USER_LOOKUP_ATTRIBUTE]
+
+LDAP_ADMIN_GROUP = 'CN=checkinparking,OU=Websites,OU=UH,OU=Manual,OU=Groups,' + LDAP_GROUPS_BASE_DN
+LDAP_DEVELOPER_GROUP = 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,' + LDAP_GROUPS_BASE_DN
+
 
 # ======================================================================================================== #
 #                                      Session/Security Configuration                                      #
@@ -194,10 +175,10 @@ SECRET_KEY = get_env_variable('CHECKIN_PARKING_SECRET_KEY')
 #                                  File/Application Handling Configuration                                 #
 # ======================================================================================================== #
 
-PROJECT_DIR = Path(__file__).ancestor(3)
+PROJECT_DIR = Path(__file__).parents[2]
 
 # The directory that will hold user-uploaded files.
-MEDIA_ROOT = PROJECT_DIR.child("media")
+MEDIA_ROOT = str(PROJECT_DIR.joinpath("media").resolve())
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a trailing slash.
 MEDIA_URL = '/media/'
@@ -205,25 +186,24 @@ MEDIA_URL = '/media/'
 # The directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
-STATIC_ROOT = PROJECT_DIR.child("static")
+STATIC_ROOT = str(PROJECT_DIR.joinpath("static").resolve())
 
 # URL prefix for static files. Make sure to use a trailing slash.
 STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    PROJECT_DIR.child("checkin_parking", "core", "static"),
+    str(PROJECT_DIR.joinpath("checkin_parking", "static").resolve()),
 )
 
 # List of finder classes that know how to find static files in various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#   'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 TEMPLATE_DIRS = (
-    PROJECT_DIR.child("checkin_parking", "templates"),
+    str(PROJECT_DIR.joinpath("checkin_parking", "templates").resolve()),
 )
 
 # List of callables that know how to import templates from various sources.
@@ -244,8 +224,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.core.context_processors.request',
-    'checkin_parking.core.context_processors.display_name',
-    'checkin_parking.core.context_processors.reservation_status',
+    'checkin_parking.apps.core.context_processors.display_name',
+    'checkin_parking.apps.core.context_processors.reservation_status',
     'django.contrib.messages.context_processors.messages',
 )
 
@@ -269,14 +249,14 @@ INSTALLED_APPS = (
     'raven.contrib.django.raven_compat',
     'django_ajax',
     'rmsconnector',
-    'checkin_parking.administration',
-    'checkin_parking.core',
-    'checkin_parking.core.templatetags.__init__.default_app_config',
-    'checkin_parking.pdfs',
-    'checkin_parking.residents',
-    'checkin_parking.checkin_sessions',
-    'checkin_parking.statistics',
-    'checkin_parking.zones',
+    'checkin_parking.apps.administration',
+    'checkin_parking.apps.core',
+    'checkin_parking.apps.core.templatetags.__init__.default_app_config',
+    'checkin_parking.apps.pdfs',
+    'checkin_parking.apps.residents',
+    'checkin_parking.apps.checkin_sessions',
+    'checkin_parking.apps.statistics',
+    'checkin_parking.apps.zones',
 )
 
 # ======================================================================================================== #

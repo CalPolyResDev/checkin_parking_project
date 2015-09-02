@@ -1,5 +1,5 @@
 """
-.. module:: checkin_parking.core.context_processors
+.. module:: checkin_parking.apps.core.context_processors
    :synopsis: Checkin Parking Reservation Core Context Processors.
 
 .. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>

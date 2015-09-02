@@ -6,15 +6,13 @@
 
 """
 
-import ast
 import logging
-from HTMLParser import HTMLParser
 
 from django.views.decorators.http import require_POST
 
 from django_ajax.decorators import ajax
 
-from ..zones.models import Building
+from ..zones.models import Community
 
 
 logger = logging.getLogger(__name__)
@@ -25,39 +23,40 @@ logger = logging.getLogger(__name__)
 def update_building(request):
     """ Update building drop-down choices based on the community chosen.
 
-    :param community: The community for which to display building choices.
-    :type community: str
-    :param building_selection: The building selected before form submission.
-    :type building_selection: str
+    :param community_id: The community for which to display building choices.
+    :type community_id: str
+
+    :param building_selection_id (optional): The building selected before form submission.
+    :type building_selection_id (optional): str
+
+    :param css_target (optional): The target of which to replace inner HTML. Defaults to #id_sub_department.
+    :type css_target (optional): str
 
     """
 
     # Pull post parameters
     community_id = request.POST.get("community_id", None)
-    building_selections = request.POST.get("building_selections", None)
+    building_selection_id = request.POST.get("building_selection_id", None)
+    css_target = request.POST.get("css_target", '#id_sub_department')
 
     choices = []
 
-    if building_selections:
-        building_selections = map(int, ast.literal_eval(HTMLParser().unescape(building_selections)))
-
-    # Add options iff a building is selected
+    # Add options iff a department is selected
     if community_id:
-        building_options = Building.objects.filter(community__id=community_id)
+        community_instance = Community.objects.get(id=int(community_id))
 
-        for building in building_options:
-            if building_selections and building.id in building_selections:
-                selected = "selected='selected'"
+        for building in community_instance.buildings.all():
+            if building_selection_id and building.id == int(building_selection_id):
+                choices.append("<option value='{id}' selected='selected'>{name}</option>".format(id=building.id, name=building.name))
             else:
-                selected = ""
-
-            choices.append("<option value='{id}'{selected}>{name}</option>".format(id=building.id, selected=selected, name=building.name))
+                choices.append("<option value='{id}'>{name}</option>".format(id=building.id, name=building.name))
     else:
-        logger.debug("A building wasn't passed via POST.")
+        logger.warning("A department wasn't passed via POST.")
+        choices.append("<option value='{id}'>{name}</option>".format(id="", name="---------"))
 
     data = {
         'inner-fragments': {
-            '#id_buildings': ''.join(choices),
+            css_target: ''.join(choices)
         },
     }
 

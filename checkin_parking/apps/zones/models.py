@@ -24,7 +24,7 @@ class Building(Model):
     """Housing Building."""
 
     name = CharField(max_length=30, verbose_name="Building Name")
-    community = ForeignKey(Community, verbose_name="Community")
+    community = ForeignKey(Community, verbose_name="Community", related_name="buildings")
 
     def __unicode__(self):
         return str(self.community) + " " + self.name

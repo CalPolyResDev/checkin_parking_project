@@ -1,5 +1,5 @@
 """
-.. module:: checkin_parking.core.views
+.. module:: checkin_parking.apps.core.views
    :synopsis: Checkin Parking Reservation Core Views.
 
 .. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block subtitle %} | HTTP 500{% endblock %}
+
+{% block sidenav %}{% endblock %}
+
+{% block content %}
+    <div id="mainColFull">
+        <h1>Internal Server Error (HTTP 500)</h1>
+        <p>Oh no! It looks like something went wrong with our code!</p>
+        <p>If this is a frequent occurence, please consider notifying us via email at <a href="mailto:resdev@calpoly.edu">resdev@calpoly.edu</a> with a description of what's happening.
+        {% if request.sentry.id %}
+        Include the following Sentry ID in your description:<br /><br />
+        <b>SENTRY_ID = {{ request.sentry.id }}</b>
+        {% endif %}
+        </p>
+        <p>For more information on what an HTTP 500 error is and how it occurs, <a href="http://httpstatus.es/500" target="_blank">click here</a>.</p>
+    </div>
+{% endblock %}

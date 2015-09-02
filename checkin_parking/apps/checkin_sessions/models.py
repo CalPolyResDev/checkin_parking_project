@@ -14,12 +14,12 @@ from django.db.models.fields.related import ForeignKey
 
 from ..zones.models import Zone
 
+CLASS_LEVELS = ['Freshman', 'Transfer', 'Continuing', 'All']
+CLASS_LEVEL_CHOICES = [(CLASS_LEVELS.index(class_level), class_level) for class_level in CLASS_LEVELS]
+
 
 class Session(Model):
     """ A parking session."""
-
-    CLASS_LEVELS = ['Freshman', 'Transfer', 'Continuing', 'All']
-    CLASS_LEVEL_CHOICES = [(CLASS_LEVELS.index(class_level), class_level) for class_level in CLASS_LEVELS]
 
     date = DateField(verbose_name="Date")
     time = TimeField(verbose_name="Time")

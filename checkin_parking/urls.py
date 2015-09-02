@@ -16,14 +16,14 @@ from django.core.exceptions import PermissionDenied
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.staticfiles.templatetags.staticfiles import static
-from django.views.generic import RedirectView
+from django.views.generic import TemplateView, RedirectView
 from django.views.defaults import server_error, permission_denied, page_not_found
 
-from .apps.core.views import IndexView, LoginView, logout
+from django_cas_ng.views import login as auth_login, logout as auth_logout
+
+from .apps.core.views import IndexView
 from .apps.zones.views import ZoneCreateView
 from .apps.zones.ajax import update_building
-
-from .settings.base import ral_manager_access_test
 
 
 def permissions_check(test_func, raise_exception=True):
@@ -51,7 +51,7 @@ def permissions_check(test_func, raise_exception=True):
         return False
     return user_passes_test(check_perms)
 
-ral_manager_access = permissions_check(ral_manager_access_test)
+administration_access = permissions_check((lambda user: user.is_admin))
 
 admin.autodiscover()
 
@@ -61,18 +61,19 @@ logger = logging.getLogger(__name__)
 # Core
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='home'),
+    url(r'^login/$', auth_login, name='login'),
+    url(r'^logout/$', auth_logout, name='logout'), # kwargs={'next_page': settings.CAS_LOGOUT_URL},
     url(r'^favicon\.ico$', RedirectView.as_view(url=static('images/icons/favicon.ico')), name='favicon'),
+    url(r'^admin/', TemplateView.as_view(template_name="honeypot.html"), name="honeypot"),  # admin site urls, honeypot
     url(r'^flugzeug/', include(admin.site.urls)),  # admin site urls, masked
-    url(r'^login/$', LoginView.as_view(), name='login'),
-    url(r'^logout/$', logout, name='logout'),
 ]
 
 # Sessions
 urlpatterns += [
-    url(r'^sessions/list/$', login_required(ral_manager_access(IndexView.as_view())), name='list_sessions'),
-    url(r'^sessions/create/$', login_required(ral_manager_access(IndexView.as_view())), name='create_sessions'),
-    url(r'^sessions/(?P<id>\d+)/$', login_required(ral_manager_access(IndexView.as_view())), name='edit_session'),
-    url(r'^sessions/(?P<id>\d+)/delete/$', login_required(ral_manager_access(IndexView.as_view())), name='delete_session'),
+    url(r'^sessions/list/$', login_required(administration_access(IndexView.as_view())), name='list_sessions'),
+    url(r'^sessions/create/$', login_required(administration_access(IndexView.as_view())), name='create_sessions'),
+    url(r'^sessions/(?P<id>\d+)/$', login_required(administration_access(IndexView.as_view())), name='edit_session'),
+    url(r'^sessions/(?P<id>\d+)/delete/$', login_required(administration_access(IndexView.as_view())), name='delete_session'),
     url(r'^sessions/reservation/reserve/$', login_required(IndexView.as_view()), name='reserve_session'),
     url(r'^sessions/reservation/detail/$', login_required(IndexView.as_view()), name='view_reservation'),
     url(r'^sessions/reservation/change/$', login_required(IndexView.as_view()), name='change_reservation'),
@@ -82,33 +83,33 @@ urlpatterns += [
 
 # Zones
 urlpatterns += [
-    url(r'^zones/list/$', login_required(ral_manager_access(IndexView.as_view())), name='list_zones'),
-    url(r'^zones/create/$', login_required(ral_manager_access(ZoneCreateView.as_view())), name='create_zone'),
-    url(r'^zones/(?P<id>\d+)/$', login_required(ral_manager_access(IndexView.as_view())), name='edit_zone'),
-    url(r'^zones/(?P<id>\d+)/delete/$', login_required(ral_manager_access(IndexView.as_view())), name='delete_zone'),
+    url(r'^zones/list/$', login_required(administration_access(IndexView.as_view())), name='list_zones'),
+    url(r'^zones/create/$', login_required(administration_access(ZoneCreateView.as_view())), name='create_zone'),
+    url(r'^zones/(?P<id>\d+)/$', login_required(administration_access(IndexView.as_view())), name='edit_zone'),
+    url(r'^zones/(?P<id>\d+)/delete/$', login_required(administration_access(IndexView.as_view())), name='delete_zone'),
     url(r'^zones/ajax/update_building/$', login_required(update_building), name='ajax_update_building'),
 ]
 
 # PDFs
 urlpatterns += [
-    url(r'^pdfs/maps/list/$', login_required(ral_manager_access(IndexView.as_view())), name='list_maps'),
+    url(r'^pdfs/maps/list/$', login_required(administration_access(IndexView.as_view())), name='list_maps'),
     url(r'^pdfs/parking_pass/generate/$', login_required(IndexView.as_view()), name='generate_parking_pass'),
 ]
 
 # Residents
 urlpatterns += [
-    url(r'^residents/lookup/$', login_required(ral_manager_access(IndexView.as_view())), name='lookup_residents'),
+    url(r'^residents/lookup/$', login_required(administration_access(IndexView.as_view())), name='lookup_residents'),
 ]
 
 # Statistics
 urlpatterns += [
-    url(r'^statistics/$', login_required(ral_manager_access(IndexView.as_view())), name='statistics'),
+    url(r'^statistics/$', login_required(administration_access(IndexView.as_view())), name='statistics'),
 ]
 
 # Administration
 urlpatterns += [
-    url(r'^admin/settings/$', login_required(ral_manager_access(IndexView.as_view())), name='settings'),
-    url(r'^admin/purge/$', login_required(ral_manager_access(IndexView.as_view())), name='purge'),
+    url(r'^admin/settings/$', login_required(administration_access(IndexView.as_view())), name='settings'),
+    url(r'^admin/purge/$', login_required(administration_access(IndexView.as_view())), name='purge'),
 ]
 
 # Raise errors on purpose
