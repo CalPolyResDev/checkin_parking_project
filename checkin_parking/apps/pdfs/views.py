@@ -29,13 +29,13 @@ class ParkingPassPDFView(TemplateView):
             'end': '2:40PM',
             'building': 'Huasna',
             'zone': '5',
-            'qr_code_url': 'www.calpoly.edu'
         }
 
         context = Context({
             'resident_name': 'Fred Smith',
             'cal_poly_logo_path': Path(MEDIA_ROOT).joinpath('pdf_assets/cp_logo.gif'),
-            'parking': parking
+            'parking': parking,
+            'qr_code_url': 'www.calpoly.edu',
         })
         xmlstring = template.render(context)
         pdfstr = trml2pdf.parseString(xmlstring)
