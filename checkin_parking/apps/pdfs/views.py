@@ -37,13 +37,13 @@ class ParkingPassPDFView(TemplateView):
             'parking': parking,
             'qr_code_url': 'www.calpoly.edu',
         })
-        xmlstring = template.render(context)
-        pdfstr = trml2pdf.parseString(xmlstring)
+        source_xml = template.render(context)
+        pdf_data = trml2pdf.parseString(source_xml)
 
         response = HttpResponse()
         response['Content-Type'] = 'application/pdf'
         response['Content-Disposition'] = 'filename=parkingpass.pdf'
 
-        response.write(pdfstr)
+        response.write(pdf_data)
 
         return response
