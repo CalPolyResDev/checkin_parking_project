@@ -29,6 +29,7 @@ class ParkingPassPDFView(TemplateView):
             'end': '2:40PM',
             'building': 'Huasna',
             'zone': '5',
+            'qr_code_url': 'www.calpoly.edu'
         }
 
         context = Context({
