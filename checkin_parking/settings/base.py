@@ -1,11 +1,8 @@
-import ldap3
 import os
 from pathlib import Path
 
-from django.core.exceptions import ImproperlyConfigured
-
-from django_auth_ldap.config import LDAPSearch, NestedActiveDirectoryGroupType
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 
 
 def get_env_variable(name):
