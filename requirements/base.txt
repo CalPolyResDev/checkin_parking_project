@@ -11,7 +11,7 @@ raven~=5.5
 ldap-groups==4.1.0
 dj_database_url==0.3.0
 mysqlclient~=1.3.3
-git+https://github.com/interlegis/trml2pdf.git@python3-port
+git+https://github.com/CalPolyResDev/trml2pdf.git
 
 # The only non-pure python package!
 cx_Oracle==5.2

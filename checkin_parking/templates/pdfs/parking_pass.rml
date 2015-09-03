@@ -1,57 +1,57 @@
 <!DOCTYPE document SYSTEM "rml.dtd">
 <document filename="parking_pass.pdf">
 
-    <template showBoundary="0">
+    <template showBoundary="0" pageSize="(8.5in,11in)">
         <pageTemplate id="main">
             <pageGraphics>
-                <image file="{{ cal_poly_logo_path }}" x=".5in" y="9.5in" width="1.75in" height="1in"/>
+                <image file="{{ cal_poly_logo_path }}" x=".5in" y="9.75in" height=".75in"/>
                 <fill color="black"/>
-                <setFont name="Helvetica-Bold" size="20"/>
-                <drawString x="3.9in" y="10.3in">Cal Poly University Housing</drawString>
-                <drawString x="3.05in" y="9.9in">Checkin Registration Confirmation"</drawString>
+                <setFont name="Helvetica-Bold" size="16"/>
+                <drawRightString x="8in" y="10.2in">University Housing</drawRightString>
+                <drawRightString x="8in" y="9.85in">Checkin Registration Confirmation</drawRightString>
+                <!--For Margins: <lines>.5in 0in .5in 11in 8in 0in 8in 11in 0in .5in 8.5in .5in 0in 10.5in 8.5in 10.5in 4.25in 0in 4.25in 11in</lines> -->
+                <rect x="1in" y="2.25in" height="3in" width="6.5in"/>
+                <barCode code="QR" x="6in" y="7.75in" value="www.google.com" height="2in" width="2in"/>
             </pageGraphics>
-            <frame id="first" x1="1in" y1="1in" width="6.5in" height="9.25in"/>
+            <frame id="first" x1=".5in" y1=".5in" width="7.5in" height="8.75in"/>
         </pageTemplate>
     </template>
     
     <stylesheet>
-        <paraStyle name="body" fontName="Helvetica" fontSize="12">
-        <paraStyle name="additional_note" fontName="Helvetica-Bold" fontSize="15">
-        <paraStyle name="date" fontName="Helvetica-Bold" fontSize="24">
-        <paraStyle name="time_interval" fontName="Helvetica-Bold" fontSize="48">
-        <paraStyle name="zone_and_building" fontName="Helvetica-Bold" fontSize="42">
-        <paraStyle name="dashboard_note" fontName="Helvetica-Bold" fontSize="36">
+        <paraStyle name="body" fontName="Helvetica" fontSize="14"/>
+        <paraStyle name="additional_note" fontName="Helvetica-Bold" fontSize="15"/>
+        <paraStyle name="date" fontName="Helvetica-Bold" fontSize="30"  alignment="center"/>
+        <paraStyle name="time_interval" fontName="Helvetica-Bold" fontSize="48" alignment="center"/>
+        <paraStyle name="zone_and_building" fontName="Helvetica-Bold" fontSize="42" alignment="center"/>
+        <paraStyle name="dashboard_note" fontName="Helvetica-Bold" fontSize="36" alignment="center"/>
+        <paraStyle name="important_instruction" fontName="Helvetica-Bold" fontSize="10"/>
+        <listStyle name="bullet_list" bulletType='bullet' start='•' bulletFontSize='12'/>
     </stylesheet>
     
     <story>
-    <h1>Resident: {{ resident_name }}</h1>
-        <para style="body">
-            <strong>Instructions:</strong>
-            <ul>
-                <li>Print out this page and place it on your dashboard in a clearly visible location.</li>
-                <li>At your reserved time slot, proceed to your assigned short-term parking zone.</li>
-                <li>Check in at your building’s designated check-in area as shown on the map.</li>
-                <li><strong>After you’ve finished unloading (but before this pass expires), 
-                    please move your car to the long-term parking location as shown on the map.</strong></li>
-            </ul>
-        </para>
-        <para style="body">
-            <strong>Additional Rules:</strong>
-            <ul>
-                <li>Only one move-in parking pass may be displayed at a time.</li>
-                <li>Any vehicle parked for longer than 20 minutes will be cited or towed away at owner's expense.</li> 
-                <li>No vehicles are permitted on any lawn areas or walkways at any time.</li>
-                <li>Parking is never permitted in fire lanes or state vehicle spaces.</li>
-            </ul>
-        </para>
-        <para style="additional_note">
+        <h1>Resident: {{ resident_name }}</h1>
+        <h3>Instructions:</h3>
+        <ul style="bullet_list">
+            <li>Print out this page and place it on your dashboard in a clearly visible location.</li>
+            <li>At your reserved time slot, proceed to your assigned short-term parking zone.</li>
+            <li>Check in at your building’s designated check-in area as shown on the map.</li>
+            <li style='important_instruction'>After you’ve finished unloading (but before this pass expires), 
+                please move your car to the long-term parking location as shown on the map.</li>
+        </ul>
+        <h3>Additional Rules:</h3>
+        <ul style="bullet_list">
+            <li>Only one move-in parking pass may be displayed at a time.</li>
+            <li>Any vehicle parked for longer than 20 minutes will be cited or towed away at owner's expense.</li> 
+            <li>No vehicles are permitted on any lawn areas or walkways at any time.</li>
+            <li>Parking is never permitted in fire lanes or state vehicle spaces.</li>
+        </ul>
+        <para style="additional_note" spaceBefore=".2in">
             <strong>Additional passes may be acquired if needed at the check-in desk as space permits.</strong>
         </para>
-
-        <para style="date">{{ parking.date }}</para>
-        <para style="time_interval">{{ parking.start }} - {{ parking.end }}</para>
-        <para style="zone_and_building">{{ parking.building }} - {{ parking.zone }}</para>
-        <para style="dashboard_note">Display on Dashboard</para>        
+        <para style="date" spaceBefore=".85in">{{ parking.date }}</para>
+        <para style="time_interval" spaceBefore=".05in">{{ parking.start }} - {{ parking.end }}</para>
+        <para style="zone_and_building" spaceBefore=".25in">Zone: {{ parking.building }} - {{ parking.zone }}</para>
+        <para style="dashboard_note" spaceBefore="1in">Display on Dashboard</para>        
     </story>
     
 </document>

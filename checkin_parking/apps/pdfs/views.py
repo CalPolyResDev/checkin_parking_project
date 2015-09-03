@@ -24,7 +24,7 @@ class ParkingPassPDFView(TemplateView):
         template = get_template('pdfs/parking_pass.rml')
 
         parking = {
-            'date': 'Sept 8, 2015',
+            'date': 'Wednesday, September 8, 2015',
             'start': '2:00PM',
             'end': '2:40PM',
             'building': 'Huasna',
@@ -33,7 +33,7 @@ class ParkingPassPDFView(TemplateView):
 
         context = Context({
             'resident_name': 'Fred Smith',
-            'cal_poly_logo_path': Path(MEDIA_ROOT).joinpath('pdf_assets/cp_logo.png'),
+            'cal_poly_logo_path': Path(MEDIA_ROOT).joinpath('pdf_assets/cp_logo.gif'),
             'parking': parking
         })
         xmlstring = template.render(context)
