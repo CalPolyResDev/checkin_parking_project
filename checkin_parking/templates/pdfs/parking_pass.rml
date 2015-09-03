@@ -4,11 +4,11 @@
     <template showBoundary="0">
         <pageTemplate id="main">
             <pageGraphics>
-                <image file="{{ logo_path }}" x=".5in" y="9.5in" width="1.75in" height="1in"/>
+                <image file="{{ cal_poly_logo_path }}" x=".5in" y="9.5in" width="1.75in" height="1in"/>
                 <fill color="black"/>
                 <setFont name="Helvetica-Bold" size="20"/>
                 <drawString x="3.9in" y="10.3in">Cal Poly University Housing</drawString>
-                <drawString x="3.05in" y="9.9in">{{ move_type }} Registration Confirmation"</drawString>
+                <drawString x="3.05in" y="9.9in">Checkin Registration Confirmation"</drawString>
             </pageGraphics>
             <frame id="first" x1="1in" y1="1in" width="6.5in" height="9.25in"/>
         </pageTemplate>

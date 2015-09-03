@@ -10,20 +10,20 @@
 import logging
 
 from django.conf import settings
-from django.conf.urls.static import static as static_url
 from django.conf.urls import include, url
-from django.core.exceptions import PermissionDenied
+from django.conf.urls.static import static as static_url
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.staticfiles.templatetags.staticfiles import static
-from django.views.generic import TemplateView, RedirectView
+from django.core.exceptions import PermissionDenied
 from django.views.defaults import server_error, permission_denied, page_not_found
-
+from django.views.generic import TemplateView, RedirectView
 from django_cas_ng.views import login as auth_login, logout as auth_logout
 
 from .apps.core.views import IndexView
-from .apps.zones.views import ZoneCreateView
+from .apps.pdfs.views import ParkingPassPDFView
 from .apps.zones.ajax import update_building
+from .apps.zones.views import ZoneCreateView
 
 
 def permissions_check(test_func, raise_exception=True):
@@ -62,7 +62,7 @@ logger = logging.getLogger(__name__)
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='home'),
     url(r'^login/$', auth_login, name='login'),
-    url(r'^logout/$', auth_logout, name='logout'), # kwargs={'next_page': settings.CAS_LOGOUT_URL},
+    url(r'^logout/$', auth_logout, name='logout'),  # kwargs={'next_page': settings.CAS_LOGOUT_URL},
     url(r'^favicon\.ico$', RedirectView.as_view(url=static('images/icons/favicon.ico')), name='favicon'),
     url(r'^admin/', TemplateView.as_view(template_name="honeypot.html"), name="honeypot"),  # admin site urls, honeypot
     url(r'^flugzeug/', include(admin.site.urls)),  # admin site urls, masked
@@ -93,7 +93,7 @@ urlpatterns += [
 # PDFs
 urlpatterns += [
     url(r'^pdfs/maps/list/$', login_required(administration_access(IndexView.as_view())), name='list_maps'),
-    url(r'^pdfs/parking_pass/generate/$', login_required(IndexView.as_view()), name='generate_parking_pass'),
+    url(r'^pdfs/parking_pass/generate/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
 ]
 
 # Residents
