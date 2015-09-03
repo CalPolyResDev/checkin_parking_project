@@ -11,7 +11,7 @@
                 <drawRightString x="8in" y="9.85in">Checkin Registration Confirmation</drawRightString>
                 <!--For Margins: <lines>.5in 0in .5in 11in 8in 0in 8in 11in 0in .5in 8.5in .5in 0in 10.5in 8.5in 10.5in 4.25in 0in 4.25in 11in</lines> -->
                 <rect x="1in" y="2.25in" height="3in" width="6.5in"/>
-                <barCode code="QR" x="6in" y="7.75in" value="{{ qr_code_url }}" height="2in" width="2in"/>
+                <barCode code="QR" x="6in" y="7.85in" value="{{ qr_code_url }}" height="2in" width="2in"/>
             </pageGraphics>
             <frame id="first" x1=".5in" y1=".5in" width="7.5in" height="8.75in"/>
         </pageTemplate>
