@@ -1,11 +1,8 @@
-import ldap3
 import os
 from pathlib import Path
 
-from django.core.exceptions import ImproperlyConfigured
-
-from django_auth_ldap.config import LDAPSearch, NestedActiveDirectoryGroupType
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 
 
 def get_env_variable(name):
@@ -73,7 +70,7 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 DATABASES = {
     'default': dj_database_url.config(default=get_env_variable('CHECKIN_PARKING_DB_DEFAULT_DATABASE_URL')),
-#     'resnet_internal': dj_database_url.config(default=get_env_variable('CHECKIN_PARKING_DB_COMMON_DATABASE_URL')),
+    #     'resnet_internal': dj_database_url.config(default=get_env_variable('CHECKIN_PARKING_DB_COMMON_DATABASE_URL')),
     'rms': {
         'ENGINE': 'django.db.backends.oracle',
         'NAME': 'mercprd.db.calpoly.edu:1521/mercprd',
@@ -93,21 +90,33 @@ DATABASE_ROUTERS = (
 # Incoming email settings
 INCOMING_EMAIL = {
     'IMAP4': {  # IMAP4 is currently the only supported protocol. It must be included.
-        'HOST': 'outlook.office365.com',  # The host to use for receiving email. Set to empty string for localhost.
-        'PORT': 993,  # The port to use. Set to empty string for default values: 143, 993(SSL).
+        # The host to use for receiving email. Set to empty string for
+        # localhost.
+        'HOST': 'outlook.office365.com',
+        # The port to use. Set to empty string for default values: 143,
+        # 993(SSL).
+        'PORT': 993,
         'USE_SSL': True,  # Whether or not to use SSL (Boolean)
-        'USER': get_env_variable('CHECKIN_PARKING_EMAIL_USERNAME'),  # The username to use. The full email address is what most servers require.
-        'PASSWORD': get_env_variable('CHECKIN_PARKING_EMAIL_PASSWORD'),  # The password to use. Note that only clearText authentication is supported.
+        # The username to use. The full email address is what most servers
+        # require.
+        'USER': get_env_variable('CHECKIN_PARKING_EMAIL_USERNAME'),
+        # The password to use. Note that only clearText authentication is
+        # supported.
+        'PASSWORD': get_env_variable('CHECKIN_PARKING_EMAIL_PASSWORD'),
     },
 }
 
 # Outgoing email settings
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # This configuration uses the SMTP protocol as a backend
-EMAIL_HOST = 'mail.calpoly.edu'  # The host to use for sending email. Set to empty string for localhost.
+# This configuration uses the SMTP protocol as a backend
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# The host to use for sending email. Set to empty string for localhost.
+EMAIL_HOST = 'mail.calpoly.edu'
 EMAIL_PORT = 25  # The port to use. Defaul values: 25, 587
 EMAIL_USE_TLS = True  # Whether or not to use SSL (Boolean)
-EMAIL_HOST_USER = INCOMING_EMAIL['IMAP4']['USER']  # The username to use. The full email address is what most servers require.
-EMAIL_HOST_PASSWORD = INCOMING_EMAIL['IMAP4']['PASSWORD']  # The password to use. Note that only clearText authentication is supported.
+# The username to use. The full email address is what most servers require.
+EMAIL_HOST_USER = INCOMING_EMAIL['IMAP4']['USER']
+# The password to use. Note that only clearText authentication is supported.
+EMAIL_HOST_PASSWORD = INCOMING_EMAIL['IMAP4']['PASSWORD']
 
 # Set the server's email address (for sending emails only)
 SERVER_EMAIL = 'ResDev Mail Relay Server <resdev@calpoly.edu>'
@@ -142,9 +151,11 @@ CAS_SERVER_URL = "https://mydev.calpoly.edu/cas/"
 
 LDAP_GROUPS_SERVER_URI = 'ldap://ad.calpoly.edu'
 LDAP_GROUPS_BASE_DN = 'DC=ad,DC=calpoly,DC=edu'
-LDAP_GROUPS_USER_BASE_DN = 'OU=People,OU=Enterprise,OU=Accounts,' + LDAP_GROUPS_BASE_DN
+LDAP_GROUPS_USER_BASE_DN = 'OU=People,OU=Enterprise,OU=Accounts,' + \
+    LDAP_GROUPS_BASE_DN
 
-LDAP_GROUPS_USER_SEARCH_BASE_DN = 'OU=Enterprise,OU=Accounts,' + LDAP_GROUPS_BASE_DN
+LDAP_GROUPS_USER_SEARCH_BASE_DN = 'OU=Enterprise,OU=Accounts,' + \
+    LDAP_GROUPS_BASE_DN
 LDAP_GROUPS_GROUP_SEARCH_BASE_DN = 'OU=Groups,' + LDAP_GROUPS_BASE_DN
 
 LDAP_GROUPS_BIND_DN = get_env_variable('CHECKIN_PARKING_LDAP_USER_DN')
@@ -154,8 +165,10 @@ LDAP_GROUPS_USER_LOOKUP_ATTRIBUTE = 'userPrincipalName'
 LDAP_GROUPS_GROUP_LOOKUP_ATTRIBUTE = 'name'
 LDAP_GROUPS_ATTRIBUTE_LIST = ['displayName', LDAP_GROUPS_USER_LOOKUP_ATTRIBUTE]
 
-LDAP_ADMIN_GROUP = 'CN=checkinparking,OU=Websites,OU=UH,OU=Manual,OU=Groups,' + LDAP_GROUPS_BASE_DN
-LDAP_DEVELOPER_GROUP = 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,' + LDAP_GROUPS_BASE_DN
+LDAP_ADMIN_GROUP = 'CN=checkinparking,OU=Websites,OU=UH,OU=Manual,OU=Groups,' + \
+    LDAP_GROUPS_BASE_DN
+LDAP_DEVELOPER_GROUP = 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,' + \
+    LDAP_GROUPS_BASE_DN
 
 
 # ======================================================================================================== #
@@ -180,7 +193,8 @@ PROJECT_DIR = Path(__file__).parents[2]
 # The directory that will hold user-uploaded files.
 MEDIA_ROOT = str(PROJECT_DIR.joinpath("media").resolve())
 
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a trailing slash.
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash.
 MEDIA_URL = '/media/'
 
 # The directory static files should be collected to.
@@ -196,7 +210,8 @@ STATICFILES_DIRS = (
     str(PROJECT_DIR.joinpath("checkin_parking", "static").resolve()),
 )
 
-# List of finder classes that know how to find static files in various locations.
+# List of finder classes that know how to find static files in various
+# locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -254,7 +269,7 @@ INSTALLED_APPS = (
     'checkin_parking.apps.core.templatetags.__init__.default_app_config',
     'checkin_parking.apps.pdfs',
     'checkin_parking.apps.residents',
-    'checkin_parking.apps.checkin_sessions',
+    'checkin_parking.apps.reservation_slots',
     'checkin_parking.apps.statistics',
     'checkin_parking.apps.zones',
 )
@@ -271,7 +286,7 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'root': {
-        'level': 'INFO',
+        'level': 'DEBUG',
         'handlers': ['sentry'],
     },
     'formatters': {

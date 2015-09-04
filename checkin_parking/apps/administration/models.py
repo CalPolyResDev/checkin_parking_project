@@ -8,8 +8,8 @@
 """
 
 from django.db.models.base import Model
-from django.db.models.fields import BooleanField, IntegerField
-
+from django.db.models.fields import BooleanField, \
+    PositiveSmallIntegerField
 from rmsconnector.utils import get_current_term
 
 
@@ -17,7 +17,7 @@ class AdminSettings(Model):
     """ Administrative settings."""
 
     reservation_open = BooleanField(default=True, verbose_name=u'Reservation Open')
-    term_code = IntegerField(max_length=4, default=get_current_term, verbose_name=u'Term Code')
+    term_code = PositiveSmallIntegerField(default=get_current_term, verbose_name=u'Term Code')
 
     class Meta:
         verbose_name_plural = "AdminSettings"
