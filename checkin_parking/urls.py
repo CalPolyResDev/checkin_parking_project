@@ -21,7 +21,7 @@ from django.views.generic import TemplateView, RedirectView
 from django_cas_ng.views import login as auth_login, logout as auth_logout
 
 from .apps.core.views import IndexView
-from .apps.pdfs.views import ParkingPassPDFView
+from .apps.pdfs.views import ParkingPassPDFView, ParkingPassVerificationView
 from .apps.zones.ajax import update_building
 from .apps.zones.views import ZoneCreateView
 
@@ -94,6 +94,7 @@ urlpatterns += [
 urlpatterns += [
     url(r'^pdfs/maps/list/$', login_required(administration_access(IndexView.as_view())), name='list_maps'),
     url(r'^pdfs/parking_pass/generate/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
+    url(r'^pdfs/parking_pass/verify/(?P<id>\d+)/$', ParkingPassVerificationView.as_view(), name='verify_parking_pass'),
 ]
 
 # Residents

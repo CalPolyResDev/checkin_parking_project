@@ -17,6 +17,21 @@ import trml2pdf
 from checkin_parking.settings.base import MEDIA_ROOT
 
 
+class ParkingPassVerificationView(TemplateView):
+    template_name = 'pdfs/parking_pass_verification.html'
+
+    def get_context_data(self, **kwargs):
+        context = TemplateView.get_context_data(self, **kwargs)
+
+        parking_pass = {
+            'valid': False
+        }
+
+        context['parking_pass'] = parking_pass
+
+        return context
+
+
 class ParkingPassPDFView(TemplateView):
 
     def render_to_response(self, context, **response_kwargs):
