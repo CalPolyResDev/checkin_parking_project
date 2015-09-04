@@ -1,6 +1,6 @@
 """
 .. module:: checkin_parking.checkin_sessions.models
-   :synopsis: Checkin Parking Reservation Session Models.
+   :synopsis: Checkin Parking Reservation Models.
 
 .. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
 
@@ -18,7 +18,7 @@ CLASS_LEVELS = ['Freshman', 'Transfer', 'Continuing', 'All']
 CLASS_LEVEL_CHOICES = [(CLASS_LEVELS.index(class_level), class_level) for class_level in CLASS_LEVELS]
 
 
-class Session(Model):
+class ReservationSlot(Model):
     """ A parking session."""
 
     date = DateField(verbose_name="Date")

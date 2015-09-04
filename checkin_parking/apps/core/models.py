@@ -8,12 +8,14 @@
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
+from django.core.mail import send_mail
+from django.db.models.deletion import SET_NULL
 from django.db.models.fields import CharField, EmailField, BooleanField
 from django.db.models.fields.related import ForeignKey
-from django.db.models.deletion import SET_NULL
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.core.mail import send_mail
+
+from ..reservation_slots.models import ReservationSlot
 
 
 class CheckinParkingUserManager(UserManager):
@@ -43,7 +45,7 @@ class CheckinParkingUser(AbstractBaseUser, PermissionsMixin):
     email = EmailField(blank=True, verbose_name='Email Address')
 
     # Session reservation
-    reservation = ForeignKey('checkin_sessions.Session', null=True, blank=True, default=None, on_delete=SET_NULL)
+    reservation = ForeignKey(ReservationSlot, null=True, blank=True, default=None, on_delete=SET_NULL)
 
     is_active = BooleanField(default=True)
     is_staff = BooleanField(default=False)

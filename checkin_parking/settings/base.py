@@ -269,7 +269,7 @@ INSTALLED_APPS = (
     'checkin_parking.apps.core.templatetags.__init__.default_app_config',
     'checkin_parking.apps.pdfs',
     'checkin_parking.apps.residents',
-    'checkin_parking.apps.checkin_sessions',
+    'checkin_parking.apps.reservation_slots',
     'checkin_parking.apps.statistics',
     'checkin_parking.apps.zones',
 )
