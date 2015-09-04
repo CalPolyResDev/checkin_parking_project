@@ -8,9 +8,8 @@
 """
 
 from django.db.models.base import Model
-from django.db.models.fields import BooleanField, IntegerField, \
+from django.db.models.fields import BooleanField, \
     PositiveSmallIntegerField
-
 from rmsconnector.utils import get_current_term
 
 

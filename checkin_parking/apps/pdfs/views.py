@@ -6,7 +6,6 @@
 
 """
 
-from datetime import datetime
 from pathlib import Path
 
 from django.http.response import HttpResponse
