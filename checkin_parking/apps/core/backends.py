@@ -9,11 +9,12 @@
 import logging
 
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from ldap3 import Server, Connection, ObjectDef, AttrDef, Reader
 from django_cas_ng.backends import CASBackend
-
 from ldap_groups.groups import ADGroup
+from rmsconnector import Resident
 
 logger = logging.getLogger(__name__)
 
@@ -61,19 +62,16 @@ class CASLDAPBackend(CASBackend):
                     user.is_staff = True
                     user.is_superuser = True
 
-                # Ensure that non-admins who log in are actually future residents
+                # Ensure that non-admins who log in are future residents
                 if not user.is_admin or not user.is_superuser:
                     # See if the user exists in the rms database (alias is valid)
                     try:
-                        resident = Resident(alias=alias, term_code=term_code)
-                    except ObjectDoesNotExist:
-                        raise ValidationError("The alias and date of birth provided do not match university housing records.")
-
-                    # See if the user is set to live on campus
-                    try:
-                        resident.get_address()
-                    except ObjectDoesNotExist:
-                        raise ValidationError("The resident with the alias provided does not currently reside in University Housing.")
+                        Resident(principal_name=principal_name)
+                    except ObjectDoesNotExist as exc:
+                        if str(exc).startswith("A room booking could not be found"):
+                            raise ValidationError("{principal_name} does not currently reside in University Housing.".format(principal_name=principal_name))
+                        else:
+                            raise ValidationError("University Housing has no record of {principal_name}.".format(principal_name=principal_name))
 
                 user.full_name = user_info["displayName"]
                 user.first_name = user_info["givenName"]
