@@ -1,6 +1,6 @@
 """
-.. module:: checkin_parking.apps.pdfs.views
-   :synopsis: Checkin Parking Reservation PDF Views.
+.. module:: checkin_parking.apps.reservations.views
+   :synopsis: Checkin Parking Reservation Reservation Views.
 
 .. moduleauthor:: Thomas Willson <thomas.willson@me.com>
 
@@ -23,7 +23,7 @@ from ..reservations.models import ReservationSlot
 
 
 class ParkingPassVerificationView(TemplateView):
-    template_name = 'pdfs/parking_pass_verification.html'
+    template_name = 'reservations/parking_pass_verification.html'
 
     def get_context_data(self, **kwargs):
         context = super(ParkingPassVerificationView, self).get_context_data(kwargs)
@@ -46,7 +46,7 @@ class ParkingPassVerificationView(TemplateView):
 
 
 class ParkingPassPDFView(TemplateView):
-    template_name = 'pdfs/parking_pass.rml'
+    template_name = 'reservations/parking_pass.rml'
 
     def get_context_data(self, **kwargs):
         context = super(ParkingPassPDFView, self).get_context_data(kwargs)
