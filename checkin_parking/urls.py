@@ -22,7 +22,7 @@ from django.views.generic import TemplateView, RedirectView
 from django_cas_ng.views import login as auth_login, logout as auth_logout
 
 from .apps.administration.ajax import purge
-from .apps.administration.views import AdminSettingsUpdateView, PurgeView
+from .apps.administration.views import AdminSettingsUpdateView, PurgeView, PDFMapUploadView
 from .apps.core.views import IndexView, handler500
 from .apps.reservations.views import ParkingPassPDFView, ParkingPassVerificationView
 from .apps.zones.ajax import update_buildings, delete_zone
@@ -111,7 +111,7 @@ urlpatterns += [
     url(r'^settings/$', login_required(administrative_access(AdminSettingsUpdateView.as_view())), name='settings'),
     url(r'^settings/purge/$', login_required(administrative_access(PurgeView.as_view())), name='purge'),
     url(r'^settings/ajax/run_purge/$', login_required(administrative_access(purge)), name='run_purge'),
-    url(r'^settings/maps/$', login_required(administrative_access(IndexView.as_view())), name='list_maps'),
+    url(r'^settings/maps/$', login_required(administrative_access(PDFMapUploadView.as_view())), name='update_maps'),
 ]
 
 # Raise errors on purpose

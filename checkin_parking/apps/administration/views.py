@@ -13,6 +13,8 @@ from django.views.decorators.http import require_POST
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView, UpdateView
 
+from checkin_parking.apps.administration.forms import PDFMapForm
+
 from ...settings.base import MEDIA_ROOT
 from ..reservations.models import TimeSlot, ReservationSlot
 from .models import AdminSettings
@@ -41,6 +43,8 @@ class PurgeView(TemplateView):
 
 class PDFMapUploadView(FormView):
     template_name = "administration/map_upload.html"
+    form_class = PDFMapForm
+    success_url = reverse_lazy('update_maps')
 
     def form_valid(self, form):
         upload_dir = 'documents'
@@ -59,7 +63,7 @@ class PDFMapUploadView(FormView):
             'fresh_trans_cerro_map': 'fresh_trans_cerro_parking_info.pdf'
         }
 
-        for key, filename in filenames:
+        for key, filename in filenames.items():
             if key in self.request.FILES:
                 upload = self.request.FILES[key]
                 filedata = b''.join(upload.chunks())
