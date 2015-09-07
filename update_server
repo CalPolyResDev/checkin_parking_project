@@ -1,0 +1,17 @@
+#! /bin/bash
+
+source /etc/environment
+source /usr/local/bin/virtualenvwrapper.sh
+
+workon checkin_parking_project
+GITOUTPUT=$(git pull 2> /dev/null)
+echo $GITOUTPUT | grep 'Already up-to-date.' > /dev/null
+UPDATED=$?
+
+if [ $UPDATED = 1 ]; then    
+    echo $GITOUTPUT
+    wipeenv
+    pip3 install -r requirements.txt 
+    python3 checkin_parking/manage.py collectstatic --noinput
+    touch conf/uwsgi.ini
+fi
