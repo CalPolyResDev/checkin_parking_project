@@ -80,4 +80,4 @@ class CASLDAPBackend(CASBackend):
                 user.email = user_info["mail"]
                 user.save()
 
-            return user
+        return user
