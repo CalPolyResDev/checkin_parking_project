@@ -312,5 +312,10 @@ LOGGING = {
             'handlers': ['sentry'],
             'propagate': True,
         },
+        'ldap3': {
+            'level': 'WARNING',
+            'handlers': ['sentry'],
+            'propagate': True,
+        }
     }
 }
