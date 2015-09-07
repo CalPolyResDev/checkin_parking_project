@@ -246,7 +246,6 @@ INSTALLED_APPS = (
     'checkin_parking.apps.administration',
     'checkin_parking.apps.core',
     'checkin_parking.apps.pdfs',
-    'checkin_parking.apps.residents',
     'checkin_parking.apps.reservations',
     'checkin_parking.apps.statistics',
     'checkin_parking.apps.zones',

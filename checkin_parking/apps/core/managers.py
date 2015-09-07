@@ -12,7 +12,7 @@ from django.db.models.manager import Manager
 class DefaultRelatedManager(Manager):
     use_for_related_fields = True
 
-    def __init__(self, select_related, prefetch_related):
+    def __init__(self, select_related=None, prefetch_related=None):
         self._select_related = select_related
         self._prefetch_related = prefetch_related
         super(DefaultRelatedManager, self).__init__()

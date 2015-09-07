@@ -26,4 +26,4 @@ class ZoneForm(ModelForm):
 
     class Meta:
         model = Zone
-        fields = ['number', 'capacity', 'community', 'buildings']
+        fields = ['name', 'capacity', 'community', 'buildings']

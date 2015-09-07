@@ -12,6 +12,6 @@ from .models import Zone
 
 
 class ZoneAdmin(admin.ModelAdmin):
-    list_display = ['number', 'community', 'building_list', 'capacity']
+    list_display = ['name', 'community', 'building_list', 'capacity']
 
 admin.site.register(Zone, ZoneAdmin)
