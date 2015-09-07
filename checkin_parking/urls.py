@@ -21,6 +21,7 @@ from django.views.defaults import permission_denied, page_not_found
 from django.views.generic import TemplateView, RedirectView
 from django_cas_ng.views import login as auth_login, logout as auth_logout
 
+from .apps.administration.views import AdminSettingsUpdateView
 from .apps.core.views import IndexView, handler500
 from .apps.pdfs.views import ParkingPassPDFView, ParkingPassVerificationView
 from .apps.zones.ajax import update_building
@@ -109,7 +110,7 @@ urlpatterns += [
 
 # Administration
 urlpatterns += [
-    url(r'^settings/$', login_required(administrative_access(IndexView.as_view())), name='settings'),
+    url(r'^settings/$', login_required(administrative_access(AdminSettingsUpdateView.as_view())), name='settings'),
     url(r'^settings/purge/$', login_required(administrative_access(IndexView.as_view())), name='purge'),
 ]
 

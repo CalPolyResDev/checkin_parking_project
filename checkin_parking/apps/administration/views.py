@@ -8,13 +8,33 @@
 
 from pathlib import Path
 
-from django.views.generic.edit import FormView
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic.edit import FormView, UpdateView
 
 from ...settings.base import MEDIA_ROOT
+from ..reservations.models import TimeSlot, ReservationSlot
+from .models import AdminSettings
+
+
+class AdminSettingsUpdateView(UpdateView):
+    template_name = 'administration/admin_settings.html'
+    model = AdminSettings
+    fields = ['reservation_open', 'term_code', 'timeslot_length']
+    success_url = reverse_lazy('settings')
+
+    def get_object(self, queryset=None):
+        return AdminSettings.objects.get_settings()
+
+    def form_valid(self, form):
+        if any(field in form.changed_data for field in ['term_code', 'timeslot_length']) and (TimeSlot.objects.count() or ReservationSlot.objects.count()):
+            form.add_error(None, 'All reservations and time slots must be purged before changing the ' + ' or '.join([field.replace('_', ' ') for field in form.changed_data]) + '.')
+            return super(AdminSettingsUpdateView, self).form_invalid(form)
+
+        return super(AdminSettingsUpdateView, self).form_valid(form)
 
 
 class PDFMapUploadView(FormView):
-    template_name = "main/admin/mapUpload.html"
+    template_name = "administration/map_upload.html"
 
     def form_valid(self, form):
         upload_dir = 'documents'
