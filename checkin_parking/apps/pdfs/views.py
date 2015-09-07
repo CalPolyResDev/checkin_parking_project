@@ -6,7 +6,7 @@
 
 """
 
-from datetime import datetime
+from datetime import timedelta
 from pathlib import Path
 
 from django.core.urlresolvers import reverse
@@ -56,7 +56,7 @@ class ParkingPassPDFView(TemplateView):
         parking = {
             'date': reservation_slot.time_slot.date,
             'start': reservation_slot.time_slot.time,
-            'end': reservation_slot.time_slot.time + datetime.timedelta(minutes=AdminSettings.objects.get_settings().timeslot_length),
+            'end': reservation_slot.time_slot.time + timedelta(minutes=AdminSettings.objects.get_settings().timeslot_length),
             'zone': reservation_slot.zone.name,
         }
 
