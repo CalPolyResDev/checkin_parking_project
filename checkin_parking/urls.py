@@ -14,6 +14,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static as static_url
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import Group as group_unregistered
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core.exceptions import PermissionDenied
 from django.views.defaults import permission_denied, page_not_found
@@ -55,7 +56,6 @@ administrative_access = permissions_check((lambda user: user.is_admin))
 
 admin.autodiscover()
 
-from django.contrib.auth.models import Group as group_unregistered
 admin.site.unregister(group_unregistered)
 
 logger = logging.getLogger(__name__)
@@ -99,7 +99,7 @@ urlpatterns += [
 urlpatterns += [
     url(r'^pdfs/maps/list/$', login_required(administrative_access(IndexView.as_view())), name='list_maps'),
     url(r'^pdfs/parking-pass/generate/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
-    url(r'^pdfs/parking-pass/verify/(?P<id>\d+)/$', ParkingPassVerificationView.as_view(), name='verify_parking_pass'),
+    url(r'^pdfs/parking-pass/verify/(?P<id>\d+)/(?P<username>\b[[:alnum:]]\b)/$', ParkingPassVerificationView.as_view(), name='verify_parking_pass'),
 ]
 
 # Statistics
