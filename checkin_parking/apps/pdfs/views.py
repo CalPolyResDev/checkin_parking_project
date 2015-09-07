@@ -16,6 +16,7 @@ from django.views.generic.base import TemplateView
 import trml2pdf
 
 from ...settings.base import MEDIA_ROOT
+from ..reservations.models import ReservationSlot
 
 
 class ParkingPassVerificationView(TemplateView):
@@ -24,8 +25,20 @@ class ParkingPassVerificationView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ParkingPassVerificationView, self).get_context_data(kwargs)
 
+        reservation_id = kwargs['reservation_id']
+        user_id = kwargs['user_id']
+        valid_pass = True
+
+        try:
+            reservation_slot = ReservationSlot.objects.get(id=reservation_id)
+
+            if reservation_slot.resident.id != user_id:
+                valid_pass = False
+        except ReservationSlot.DoesNotExist:
+            valid_pass = False
+
         parking_pass = {
-            'valid': False
+            'valid': valid_pass
         }
 
         context['parking_pass'] = parking_pass
