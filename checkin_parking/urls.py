@@ -3,7 +3,7 @@
    :synopsis: Checkin Parking Reservation URLs.
 
 .. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
-.. moduleauthor:: RJ Almada <almada.dev@gmail.com>
+.. moduleauthor:: Thomas Willson <thomas.willson@me.com>
 
 """
 
