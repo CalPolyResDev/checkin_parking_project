@@ -74,17 +74,18 @@
                 	{% if request.user.reservation %}
                     <li><a href="{% url 'view_reservation' %}">View Reservation</a></li>
                     <li><a href="{% url 'change_reservation' %}">Change Reservation</a></li>
+                    <li><a href="{% url 'cancel_reservation' %}">Cancel Reservation</a></li>
                     {% else %}
-                    <li><a href="{% url 'reserve_session' %}">Reserve Session</a></li>
+                    <li><a href="{% url 'reserve' %}">Reserve</a></li>
                     {% endif %}
                 </ul>
                 {% if request.user.is_admin %}
                 <h2>Administrator Resources</h2>
                 <ul>
-                	<li><a>Session Management</a>
+                	<li><a>Reservation Management</a>
 					    <ul>
-					      <li><a href="{% url 'list_sessions' %}">List Sessions</a></li>
-					      <li><a href="{% url 'create_sessions' %}">Create Sessions</a></li>
+					       <li><a href="{% url 'generate_reservation_slots' %}">Generate Reservation Slots</a></li>
+					       <li><a href="{% url 'list_time_slots' %}">List Time Slots</a></li>
 					    </ul>
 					</li>
 					<li><a>Parking Zone Management</a>
@@ -98,7 +99,6 @@
 					      <li><a href="{% url 'list_maps' %}">List Parking Maps</a></li>
 					    </ul>
 					</li>
-					<li><a href="{% url 'lookup_residents' %}">Resident Lookup</a></li>
 					<li><a href="{% url 'statistics' %}">Statistics</a></li>
 					<li><a href="{% url 'settings' %}">Settings</a></li>
                 </ul>
