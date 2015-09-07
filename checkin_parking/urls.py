@@ -23,8 +23,8 @@ from django_cas_ng.views import login as auth_login, logout as auth_logout
 
 from .apps.core.views import IndexView, handler500
 from .apps.pdfs.views import ParkingPassPDFView, ParkingPassVerificationView
-from .apps.zones.ajax import update_building
-from .apps.zones.views import ZoneCreateView
+from .apps.zones.ajax import update_buildings, delete_zone
+from .apps.zones.views import ZoneListView, ZoneCreateView, ZoneUpdateView
 
 
 def permissions_check(test_func, raise_exception=True):
@@ -78,7 +78,7 @@ urlpatterns += [
     url(r'^reservations/slots/generate/$', login_required(administrative_access(IndexView.as_view())), name='generate_reservation_slots'),
 
     url(r'^reservations/slots/list/$', login_required(administrative_access(IndexView.as_view())), name='list_time_slots'),
-    url(r'^reservations/slots/(?P<id>\d+)/$', login_required(administrative_access(IndexView.as_view())), name='edit_time_slot'),
+    url(r'^reservations/slots/(?P<id>\d+)/$', login_required(administrative_access(IndexView.as_view())), name='update_time_slot'),
     url(r'^reservations/slots/(?P<id>\d+)/delete/$', login_required(administrative_access(IndexView.as_view())), name='delete_time_slot'),
 
     url(r'^reservations/reserve/$', login_required(IndexView.as_view()), name='reserve'),
@@ -89,10 +89,11 @@ urlpatterns += [
 
 # Zones
 urlpatterns += [
-    url(r'^zones/list/$', login_required(administrative_access(IndexView.as_view())), name='list_zones'),
+    url(r'^zones/list/$', login_required(administrative_access(ZoneListView.as_view())), name='list_zones'),
     url(r'^zones/create/$', login_required(administrative_access(ZoneCreateView.as_view())), name='create_zone'),
-    url(r'^zones/(?P<id>\d+)/delete/$', login_required(administrative_access(IndexView.as_view())), name='delete_zone'),
-    url(r'^zones/ajax/update_building/$', login_required(update_building), name='ajax_update_building'),
+    url(r'^zones/update/(?P<id>\d+)/$', login_required(administrative_access(ZoneUpdateView.as_view())), name='update_zone'),
+    url(r'^zones/ajax/delete/$', login_required(administrative_access(delete_zone)), name='delete_zone'),
+    url(r'^zones/ajax/update_buildings/$', login_required(update_buildings), name='ajax_update_building'),
 ]
 
 # PDFs

@@ -15,9 +15,9 @@ from django.db.models.fields import DateField, TimeField, PositiveSmallIntegerFi
 from django.db.models.fields.related import ForeignKey, OneToOneField
 from django.utils.functional import cached_property
 
-from ..zones.models import Zone
 from ..core.managers import DefaultRelatedManager
 from ..core.models import CheckinParkingUser
+from ..zones.models import Zone
 
 
 CLASS_LEVELS = ['Freshman', 'Transfer', 'Continuing', 'All']
@@ -37,7 +37,7 @@ class TimeSlot(Model):
         return datetime.strftime(combined, settings.PYTHON_DATETIME_FORMAT)
 
     def __str__(self):
-        return self.datetime + "(" + str(self.term) + ")"
+        return self.datetime + " (" + str(self.term) + ")"
 
 
 class ReservationSlot(Model):

@@ -3,33 +3,56 @@
 {% block subtitle %} | Zones{% endblock %}
 
 {% block content %}
-	<div id="content">
-	    <div id="mainLeftFull">
-	        <h1>Parking Zones</h1>
-	        <p>Parking zones are only accessible to residents who live in the community and building(s) designated in the form below.</p>
-	        <table border="1" class="table_directory">
-	            <tbody>
-	                <tr>
-	                    <th>Community</th>
-	                    <th>Zone Number</th>
-	                    <th>Building(s)</th>
-	                </tr>
-	                {% for zone in zones %}
-	                <tr>
-	                    <td>{{ zone.community }}</td>
-	                    <td>{{ zone.number }}</td>
-	                    <td>{{ zone.building_list }}</td>
-	                </tr>
-	                {% else %}
-	                <tr>
-	                	<td></td>
-	                	<td></td>
-	                	<td></td>
-	                </tr>
-	                {% endfor %}
+    <div id="content">
+        <div id="mainLeftFull">
+            <h1>Parking Zones</h1>
+            <p>Parking zones are only accessible to residents who live in the community and building(s) designated in the form below.</p>
+            <table border="1" class="table_directory">
+                <tbody>
+                    <tr>
+                        <th>Name</th>
+                        <th>Community</th>
+                        <th>Building(s)</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                    </tr>
+                    {% for zone in zone_list %}
+                    <tr id="zone_{{ zone.id }}">
+                        <td>{{ zone.name }}</td>
+                        <td>{{ zone.community }}</td>
+                        <td>{{ zone.formatted_building_list }}</td>
+                        <td><a class="update" href="{% url 'update_zone' id=zone.id %}">Update</a></td>
+                        <td><a class="delete" onclick="delete_zone({{ zone.id }}, '{{ zone.name }}')">Delete</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
 
-	            </tbody>
-	        </table>
-	    </div>
-	</div>
+{% block extra_script %}
+{{ block.super }}
+<script type="text/javascript">
+    function delete_zone(zone_id, zone_name) {
+        if (confirm("Are you sure you want to delete '" + zone_name + "'?")) {
+            ajaxPost("{% url 'delete_zone' %}", {'zone_id': zone_id}, function(response_context) {
+                if (response_context["success"]) {
+                    $("#zone_" + zone_id).remove();
+                    return true;
+                }
+            });
+        } else {
+            return false;
+        }
+    };
+</script>
 {% endblock %}

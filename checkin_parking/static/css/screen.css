@@ -103,3 +103,22 @@ form .horizontal_fields p {
     width: 40%;
     float: right;
 }
+
+.delete {
+    color: rgb(194,34,36) !important;
+}
+
+.update {
+    color: rgb(194,112,34) !important;
+}
+
+.delete, .update {
+    cursor: pointer;
+    text-decoration: none !important;
+}
+
+.delete:hover, .delete:focus, .delete:active,
+.update:hover, .update:focus, .update:active {
+    cursor: pointer;
+    text-decoration: underline !important;
+}

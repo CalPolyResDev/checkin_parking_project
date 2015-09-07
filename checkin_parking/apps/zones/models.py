@@ -39,9 +39,13 @@ class Zone(Model):
     buildings = ManyToManyField(Building, verbose_name="Building(s)")
     capacity = PositiveSmallIntegerField(default=30, verbose_name="Capacity")
 
+    @property
+    def formatted_building_list(self):
+        return ", ".join(self.building_list)
+
     @cached_property
     def building_list(self):
-        return [building.name for building in self.buildings.all()]
+        return [building.name for building in self.buildings.all().order_by("name")]
 
     def __str__(self):
         return self.name
