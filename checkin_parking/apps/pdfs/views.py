@@ -6,14 +6,17 @@
 
 """
 
+from datetime import datetime
 from pathlib import Path
 
+from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse
 from django.template.context import Context
 from django.template.loader import get_template
 from django.views.generic.base import TemplateView
-
 import trml2pdf
+
+from checkin_parking.apps.administration.models import AdminSettings
 
 from ...settings.base import MEDIA_ROOT
 from ..reservations.models import ReservationSlot
@@ -48,18 +51,19 @@ class ParkingPassPDFView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ParkingPassPDFView, self).get_context_data(kwargs)
 
+        reservation_slot = ReservationSlot.objects.get(id=kwargs['reservation_id'])
+
         parking = {
-            'date': 'Wednesday, September 8, 2015',
-            'start': '2:00PM',
-            'end': '2:40PM',
-            'building': 'Huasna',
-            'zone': '5',
+            'date': reservation_slot.time_slot.date,
+            'start': reservation_slot.time_slot.time,
+            'end': reservation_slot.time_slot.time + datetime.timedelta(minutes=AdminSettings.objects.get_settings().timeslot_length),
+            'zone': reservation_slot.zone.name,
         }
 
-        context['resident_name'] = 'Fred Smith'
+        context['resident_name'] = reservation_slot.resident.full_name
         context['cal_poly_logo_path'] = Path(MEDIA_ROOT).joinpath('pdf_assets/cp_logo.gif')
         context['parking'] = parking
-        context['qr_code_url'] = 'www.calpoly.edu'
+        context['qr_code_url'] = reverse('verify_parking_pass', kwargs={'reservation_id': reservation_slot.id, 'user_id': reservation_slot.resident.id})
 
         return context
 

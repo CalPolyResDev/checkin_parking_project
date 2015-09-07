@@ -50,7 +50,7 @@
         </para>
         <para style="date" spaceBefore=".85in">{{ parking.date }}</para>
         <para style="time_interval" spaceBefore=".05in">{{ parking.start }} - {{ parking.end }}</para>
-        <para style="zone_and_building" spaceBefore=".25in">Zone: {{ parking.building }} - {{ parking.zone }}</para>
+        <para style="zone_and_building" spaceBefore=".25in">Zone: {{ parking.zone }}</para>
         <para style="dashboard_note" spaceBefore="1in">Display on Dashboard</para>        
     </story>
     

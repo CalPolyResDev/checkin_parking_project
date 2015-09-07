@@ -98,7 +98,7 @@ urlpatterns += [
 # PDFs
 urlpatterns += [
     url(r'^pdfs/maps/list/$', login_required(administrative_access(IndexView.as_view())), name='list_maps'),
-    url(r'^pdfs/parking-pass/generate/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
+    url(r'^pdfs/parking-pass/generate/(?P<reservation_id>\d+)/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
     url(r'^pdfs/parking-pass/verify/(?P<reservation_id>\d+)/(?P<user_id>\d+)/$', ParkingPassVerificationView.as_view(), name='verify_parking_pass'),
 ]
 
