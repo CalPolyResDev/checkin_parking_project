@@ -8,21 +8,19 @@
 			<h1>PDF Map Upload</h1>
 			<p>The following fields may be used to upload informational PDF maps. Links to these maps are displayed when a student views his/her reservation.</p>
 			<form method="post" enctype="multipart/form-data" id="zone_text_form">
+				{{ form.as_p }}
 				<p>
-					{{ form.non_field_errors }}
-				</p>
-					{% for field in form %}
-			        <p>
-			        	{{ field.errors }}
-			            <h3><label for="id_<field-name>">{{ field.label }}:</label></h3>
-			            {{ field }}
-			        </p>
-				    {% endfor %}
-				<p>
-					<input type="submit" value="Upload" />
-				</p>
-				{% csrf_token %}
+                    <input type="submit" value="Upload" />
+                </p>
 			</form>
+		</div>
+		<div>
+		  <h2>Current PDFs</h2>
+            <a href="/media/documents/trans_pcv_parking_info.pdf" target="blank">Poly Canyon Village Transfer Student Parking Information (PDF)</a><br />
+            <a href="/media/documents/co_pcv_parking_info.pdf" target="blank">Poly Canyon Village Continuing Student Parking Information (PDF)</a><br />
+            <a href="/media/documents/pcv_loop_nav_info.pdf" target="blank">Poly Canyon Village Loop Navigation Information (PDF)</a><br />
+            <a href="/media/documents/fresh_trans_cerro_parking_info.pdf" target="blank">Cerro Vista Freshman/Transfer Student Parking Information (PDF)</a><br />
+            <a href="/media/documents/co_cerro_parking_info.pdf" target="blank">Cerro Vista Continuing Student Parking Information (PDF)</a><br />
 		</div>
 	</div>
 {% endblock %}
