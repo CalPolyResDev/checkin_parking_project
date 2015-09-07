@@ -69,7 +69,7 @@ handler500 = handler500
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='home'),
     url(r'^login/$', auth_login, name='login'),
-    url(r'^logout/$', auth_logout, name='logout'),  # kwargs={'next_page': settings.CAS_LOGOUT_URL},
+    url(r'^logout/$', auth_logout, name='logout', kwargs={'next_page': settings.CAS_LOGOUT_URL}),
     url(r'^favicon\.ico$', RedirectView.as_view(url=static('images/icons/favicon.ico')), name='favicon'),
     url(r'^admin/', TemplateView.as_view(template_name="honeypot.html"), name="honeypot"),  # admin site urls, honeypot
     url(r'^flugzeug/', include(admin.site.urls)),  # admin site urls, masked

@@ -128,8 +128,8 @@ AUTH_USER_MODEL = 'core.CheckinParkingUser'
 CAS_ADMIN_PREFIX = "flugzeug/"
 CAS_LOGOUT_COMPLETELY = False
 
-CAS_SERVER_URL = "https://mydev.calpoly.edu/cas/"
-# CAS_LOGOUT_URL = "https://my.calpoly.edu/cas/casClientLogout.jsp?logoutApp=Cal%20Poly%20Group%20Manager"
+CAS_SERVER_URL = "https://my.calpoly.edu/cas/"
+CAS_LOGOUT_URL = "https://my.calpoly.edu/cas/casClientLogout.jsp?logoutApp=University%20Housing%20Checkin%20Parking%20Reservation"
 
 
 # ======================================================================================================== #
@@ -312,5 +312,10 @@ LOGGING = {
             'handlers': ['sentry'],
             'propagate': True,
         },
+        'ldap3': {
+            'level': 'WARNING',
+            'handlers': ['sentry'],
+            'propagate': True,
+        }
     }
 }

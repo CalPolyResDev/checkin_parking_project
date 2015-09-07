@@ -14,5 +14,5 @@ CSRF_COOKIE_SECURE = True
 
 ALLOWED_HOSTS = [
     '.checkin.housing.calpoly.edu',
-    '.checkin.staging.housing.calpoly.edu',
+    '.staging.checkin.housing.calpoly.edu',
 ]
