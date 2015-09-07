@@ -37,11 +37,7 @@ class ParkingPassVerificationView(TemplateView):
         except ReservationSlot.DoesNotExist:
             valid_pass = False
 
-        parking_pass = {
-            'valid': valid_pass
-        }
-
-        context['parking_pass'] = parking_pass
+        context['parking_pass_valid'] = valid_pass
 
         return context
 
