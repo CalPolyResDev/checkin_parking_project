@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block subtitle %} | Pure Reservations{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div id="mainLeftFull">
+            <h1>Purge Reservations</h1>
+            <p>This allows you to purge all reservations and time slots from the database.
+            <br />
+            <strong>USE THIS WITH CARE. THIS OPERATION CANNOT BE UNDONE.</strong>
+            </p>
+            <button id="purge_button" onclick="purge();" style="padding 3px 3px;"><strong style="color: red; font-size: 150%;">Purge!</strong></button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    function purge() {
+        if (confirm('Are you sure you want to delete all reservations and time slots? THIS CANNOT BE UNDONE!')) {
+            $('#purge_button').attr('disabled', 'disabled');
+            ajaxPost("{% url 'run_purge' %}", {'confirmation': true}, function(response){
+                alert(response['reservation_count'].toString() + ' Reservations Deleted & ' + response['timeslot_count'] + ' Timeslots Deleted.');
+                $('#purge_button').removeAttr('disabled');
+            });
+        }
+    };
+</script>
+{% endblock %}

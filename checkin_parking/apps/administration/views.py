@@ -9,6 +9,8 @@
 from pathlib import Path
 
 from django.core.urlresolvers import reverse_lazy
+from django.views.decorators.http import require_POST
+from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView, UpdateView
 
 from ...settings.base import MEDIA_ROOT
@@ -31,6 +33,10 @@ class AdminSettingsUpdateView(UpdateView):
             return super(AdminSettingsUpdateView, self).form_invalid(form)
 
         return super(AdminSettingsUpdateView, self).form_valid(form)
+
+
+class PurgeView(TemplateView):
+    template_name = 'administration/purge.html'
 
 
 class PDFMapUploadView(FormView):

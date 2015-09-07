@@ -100,7 +100,11 @@
 					    </ul>
 					</li>
 					<li><a href="{% url 'statistics' %}">Statistics</a></li>
-					<li><a href="{% url 'settings' %}">Settings</a></li>
+					<li><a href="{% url 'settings' %}">Settings</a>
+					    <ul>
+					       <li><a href="{% url 'purge' %}">Purge Reservations</a></li>
+					    </ul>
+					</li>
                 </ul>
                 {% endif %}
             </div>
