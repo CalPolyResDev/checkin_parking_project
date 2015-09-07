@@ -23,7 +23,7 @@ from django_cas_ng.views import login as auth_login, logout as auth_logout
 
 from .apps.administration.views import AdminSettingsUpdateView
 from .apps.core.views import IndexView, handler500
-from .apps.pdfs.views import ParkingPassPDFView, ParkingPassVerificationView
+from .apps.reservations.views import ParkingPassPDFView, ParkingPassVerificationView
 from .apps.zones.ajax import update_buildings, delete_zone
 from .apps.zones.views import ZoneListView, ZoneCreateView, ZoneUpdateView
 
@@ -86,6 +86,9 @@ urlpatterns += [
     url(r'^reservations/view/$', login_required(IndexView.as_view()), name='view_reservation'),
     url(r'^reservations/change/$', login_required(IndexView.as_view()), name='change_reservation'),
     url(r'^reservations/cancel/$', login_required(IndexView.as_view()), name='cancel_reservation'),
+
+    url(r'^reservations/parking-pass/generate/(?P<reservation_id>\d+)/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
+    url(r'^reservations/parking-pass/verify/(?P<reservation_id>\d+)/(?P<user_id>\d+)/$', ParkingPassVerificationView.as_view(), name='verify_parking_pass'),
 ]
 
 # Zones
@@ -97,13 +100,6 @@ urlpatterns += [
     url(r'^zones/ajax/update_buildings/$', login_required(update_buildings), name='ajax_update_building'),
 ]
 
-# PDFs
-urlpatterns += [
-    url(r'^pdfs/maps/list/$', login_required(administrative_access(IndexView.as_view())), name='list_maps'),
-    url(r'^pdfs/parking-pass/generate/(?P<reservation_id>\d+)/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
-    url(r'^pdfs/parking-pass/verify/(?P<reservation_id>\d+)/(?P<user_id>\d+)/$', ParkingPassVerificationView.as_view(), name='verify_parking_pass'),
-]
-
 # Statistics
 urlpatterns += [
     url(r'^statistics/$', login_required(administrative_access(IndexView.as_view())), name='statistics'),
@@ -113,6 +109,7 @@ urlpatterns += [
 urlpatterns += [
     url(r'^settings/$', login_required(administrative_access(AdminSettingsUpdateView.as_view())), name='settings'),
     url(r'^settings/purge/$', login_required(administrative_access(IndexView.as_view())), name='purge'),
+    url(r'^settings/maps/$', login_required(administrative_access(IndexView.as_view())), name='list_maps'),
 ]
 
 # Raise errors on purpose
