@@ -10,11 +10,12 @@ import logging
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-
-from ldap3 import Server, Connection, ObjectDef, AttrDef, Reader
 from django_cas_ng.backends import CASBackend
+from ldap3 import Server, Connection, ObjectDef, AttrDef, Reader
 from ldap_groups.groups import ADGroup
+
 from rmsconnector.utils import Resident
+
 
 logger = logging.getLogger(__name__)
 
@@ -79,4 +80,4 @@ class CASLDAPBackend(CASBackend):
                 user.email = user_info["mail"]
                 user.save()
 
-        return user
+            return user
