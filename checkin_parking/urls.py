@@ -16,11 +16,11 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core.exceptions import PermissionDenied
-from django.views.defaults import server_error, permission_denied, page_not_found
+from django.views.defaults import permission_denied, page_not_found
 from django.views.generic import TemplateView, RedirectView
 from django_cas_ng.views import login as auth_login, logout as auth_logout
 
-from .apps.core.views import IndexView
+from .apps.core.views import IndexView, handler500
 from .apps.pdfs.views import ParkingPassPDFView, ParkingPassVerificationView
 from .apps.zones.ajax import update_building
 from .apps.zones.views import ZoneCreateView
@@ -51,11 +51,16 @@ def permissions_check(test_func, raise_exception=True):
         return False
     return user_passes_test(check_perms)
 
-administration_access = permissions_check((lambda user: user.is_admin))
+administrative_access = permissions_check((lambda user: user.is_admin))
 
 admin.autodiscover()
 
+from django.contrib.auth.models import Group as group_unregistered
+admin.site.unregister(group_unregistered)
+
 logger = logging.getLogger(__name__)
+
+handler500 = handler500
 
 
 # Core
@@ -68,54 +73,49 @@ urlpatterns = [
     url(r'^flugzeug/', include(admin.site.urls)),  # admin site urls, masked
 ]
 
-# Sessions
+# Reservations
 urlpatterns += [
-    url(r'^sessions/list/$', login_required(administration_access(IndexView.as_view())), name='list_sessions'),
-    url(r'^sessions/create/$', login_required(administration_access(IndexView.as_view())), name='create_sessions'),
-    url(r'^sessions/(?P<id>\d+)/$', login_required(administration_access(IndexView.as_view())), name='edit_session'),
-    url(r'^sessions/(?P<id>\d+)/delete/$', login_required(administration_access(IndexView.as_view())), name='delete_session'),
-    url(r'^sessions/reservation/reserve/$', login_required(IndexView.as_view()), name='reserve_session'),
-    url(r'^sessions/reservation/detail/$', login_required(IndexView.as_view()), name='view_reservation'),
-    url(r'^sessions/reservation/change/$', login_required(IndexView.as_view()), name='change_reservation'),
-    url(r'^sessions/reservation/cancel/$', login_required(IndexView.as_view()), name='cancel_reservation'),
-    url(r'^sessions/update/$', login_required(IndexView.as_view()), name='update_sessions'),
+    url(r'^reservations/slots/generate/$', login_required(administrative_access(IndexView.as_view())), name='generate_reservation_slots'),
+
+    url(r'^reservations/slots/list/$', login_required(administrative_access(IndexView.as_view())), name='list_time_slots'),
+    url(r'^reservations/slots/(?P<id>\d+)/$', login_required(administrative_access(IndexView.as_view())), name='edit_time_slot'),
+    url(r'^reservations/slots/(?P<id>\d+)/delete/$', login_required(administrative_access(IndexView.as_view())), name='delete_time_slot'),
+
+    url(r'^reservations/reserve/$', login_required(IndexView.as_view()), name='reserve'),
+    url(r'^reservations/view/$', login_required(IndexView.as_view()), name='view_reservation'),
+    url(r'^reservations/change/$', login_required(IndexView.as_view()), name='change_reservation'),
+    url(r'^reservations/cancel/$', login_required(IndexView.as_view()), name='cancel_reservation'),
 ]
 
 # Zones
 urlpatterns += [
-    url(r'^zones/list/$', login_required(administration_access(IndexView.as_view())), name='list_zones'),
-    url(r'^zones/create/$', login_required(administration_access(ZoneCreateView.as_view())), name='create_zone'),
-    url(r'^zones/(?P<id>\d+)/$', login_required(administration_access(IndexView.as_view())), name='edit_zone'),
-    url(r'^zones/(?P<id>\d+)/delete/$', login_required(administration_access(IndexView.as_view())), name='delete_zone'),
+    url(r'^zones/list/$', login_required(administrative_access(IndexView.as_view())), name='list_zones'),
+    url(r'^zones/create/$', login_required(administrative_access(ZoneCreateView.as_view())), name='create_zone'),
+    url(r'^zones/(?P<id>\d+)/delete/$', login_required(administrative_access(IndexView.as_view())), name='delete_zone'),
     url(r'^zones/ajax/update_building/$', login_required(update_building), name='ajax_update_building'),
 ]
 
 # PDFs
 urlpatterns += [
-    url(r'^pdfs/maps/list/$', login_required(administration_access(IndexView.as_view())), name='list_maps'),
-    url(r'^pdfs/parking_pass/generate/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
-    url(r'^pdfs/parking_pass/verify/(?P<id>\d+)/$', ParkingPassVerificationView.as_view(), name='verify_parking_pass'),
-]
-
-# Residents
-urlpatterns += [
-    url(r'^residents/lookup/$', login_required(administration_access(IndexView.as_view())), name='lookup_residents'),
+    url(r'^pdfs/maps/list/$', login_required(administrative_access(IndexView.as_view())), name='list_maps'),
+    url(r'^pdfs/parking-pass/generate/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
+    url(r'^pdfs/parking-pass/verify/(?P<id>\d+)/$', ParkingPassVerificationView.as_view(), name='verify_parking_pass'),
 ]
 
 # Statistics
 urlpatterns += [
-    url(r'^statistics/$', login_required(administration_access(IndexView.as_view())), name='statistics'),
+    url(r'^statistics/$', login_required(administrative_access(IndexView.as_view())), name='statistics'),
 ]
 
 # Administration
 urlpatterns += [
-    url(r'^admin/settings/$', login_required(administration_access(IndexView.as_view())), name='settings'),
-    url(r'^admin/purge/$', login_required(administration_access(IndexView.as_view())), name='purge'),
+    url(r'^settings/$', login_required(administrative_access(IndexView.as_view())), name='settings'),
+    url(r'^settings/purge/$', login_required(administrative_access(IndexView.as_view())), name='purge'),
 ]
 
 # Raise errors on purpose
 urlpatterns += [
-    url(r'^500/$', server_error),
+    url(r'^500/$', handler500),
     url(r'^403/$', permission_denied),
     url(r'^404/$', page_not_found),
 ]

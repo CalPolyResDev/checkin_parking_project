@@ -49,16 +49,17 @@ DATE_FORMAT = 'l, F d, Y'
 TIME_FORMAT = 'h:i a'
 
 DATETIME_FORMAT = 'l, F d, Y h:i a'
+PYTHON_DATETIME_FORMAT = '%A, %B %d, %Y %I:%M%p'  # Format: Monday, January 01, 2012 08:00am'
 
 DEFAULT_CHARSET = 'utf-8'
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N = False
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale
-USE_L10N = True
+USE_L10N = False
 
 ROOT_URLCONF = 'checkin_parking.urls'
 
@@ -70,7 +71,6 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 DATABASES = {
     'default': dj_database_url.config(default=get_env_variable('CHECKIN_PARKING_DB_DEFAULT_DATABASE_URL')),
-    #     'resnet_internal': dj_database_url.config(default=get_env_variable('CHECKIN_PARKING_DB_COMMON_DATABASE_URL')),
     'rms': {
         'ENGINE': 'django.db.backends.oracle',
         'NAME': 'mercprd.db.calpoly.edu:1521/mercprd',
@@ -89,33 +89,20 @@ DATABASE_ROUTERS = (
 
 # Incoming email settings
 INCOMING_EMAIL = {
-    'IMAP4': {  # IMAP4 is currently the only supported protocol. It must be included.
-        # The host to use for receiving email. Set to empty string for
-        # localhost.
+    'IMAP4': {
         'HOST': 'outlook.office365.com',
-        # The port to use. Set to empty string for default values: 143,
-        # 993(SSL).
         'PORT': 993,
-        'USE_SSL': True,  # Whether or not to use SSL (Boolean)
-        # The username to use. The full email address is what most servers
-        # require.
+        'USE_SSL': True,
         'USER': get_env_variable('CHECKIN_PARKING_EMAIL_USERNAME'),
-        # The password to use. Note that only clearText authentication is
-        # supported.
         'PASSWORD': get_env_variable('CHECKIN_PARKING_EMAIL_PASSWORD'),
     },
 }
 
-# Outgoing email settings
-# This configuration uses the SMTP protocol as a backend
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# The host to use for sending email. Set to empty string for localhost.
 EMAIL_HOST = 'mail.calpoly.edu'
-EMAIL_PORT = 25  # The port to use. Defaul values: 25, 587
-EMAIL_USE_TLS = True  # Whether or not to use SSL (Boolean)
-# The username to use. The full email address is what most servers require.
+EMAIL_PORT = 25  # The port to use. Default values: 25, 587
+EMAIL_USE_TLS = True
 EMAIL_HOST_USER = INCOMING_EMAIL['IMAP4']['USER']
-# The password to use. Note that only clearText authentication is supported.
 EMAIL_HOST_PASSWORD = INCOMING_EMAIL['IMAP4']['PASSWORD']
 
 # Set the server's email address (for sending emails only)
@@ -151,11 +138,9 @@ CAS_SERVER_URL = "https://mydev.calpoly.edu/cas/"
 
 LDAP_GROUPS_SERVER_URI = 'ldap://ad.calpoly.edu'
 LDAP_GROUPS_BASE_DN = 'DC=ad,DC=calpoly,DC=edu'
-LDAP_GROUPS_USER_BASE_DN = 'OU=People,OU=Enterprise,OU=Accounts,' + \
-    LDAP_GROUPS_BASE_DN
+LDAP_GROUPS_USER_BASE_DN = 'OU=People,OU=Enterprise,OU=Accounts,' + LDAP_GROUPS_BASE_DN
 
-LDAP_GROUPS_USER_SEARCH_BASE_DN = 'OU=Enterprise,OU=Accounts,' + \
-    LDAP_GROUPS_BASE_DN
+LDAP_GROUPS_USER_SEARCH_BASE_DN = 'OU=Enterprise,OU=Accounts,' + LDAP_GROUPS_BASE_DN
 LDAP_GROUPS_GROUP_SEARCH_BASE_DN = 'OU=Groups,' + LDAP_GROUPS_BASE_DN
 
 LDAP_GROUPS_BIND_DN = get_env_variable('CHECKIN_PARKING_LDAP_USER_DN')
@@ -165,10 +150,8 @@ LDAP_GROUPS_USER_LOOKUP_ATTRIBUTE = 'userPrincipalName'
 LDAP_GROUPS_GROUP_LOOKUP_ATTRIBUTE = 'name'
 LDAP_GROUPS_ATTRIBUTE_LIST = ['displayName', LDAP_GROUPS_USER_LOOKUP_ATTRIBUTE]
 
-LDAP_ADMIN_GROUP = 'CN=checkinparking,OU=Websites,OU=UH,OU=Manual,OU=Groups,' + \
-    LDAP_GROUPS_BASE_DN
-LDAP_DEVELOPER_GROUP = 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,' + \
-    LDAP_GROUPS_BASE_DN
+LDAP_ADMIN_GROUP = 'CN=checkinparking,OU=Websites,OU=UH,OU=Manual,OU=Groups,' + LDAP_GROUPS_BASE_DN
+LDAP_DEVELOPER_GROUP = 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,' + LDAP_GROUPS_BASE_DN
 
 
 # ======================================================================================================== #
@@ -234,14 +217,11 @@ TEMPLATE_LOADERS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
-    'django.core.context_processors.tz',
     'django.core.context_processors.request',
     'checkin_parking.apps.core.context_processors.display_name',
     'checkin_parking.apps.core.context_processors.reservation_status',
-    'django.contrib.messages.context_processors.messages',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -258,7 +238,6 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
     'raven.contrib.django.raven_compat',
@@ -266,10 +245,9 @@ INSTALLED_APPS = (
     'rmsconnector',
     'checkin_parking.apps.administration',
     'checkin_parking.apps.core',
-    'checkin_parking.apps.core.templatetags.__init__.default_app_config',
     'checkin_parking.apps.pdfs',
     'checkin_parking.apps.residents',
-    'checkin_parking.apps.reservation_slots',
+    'checkin_parking.apps.reservations',
     'checkin_parking.apps.statistics',
     'checkin_parking.apps.zones',
 )

@@ -14,7 +14,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from ldap3 import Server, Connection, ObjectDef, AttrDef, Reader
 from django_cas_ng.backends import CASBackend
 from ldap_groups.groups import ADGroup
-from rmsconnector import Resident
+from rmsconnector.utils import Resident
 
 logger = logging.getLogger(__name__)
 

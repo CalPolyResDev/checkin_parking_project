@@ -16,7 +16,8 @@ class ZoneForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ZoneForm, self).__init__(*args, **kwargs)
 
-        self.fields["number"].error_messages = {'required': 'A zone number is required.'}
+        self.fields["name"].error_messages = {'required': 'A zone name is required.'}
+        self.fields["capacity"].error_messages = {'required': 'A capacity is required.'}
         self.fields["community"].error_messages = {'required': 'A community is required.'}
         self.fields["buildings"].error_messages = {'required': 'At least one building must be selected.'}
 
@@ -25,4 +26,4 @@ class ZoneForm(ModelForm):
 
     class Meta:
         model = Zone
-        fields = ['number', 'community', 'buildings']
+        fields = ['number', 'capacity', 'community', 'buildings']

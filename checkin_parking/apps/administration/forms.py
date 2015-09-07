@@ -1,8 +1,10 @@
-'''
-Created on Sep 4, 2015
+"""
+.. module:: checkin_parking.apps.administration.forms
+   :synopsis: Checkin Parking Reservation Administration Forms.
 
-@author: thomaswillson
-'''
+.. moduleauthor:: Thomas Willson <thomas.willson@me.com>
+
+"""
 
 import os
 

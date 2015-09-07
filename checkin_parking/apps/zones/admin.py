@@ -1,9 +1,17 @@
+"""
+.. module:: checkin_parking.apps.zones.admin
+   :synopsis: Checkin Parking Reservation Zone Admin Configuration.
+
+.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+
+"""
+
 from django.contrib import admin
 
 from .models import Zone
 
 
 class ZoneAdmin(admin.ModelAdmin):
-    list_display = ('number', 'community', 'building_list')
+    list_display = ['number', 'community', 'building_list', 'capacity']
 
 admin.site.register(Zone, ZoneAdmin)

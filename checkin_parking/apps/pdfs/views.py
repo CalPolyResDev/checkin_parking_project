@@ -1,6 +1,6 @@
 """
-.. module:: checkin_parking.pdfs.view
-   :synopsis: Checkin Parking PDFViews.
+.. module:: checkin_parking.apps.pdfs.views
+   :synopsis: Checkin Parking Reservation PDF Views.
 
 .. moduleauthor:: Thomas Willson <thomas.willson@me.com>
 
@@ -12,16 +12,17 @@ from django.http.response import HttpResponse
 from django.template.context import Context
 from django.template.loader import get_template
 from django.views.generic.base import TemplateView
+
 import trml2pdf
 
-from checkin_parking.settings.base import MEDIA_ROOT
+from ...settings.base import MEDIA_ROOT
 
 
 class ParkingPassVerificationView(TemplateView):
     template_name = 'pdfs/parking_pass_verification.html'
 
     def get_context_data(self, **kwargs):
-        context = TemplateView.get_context_data(self, **kwargs)
+        context = super(ParkingPassVerificationView, self).get_context_data(kwargs)
 
         parking_pass = {
             'valid': False
@@ -33,9 +34,10 @@ class ParkingPassVerificationView(TemplateView):
 
 
 class ParkingPassPDFView(TemplateView):
+    template_name = 'pdfs/parking_pass.rml'
 
-    def render_to_response(self, context, **response_kwargs):
-        template = get_template('pdfs/parking_pass.rml')
+    def get_context_data(self, **kwargs):
+        context = super(ParkingPassPDFView, self).get_context_data(kwargs)
 
         parking = {
             'date': 'Wednesday, September 8, 2015',
@@ -45,13 +47,17 @@ class ParkingPassPDFView(TemplateView):
             'zone': '5',
         }
 
-        context = Context({
-            'resident_name': 'Fred Smith',
-            'cal_poly_logo_path': Path(MEDIA_ROOT).joinpath('pdf_assets/cp_logo.gif'),
-            'parking': parking,
-            'qr_code_url': 'www.calpoly.edu',
-        })
-        source_xml = template.render(context)
+        context['resident_name'] = 'Fred Smith'
+        context['cal_poly_logo_path'] = Path(MEDIA_ROOT).joinpath('pdf_assets/cp_logo.gif')
+        context['parking'] = parking
+        context['qr_code_url'] = 'www.calpoly.edu'
+
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        template = get_template(self.template_name)
+
+        source_xml = template.render(Context(context))
         pdf_data = trml2pdf.parseString(source_xml)
 
         response = HttpResponse()

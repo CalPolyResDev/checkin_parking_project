@@ -1,18 +1,19 @@
-'''
-Created on Sep 4, 2015
+"""
+.. module:: checkin_parking.apps.administration.views
+   :synopsis: Checkin Parking Reservation Administration Views.
 
-@author: thomaswillson
-'''
+.. moduleauthor:: Thomas Willson <thomas.willson@me.com>
 
-import os
+"""
+
 from pathlib import Path
 
 from django.views.generic.edit import FormView
 
-from checkin_parking.settings.base import MEDIA_ROOT
+from ...settings.base import MEDIA_ROOT
 
 
-class pdfMapUpload(FormView):
+class PDFMapUploadView(FormView):
     template_name = "main/admin/mapUpload.html"
 
     def form_valid(self, form):

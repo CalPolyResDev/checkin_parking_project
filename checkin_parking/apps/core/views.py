@@ -6,6 +6,7 @@
 
 """
 
+from django.template.context import RequestContext
 from django.views.generic import TemplateView
 
 
@@ -18,3 +19,14 @@ class IndexView(TemplateView):
         # TODO: Add Session data to context
 
         return context
+
+
+def handler500(request):
+    """500 error handler which includes ``request`` in the context."""
+
+    from django.template import loader
+    from django.http import HttpResponseServerError
+
+    template = loader.get_template('500.html')
+
+    return HttpResponseServerError(template.render(RequestContext(request)))

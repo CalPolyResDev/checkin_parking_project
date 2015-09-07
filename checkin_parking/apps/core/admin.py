@@ -1,3 +1,11 @@
+"""
+.. module:: checkin_parking.apps.core.admin
+   :synopsis: Checkin Parking Reservation Core Admin Configuration.
+
+.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+
+"""
+
 from django.contrib import admin
 
 from .models import CheckinParkingUser

@@ -9,13 +9,9 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
 from django.core.mail import send_mail
-from django.db.models.deletion import SET_NULL
 from django.db.models.fields import CharField, EmailField, BooleanField
-from django.db.models.fields.related import ForeignKey
 from django.utils import timezone
 from django.utils.functional import cached_property
-
-from ..reservation_slots.models import ReservationSlot
 
 
 class CheckinParkingUserManager(UserManager):
@@ -24,9 +20,10 @@ class CheckinParkingUserManager(UserManager):
         now = timezone.now()
 
         if not username:
-            raise ValueError('The given username must be set')
+            raise ValueError('The given username must be set.')
 
         email = self.normalize_email(email)
+        username = self.normalize_email(username)
 
         user = self.model(username=username, email=email, is_staff=is_staff, is_active=True, is_superuser=is_superuser, last_login=now, **extra_fields)
         user.set_password("!")
@@ -38,14 +35,11 @@ class CheckinParkingUserManager(UserManager):
 class CheckinParkingUser(AbstractBaseUser, PermissionsMixin):
     """Checkin Parking Reservation User Model"""
 
-    username = CharField(max_length=30, unique=True, verbose_name='Principal Name')
+    username = EmailField(unique=True, verbose_name='Principal Name')
     first_name = CharField(max_length=30, blank=True, verbose_name='First Name')
     last_name = CharField(max_length=30, blank=True, verbose_name='Last Name')
     full_name = CharField(max_length=30, blank=True, verbose_name='Full Name')
     email = EmailField(blank=True, verbose_name='Email Address')
-
-    # Session reservation
-    reservation = ForeignKey(ReservationSlot, null=True, blank=True, default=None, on_delete=SET_NULL)
 
     is_active = BooleanField(default=True)
     is_staff = BooleanField(default=False)
