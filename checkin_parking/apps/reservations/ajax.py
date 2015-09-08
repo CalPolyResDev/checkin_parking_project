@@ -5,12 +5,14 @@
 .. moduleauthor:: Thomas E. Willson <thomas.willson@me.com>
 
 """
+from _datetime import datetime
+
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.views.decorators.http import require_POST
 from django_ajax.decorators import ajax
 
-from .models import ReservationSlot
+from .models import ReservationSlot, TimeSlot
 
 
 @ajax
@@ -50,4 +52,19 @@ def cancel_reservation(request):
     reservation_slot.resident = None
     reservation_slot.save()
 
+    return {'success': True}
+
+
+@ajax
+@require_POST
+def delete_timeslot(request):
+    try:
+        time_slot = TimeSlot.objects.get(id=request.POST['timeslot_id'])
+    except ReservationSlot.DoesNotExist:
+        return {'success': False}
+
+    if time_slot.reservationslots.exists() and datetime.combine(time_slot.date, time_slot.time) < datetime.now():
+        return {'success': False, 'reservation_count': time_slot.reservationslots.count()}
+
+    time_slot.delete()
     return {'success': True}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block subtitle %} | Zones{% endblock %}
+
+
+{% block content%}
+<div id="content">
+    <div id="mainLeftFull">
+        <h1>
+            View Time Slots
+        </h1>
+        <table border="1" class="table_directory">
+            <tbody>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Start Time</th>
+                    <th scope="col">End Time</th>
+                    <th scope="col">Delete</th>
+                </tr>
+                {% for timeslot in timeslot_list %}
+                <tr id="timeslot_{{ timeslot.id }}">
+                    <td>{{ timeslot.date|date }}</td>
+                    <td>{{ timeslot.time|time:"H:i" }}</td>
+                    <td>{{ timeslot.end_time|time:"H:i" }}</td>
+                    <td style="cursor: pointer; color: red; text-decoration: underline;" onclick="delete_timeslot('{{timeslot.id}}');">Delete</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4">There are not any time slots in the database.</td>
+                </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'js/jquery.blockUI.js' %}"></script>
+<script type="text/javascript">
+    function delete_timeslot(timeslot_id) {
+        if (confirm('Would you like to delete this timeslot?')) {
+            $.blockUI({message: '<h1>Deleting the timeslot. Please wait...</h1>'});
+            ajaxPost("{% url 'delete_time_slot' %}", {'timeslot_id': timeslot_id}, function(response) {
+                $.unblockUI();
+                if (response['success']) {
+                    $('#timeslot_' + timeslot_id).remove();
+                }
+                else {
+                    if (response['reservation_count']) {
+                        alert('Could not delete this time slot because there are ' + response['reservation_count'].toString() + ' reservations attached to it.');
+                    }
+                    else { 
+                        alert('An error occurred when trying to delete this time slot. Please try again later.');
+                    }
+                }
+            });
+            
+        }
+    };
+</script>
+{% endblock %}

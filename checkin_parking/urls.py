@@ -21,6 +21,8 @@ from django.views.defaults import permission_denied, page_not_found
 from django.views.generic import TemplateView, RedirectView
 from django_cas_ng.views import login as auth_login, logout as auth_logout
 
+from checkin_parking.apps.reservations.ajax import delete_timeslot
+
 from .apps.administration.ajax import purge
 from .apps.administration.views import AdminSettingsUpdateView, PurgeView, PDFMapUploadView
 from .apps.core.views import IndexView, handler500
@@ -82,7 +84,7 @@ urlpatterns += [
 
     url(r'^reservations/slots/list/$', login_required(administrative_access(TimeSlotListView.as_view())), name='list_time_slots'),
     url(r'^reservations/slots/(?P<id>\d+)/$', login_required(administrative_access(IndexView.as_view())), name='update_time_slot'),
-    url(r'^reservations/slots/(?P<id>\d+)/delete/$', login_required(administrative_access(IndexView.as_view())), name='delete_time_slot'),
+    url(r'^reservations/ajax/delete_time_slot/$', login_required(administrative_access(delete_timeslot)), name='delete_time_slot'),
 
     url(r'^reservations/reserve/$', login_required(ReserveView.as_view()), name='reserve'),
     url(r'^reservations/ajax/reserve_slot/$', login_required(reserve_slot), name='reserve_slot'),
