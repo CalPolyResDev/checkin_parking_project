@@ -34,7 +34,7 @@ def handler500(request):
 
     exc_type, exc_value, exc_traceback = sys.exc_info()
     lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
-    message = ''.join('!! ' + line for line in lines)
+    message = lines[-1]
 
     context['exception_text'] = message
 
