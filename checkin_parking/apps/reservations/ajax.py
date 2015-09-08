@@ -1,13 +1,12 @@
 """
 .. module:: checkin_parking.apps.reservations.ajax
-  :synopsis: Checkin Parking Reservation {app name} {file name}.
+  :synopsis: Checkin Parking Reservation Reservation AJAX Methods.
 
 .. moduleauthor:: Thomas E. Willson <thomas.willson@me.com>
 
 """
 from _datetime import datetime
 
-from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.views.decorators.http import require_POST
 from django_ajax.decorators import ajax

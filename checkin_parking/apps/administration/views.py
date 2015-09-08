@@ -9,7 +9,6 @@
 from pathlib import Path
 
 from django.core.urlresolvers import reverse_lazy
-from django.views.decorators.http import require_POST
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView, UpdateView
 

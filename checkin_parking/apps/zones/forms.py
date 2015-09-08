@@ -6,6 +6,7 @@
 
 """
 
+from django.core.exceptions import ValidationError
 from django.forms.models import ModelForm
 
 from .models import Zone
@@ -21,9 +22,18 @@ class ZoneForm(ModelForm):
         self.fields["community"].error_messages = {'required': 'A community is required.'}
         self.fields["buildings"].error_messages = {'required': 'At least one building must be selected.'}
 
-        self.fields["capacity"].readonly = True
+        self.fields["capacity"].widget.attrs['readonly'] = True
+        self.fields["capacity"].widget.attrs['disabled'] = True
         self.fields["community"].widget.attrs['autocomplete'] = "off"
         self.fields["buildings"].help_text = ""
+
+    def clean(self):
+        cleaned_data = super(ZoneForm, self).clean()
+
+        if "capacity" in self.changed_data:
+            raise ValidationError("A Zone's capacity field cannot be altered.")
+
+        return cleaned_data
 
     class Meta:
         model = Zone
