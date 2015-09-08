@@ -65,7 +65,8 @@ class CASLDAPBackend(CASBackend):
                     user.is_superuser = True
 
                 # Ensure that non-admins who log in are future residents
-                if not user.is_admin or not user.is_superuser:
+                # TODO: Remove user hackery.
+                if not user.is_admin or not user.is_superuser or principal_name.startswith('akavanau') or principal_name.startswith('tewillso'):
                     # See if the user exists in the rms database (alias is valid)
                     try:
                         resident = Resident(principal_name=principal_name, term_code=AdminSettings.objects.get_settings().term_code)
