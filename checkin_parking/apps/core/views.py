@@ -5,7 +5,7 @@
 .. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
 
 """
-import logging
+import sys
 
 from django.template.context import RequestContext
 from django.views.generic import TemplateView
@@ -29,17 +29,8 @@ def handler500(request):
     from django.http import HttpResponseServerError
 
     template = loader.get_template('500.html')
-
     context = RequestContext(request)
-    context_string = ''
-    for k, v in context.flatten().items():
-        context_string += str(k) + ': ' + str(v)
 
-    print(context_string)
-
-    logger = logging.getLogger('raven')
-    logger.info(context_string)
-
-    RequestContext
+    context['exception_text'] = str(sys.exc_info()[0])
 
     return HttpResponseServerError(template.render(context))
