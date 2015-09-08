@@ -3,3 +3,4 @@
 -r base.txt
 
 django-secure==1.0
+git+ssh://git@code.its.calpoly.edu:7999/rmsc/rmsconnector.git
