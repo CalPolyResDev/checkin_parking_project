@@ -90,7 +90,7 @@ urlpatterns += [
     url(r'^reservations/change/$', login_required(IndexView.as_view()), name='change_reservation'),
     url(r'^reservations/cancel/$', login_required(IndexView.as_view()), name='cancel_reservation'),
 
-    url(r'^reservations/parking-pass/generate/(?P<reservation_id>\d+)/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
+    url(r'^reservations/parking-pass/generate/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
     url(r'^reservations/parking-pass/verify/(?P<reservation_id>\d+)/(?P<user_id>\d+)/$', ParkingPassVerificationView.as_view(), name='verify_parking_pass'),
 ]
 

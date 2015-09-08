@@ -94,21 +94,21 @@ class ParkingPassPDFView(TemplateView):
     template_name = 'reservations/parking_pass.rml'
 
     def get_context_data(self, **kwargs):
-        context = super(ParkingPassPDFView, self).get_context_data(kwargs)
+        context = super(ParkingPassPDFView, self).get_context_data(**kwargs)
 
-        reservation_slot = ReservationSlot.objects.get(id=kwargs['reservation_id'])
+        reservation_slot = ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
 
         parking = {
-            'date': reservation_slot.time_slot.date,
-            'start': reservation_slot.time_slot.time,
-            'end': reservation_slot.time_slot.time + timedelta(minutes=AdminSettings.objects.get_settings().timeslot_length),
+            'date': reservation_slot.timeslot.date,
+            'start': reservation_slot.timeslot.time,
+            'end': reservation_slot.timeslot.end_time,
             'zone': reservation_slot.zone.name,
         }
 
         context['resident_name'] = reservation_slot.resident.full_name
         context['cal_poly_logo_path'] = Path(MEDIA_ROOT).joinpath('pdf_assets/cp_logo.gif')
         context['parking'] = parking
-        context['qr_code_url'] = reverse('verify_parking_pass', kwargs={'reservation_id': reservation_slot.id, 'user_id': reservation_slot.resident.id})
+        context['qr_code_url'] = self.request.build_absolute_uri(reverse('verify_parking_pass', kwargs={'reservation_id': reservation_slot.id, 'user_id': reservation_slot.resident.id}))
 
         return context
 
