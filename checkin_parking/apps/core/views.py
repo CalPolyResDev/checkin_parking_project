@@ -5,6 +5,8 @@
 .. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
 
 """
+import sys
+import traceback
 
 from collections import defaultdict
 from datetime import date as datetime_date, datetime, timedelta
@@ -54,5 +56,19 @@ def handler500(request):
     from django.http import HttpResponseServerError
 
     template = loader.get_template('500.html')
+    context = RequestContext(request)
 
-    return HttpResponseServerError(template.render(RequestContext(request)))
+#     exc_type, exc_value, exc_traceback = sys.exc_info()
+#     lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+#     message = lines[-1]
+#
+#     context['exception_text'] = message
+    try:
+        raise
+    except Exception as exc:
+        exception_text = str(exc)
+        if exception_text.startswith("['"):
+            exception_text = exception_text[2:-2]
+        context['exception_text'] = exception_text
+
+    return HttpResponseServerError(template.render(context))

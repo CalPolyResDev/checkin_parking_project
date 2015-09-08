@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block subtitle %} | Zones{% endblock %}
+
+
+{% block content%}
+<div id="content">
+    <div id="mainLeftFull">
+        <h1>
+            View Reservation
+        </h1>
+        <h3>
+            Reservation Details
+        </h3>
+        <table border="1" class="table_directory">
+            <tbody>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Start Time</th>
+                    <th scope="col">End Time</th>
+                    <th scope="col">Zone</th>
+                    <th scope="col">Cancel</th>
+                </tr>
+                <tr>
+                    <td>{{ reservationslot.timeslot.date|date }}</td>
+                    <td>{{ reservationslot.timeslot.time|time:"H:i" }}</td>
+                    <td>{{ reservationslot.timeslot.end_time|time:"H:i" }}</td>
+                    <td>{{ reservationslot.zone.name }}</td>
+                    <td style="cursor: pointer; color: red; text-decoration: underline;" onclick="cancel_reservation();">Cancel</td>
+                </tr>
+            </tbody>
+        </table>
+        
+            <p>The links below are documents that contain your {% if request.session.settings.mode_is_move_in %}move-in{% else %}move-out{% endif %} date, time and location as well as instructions and a detailed map with directions to your {% if request.session.settings.mode_is_move_in %}move-in{% else %}move-out{% endif %} location. You must print out this information and present it to the parking staff at your {% if request.session.settings.mode_is_move_in %}move-in{% else %}move-out{% endif %} location.</p>
+            <br /><h3>Information & Parking Pass</h3>
+            <p>
+            {% if reservationslot.zone.community.name == 'Poly Canyon Village' %}
+                {% if not 'Continuing' in reservationslot.class_level %}
+                <a href="/media/documents/trans_pcv_parking_info.pdf" target="blank">Poly Canyon Village Transfer Student Parking Information (PDF)</a><br />
+                {% else %}
+                <a href="/media/documents/co_pcv_parking_info.pdf" target="blank">Poly Canyon Village Continuing Student Parking Information (PDF)</a><br />
+                {% endif %}
+                <a href="/media/documents/pcv_loop_nav_info.pdf" target="blank">Poly Canyon Village Loop Navigation Information (PDF)</a><br />
+            {% endif %}
+            {% if reservationslot.zone.community.name  == 'Cerro Vista' %}
+                {% if not 'Continuing' in reservationslot.class_level %}
+                <a href="/media/documents/fresh_trans_cerro_parking_info.pdf" target="blank">Cerro Vista Freshman/Transfer Student Parking Information (PDF)</a><br />
+                {% else %}
+                <a href="/media/documents/co_cerro_parking_info.pdf" target="blank">Cerro Vista Continuing Student Parking Information (PDF)</a><br />
+                {% endif %}
+            {% endif %}
+            <br />
+            <a href="{% url 'generate_parking_pass' %}">Move-in Registration Parking Pass (PDF)</a>
+            </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'js/jquery.blockUI.js' %}"></script>
+<script type="text/javascript">
+    function cancel_reservation() {
+        if (confirm('Would you like to cancel your reservation?')) {
+            $.blockUI({message: '<h1>Canceling your reservation. Please wait...</h1>'});
+            ajaxPost("{% url 'cancel_reservation' %}", {}, function(response) {
+                if (response['success']) {
+                    window.open("{% url 'reserve' %}", '_self');
+                }
+                else {
+                    $.unblockUI();
+                    alert('An error occurred when trying to cancel your reservation. Please try again later.');
+                }
+            });
+            
+        }
+    };
+</script>
+{% endblock %}

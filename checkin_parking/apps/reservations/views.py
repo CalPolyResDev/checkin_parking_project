@@ -9,13 +9,14 @@
 from datetime import date as datetime_date, datetime, timedelta
 from pathlib import Path
 
-from django.core.exceptions import FieldError
+from django.core.exceptions import FieldError, ValidationError
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import transaction
 from django.http.response import HttpResponse
 from django.template.context import Context
 from django.template.loader import get_template
 from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 import trml2pdf
@@ -99,21 +100,24 @@ class ParkingPassPDFView(TemplateView):
     template_name = 'reservations/parking_pass.rml'
 
     def get_context_data(self, **kwargs):
-        context = super(ParkingPassPDFView, self).get_context_data(kwargs)
+        context = super(ParkingPassPDFView, self).get_context_data(**kwargs)
 
-        reservation_slot = ReservationSlot.objects.get(id=kwargs['reservation_id'])
+        try:
+            reservation_slot = ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
+        except ReservationSlot.DoesNotExist:
+            raise ValidationError('You do not have a parking reservation on file. If you believe this is in error, call ResNet at (805) 756-5600.')
 
         parking = {
-            'date': reservation_slot.time_slot.date,
-            'start': reservation_slot.time_slot.time,
-            'end': reservation_slot.time_slot.time + timedelta(minutes=AdminSettings.objects.get_settings().timeslot_length),
+            'date': reservation_slot.timeslot.date,
+            'start': reservation_slot.timeslot.time,
+            'end': reservation_slot.timeslot.end_time,
             'zone': reservation_slot.zone.name,
         }
 
         context['resident_name'] = reservation_slot.resident.full_name
         context['cal_poly_logo_path'] = Path(MEDIA_ROOT).joinpath('pdf_assets/cp_logo.gif')
         context['parking'] = parking
-        context['qr_code_url'] = reverse('verify_parking_pass', kwargs={'reservation_id': reservation_slot.id, 'user_id': reservation_slot.resident.id})
+        context['qr_code_url'] = self.request.build_absolute_uri(reverse('verify_parking_pass', kwargs={'reservation_id': reservation_slot.id, 'user_id': reservation_slot.resident.id}))
 
         return context
 
@@ -136,23 +140,50 @@ class ReserveView(ListView):
     template_name = 'reservations/reserve.html'
     model = TimeSlot
 
-    def get_context_data(self, **kwargs):
-        context = super(ReserveView, self).get_context_data(**kwargs)
-
+    def get_queryset(self, **kwargs):
         building = self.request.user.building
         term_type = self.request.user.term_type
-        try:
-            if not building:
-                raise FieldError('We could not find an assigned building for you. Please call University Housing if you believe this message is in error.')
-            if not term_type:
-                raise FieldError('Could not retrieve class level. Please call ResNet at (805) 756-6500.')
-        except FieldError as exc:
-            context['error_text'] = str(exc)
 
+        if 'change_reservation' not in kwargs:
+            try:
+                ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
+                raise ValidationError('You can not reserve a slot if you already have one.')
+            except ReservationSlot.DoesNotExist:
+                pass
+
+        if not building:
+            raise FieldError('We could not find an assigned building for you. Please call University Housing if you believe this message is in error.')
+        if not term_type:
+            raise FieldError('Could not retrieve class level. Please call ResNet at (805) 756-6500.')
+
+        queryset = TimeSlot.objects.filter(reservationslots__zone__buildings__name__contains=building, reservationslots__resident=None, reservationslots__class_level__contains=term_type)
+
+        if 'change_reservation' in kwargs:
+            return queryset.exclude(reservationslots__resident=self.request.user).distinct()
+        else:
+            return queryset.distinct()
+
+
+class ViewReservationView(DetailView):
+    template_name = 'reservations/reservation_view.html'
+    model = ReservationSlot
+
+    def get_object(self, queryset=None):
+        try:
+            reservation_slot = ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
+        except ReservationSlot.DoesNotExist:
+            raise ValidationError('You do not have a parking reservation on file. If you believe this is in error, call ResNet at (805) 756-5600.')
+
+        return reservation_slot
+
+
+class ChangeReservationView(ReserveView):
+
+    def get_context_data(self, **kwargs):
+        context = super(ChangeReservationView, self).get_context_data(**kwargs)
+        context['change_reservation'] = True
         return context
 
-    def get_queryset(self):
-        building = self.request.user.building
-        term_type = self.request.user.term_type
-
-        return TimeSlot.objects.filter(reservationslots__zone__buildings__name__contains=building, reservationslots__resident=None, reservationslots__class_level__contains=term_type)
+    def get_queryset(self, **kwargs):
+        kwargs['change_reservation'] = True
+        return super(ChangeReservationView, self).get_queryset(**kwargs)

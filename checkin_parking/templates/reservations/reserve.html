@@ -6,7 +6,7 @@
 {% block content %}
     <div id="content">
         <div id="mainLeftFull">
-            <h1>Available Slots</h1>
+            <h1>{% if change_reservation %}Change Reservation{% else %}Available Slots{% endif %}</h1>
             <p>Please pick one of the below available times.</p>
             <table border="1" class="table_directory">
                 <tbody>
@@ -16,7 +16,7 @@
                         <th>End Time</th>
                     </tr>
                     {% for slot in timeslot_list %}
-                    <tr id="slot_{{ slot.id }}" onclick="reserve_slot({{ slot.id }}, '{{ slot.time }}', '{{ slot.date }}');">
+                    <tr id="slot_{{ slot.id }}" onclick="reserve_slot({{ slot.id }}, '{{ slot.time }}', '{{ slot.date }}');" style="cursor: pointer;">
                         <td>{{ slot.date }}</td>
                         <td>{{ slot.time }}</td>
                         <td>{{ slot.end_time }}</td>
@@ -45,13 +45,13 @@
     function reserve_slot(slot_id, slot_time, slot_date) {
         if (confirm('Would you like to reserve the slot starting at ' + slot_time + ' on ' + slot_date + '?')) {
             $.blockUI({message: '<h1>Reserving your slot. Please wait...</h1>'});
-            ajaxPost("{% url 'reserve_slot' %}", {'slot_id': slot_id}, function(response) {
+            ajaxPost("{% url 'reserve_slot' %}", {'slot_id': slot_id{% if change_reservation %}, 'change_reservation': true{% endif %}}, function(response) {
                 if (response['success']) {
                     window.open("{% url 'view_reservation' %}", '_self');
                 }
                 else {
                     $('#slot_' + slot_id).remove();
-                    $.unblockUI;
+                    $.unblockUI();
                     alert('Sorry, that slot is no longer available. Please select another slot.');
                 }
             });

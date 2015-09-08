@@ -40,7 +40,7 @@ class TimeSlot(Model):
 
     @cached_property
     def end_time(self):
-        return self.time + timedelta(minutes=AdminSettings.objects.get_settings().timeslot_length)
+        return (datetime.combine(datetime.today(), self.time) + timedelta(minutes=AdminSettings.objects.get_settings().timeslot_length)).time()
 
     def __str__(self):
         return self.datetime + " (" + str(self.term_code) + ")"
