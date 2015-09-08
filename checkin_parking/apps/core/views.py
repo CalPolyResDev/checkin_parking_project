@@ -32,10 +32,14 @@ def handler500(request):
     template = loader.get_template('500.html')
     context = RequestContext(request)
 
-    exc_type, exc_value, exc_traceback = sys.exc_info()
-    lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
-    message = lines[-1]
-
-    context['exception_text'] = message
+#     exc_type, exc_value, exc_traceback = sys.exc_info()
+#     lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+#     message = lines[-1]
+#
+#     context['exception_text'] = message
+    try:
+        raise
+    except Exception as exc:
+        context['exception_text'] = str(exc)
 
     return HttpResponseServerError(template.render(context))
