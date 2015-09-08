@@ -21,6 +21,7 @@ class ZoneForm(ModelForm):
         self.fields["community"].error_messages = {'required': 'A community is required.'}
         self.fields["buildings"].error_messages = {'required': 'At least one building must be selected.'}
 
+        self.fields["capacity"].readonly = True
         self.fields["community"].widget.attrs['autocomplete'] = "off"
         self.fields["buildings"].help_text = ""
 

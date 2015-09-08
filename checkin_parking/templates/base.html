@@ -1,41 +1,38 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<meta http-equiv="content-language" content="en" />
-		<meta name="language" content="en" />
-		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-		<meta name="codebase" content="5.0" />
-		<meta name="layout" content="Cal Poly Web Template" />
-		<meta name="author" content="Alex Kavanaugh - ResNet Development Team" />
-		<meta name="Keywords" content="University Housing Parking Reservation" />
-		<meta name="Description" content="University Housing Parking Reservation" />
-		<link href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/css/cp_screen.min.css" rel="stylesheet" type="text/css" />
-		<link href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/css/cp_print.min.css" rel="stylesheet" type="text/css" media="print" />
-		<!--[if IE 8]>
-		<link href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/css/ie8_screen.min.css" rel="stylesheet" type="text/css" />
-		<link href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/css/ie8_print.min.css" rel="stylesheet" type="text/css" media="print" />
-		<![endif]-->
-		<!--[if IE 7]>
-		<link href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/css/ie7_screen.min.css" rel="stylesheet" type="text/css" />
-		<link href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/css/ie7_print.min.css" rel="stylesheet" type="text/css" media="print" />
-		<![endif]-->
-		<!--<link href="{% static 'css/jqueryui/jqueryui-1.8.22.cp.css' %}" rel="stylesheet" type="text/css" />-->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="content-language" content="en" />
+        <meta name="language" content="en" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="codebase" content="5.0" />
+        <meta name="layout" content="Cal Poly Web Template" />
+        <meta name="author" content="Alex Kavanaugh - ResNet Development Team" />
+        <meta name="Keywords" content="University Housing Parking Reservation" />
+        <meta name="Description" content="University Housing Parking Reservation" />
+        <link href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/css/cp_screen.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/css/cp_print.min.css" rel="stylesheet" type="text/css" media="print" />
+        <!--[if IE 8]>
+        <link href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/css/ie8_screen.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/css/ie8_print.min.css" rel="stylesheet" type="text/css" media="print" />
+        <![endif]-->
+        <!--[if IE 7]>
+        <link href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/css/ie7_screen.min.css" rel="stylesheet" type="text/css" />
+        <link href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/css/ie7_print.min.css" rel="stylesheet" type="text/css" media="print" />
+        <![endif]-->
         <link href="{% static 'css/screen.css' %}" rel="stylesheet" type="text/css" />
         <link href="{% static 'css/print.css' %}" rel="stylesheet" type="text/css" media="print" />
         <link rel="shortcut icon" href="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/images_html/favicon.ico" type="image/x-icon" />
-		<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
-		<script type="text/javascript" src="{% static 'django_ajax/js/jquery.ajax.min.js' %}"></script>
-		<!--<script type="text/javascript" src="/static/js/jqueryui-1.8.22.cp.min.js"></script>-->
-		<!--<script type="text/javascript" src="/static/js/jqueryui-timepicker-addon.js"></script>-->
-		{% block meta %}{% endblock %}
-		<title>University Housing - Parking Reservation{% block subtitle %}{% endblock %}</title>
-	</head>
-	<body>
-		<div id="wrapper">
-			<div id="header">
-				<!-- Begin Login Display Module -->
+        <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="{% static 'django_ajax/js/jquery.ajax.min.js' %}"></script>
+        {% block meta %}{% endblock %}
+        <title>University Housing - Parking Reservation{% block subtitle %}{% endblock %}</title>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="header">
+                <!-- Begin Login Display Module -->
                 {% block login_display %}
                 <div id="loginDisplay">
                     <ul>
@@ -52,26 +49,26 @@
                 </div>
                 {% endblock %}
                 <!-- End Login Display Module -->
-				<hr />
-				<div id="headerContent">
-					<div id="cplogo">
-						<a href="http://www.calpoly.edu/" ><img src="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/images_html/header/cp_logo.jpg" alt="Cal Poly, San Luis Obispo" height="75" width="150" /></a>
-					</div>
-					<div id="deptName">
-						<h2><a href="http://housing.calpoly.edu/">University Housing</a></h2>
+                <hr />
+                <div id="headerContent">
+                    <div id="cplogo">
+                        <a href="http://www.calpoly.edu/" ><img src="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/images_html/header/cp_logo.jpg" alt="Cal Poly, San Luis Obispo" height="75" width="150" /></a>
+                    </div>
+                    <div id="deptName">
+                        <h2><a href="http://housing.calpoly.edu/">University Housing</a></h2>
 
-						<h3><a href="{% url 'home' %}">Checkin Parking Reservation</a></h3>
-					</div>
-				</div>
-			</div>
-			<div id="contentLine"></div>
-			<!-- Begin Side Navigation Bar -->
-			{% block sidenav %}
+                        <h3><a href="{% url 'home' %}">Checkin Parking Reservation</a></h3>
+                    </div>
+                </div>
+            </div>
+            <div id="contentLine"></div>
+            <!-- Begin Side Navigation Bar -->
+            {% block sidenav %}
             {% if request.user.is_authenticated %}
             <div id="rightCol">
                 <h2>Resident Resources</h2>
                 <ul>
-                	{% if request.user.reservation %}
+                    {% if request.user.reservation %}
                     <li><a href="{% url 'view_reservation' %}">View Reservation</a></li>
                     <li><a href="{% url 'change_reservation' %}">Change Reservation</a></li>
                     <li><a href="{% url 'cancel_reservation' %}">Cancel Reservation</a></li>
@@ -82,36 +79,36 @@
                 {% if request.user.is_admin %}
                 <h2>Administrator Resources</h2>
                 <ul>
-                	<li><a>Reservation Management</a>
-					    <ul>
-					       <li><a href="{% url 'generate_reservation_slots' %}">Generate Reservation Slots</a></li>
-					       <li><a href="{% url 'list_time_slots' %}">List Time Slots</a></li>
-					    </ul>
-					</li>
-					<li><a>Parking Zone Management</a>
-					    <ul>
-					      <li><a href="{% url 'list_zones' %}">List Zones</a></li>
-					      <li><a href="{% url 'create_zone' %}">Create Zone</a></li>
-					    </ul>
-					</li>
-					<li><a>PDF Management</a>
-					    <ul>
-					      <li><a href="{% url 'update_maps' %}">Update Parking Maps</a></li>
-					    </ul>
-					</li>
-					<li><a href="{% url 'statistics' %}">Statistics</a></li>
-					<li><a href="{% url 'settings' %}">Settings</a>
-					    <ul>
-					       <li><a href="{% url 'purge' %}">Purge Reservations</a></li>
-					    </ul>
-					</li>
+                    <li><a>Reservation Management</a>
+                        <ul>
+                           <li><a href="{% url 'generate_reservation_slots' %}">Generate Reservation Slots</a></li>
+                           <li><a href="{% url 'list_time_slots' %}">List Time Slots</a></li>
+                        </ul>
+                    </li>
+                    <li><a>Parking Zone Management</a>
+                        <ul>
+                          <li><a href="{% url 'list_zones' %}">List Zones</a></li>
+                          <li><a href="{% url 'create_zone' %}">Create Zone</a></li>
+                        </ul>
+                    </li>
+                    <li><a>PDF Management</a>
+                        <ul>
+                          <li><a href="{% url 'update_maps' %}">Update Parking Maps</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{% url 'statistics' %}">Statistics</a></li>
+                    <li><a href="{% url 'settings' %}">Settings</a>
+                        <ul>
+                           <li><a href="{% url 'purge' %}">Purge Reservations</a></li>
+                        </ul>
+                    </li>
                 </ul>
                 {% endif %}
             </div>
             {% endif %}
             {% endblock %}
             <!-- End Side Navigation Bar -->
-			{% block content %}{% endblock %}
+            {% block content %}{% endblock %}
             <div class="clear"></div>
             {% block footer %}
             <div id="footer">
@@ -134,5 +131,5 @@
             <div class="clear"></div>
         </div>
         {% block extra_script %}{% endblock %}
-	</body>
+    </body>
 </html>

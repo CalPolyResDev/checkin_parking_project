@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block subtitle %} | Generate Reservation Slots{% endblock %}
+
+{% block meta %}
+{{ block.super }}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.min.css" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/jqueryui/jqueryui-1.8.22.cp.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div id="mainLeftFull">
+            <h1>Generate Reservation Slots</h1>
+            <p>Use the following form to generate reservation slots. For each {{ timeslot_length }} minute chunk of the time range you enter below and for each zone you select, a reservation slot will be generated based on the capacity of each zone.</p>
+            <form method="post" id="create_zone_form">
+                <fieldset>
+                    <legend>
+                        Generate Reservation Slots
+                    </legend>
+                    {{ form.as_p }}
+                </fieldset>
+                <p>
+                    <input type="submit" value="Submit" />
+                </p>
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_scripts %}
+{{ block.super }}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/jqueryui-1.8.22.cp.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#id_date").datepicker({
+                minDate: 0,
+                dateFormat: 'yyyy-mm-dd',
+            });
+            $("#id_start_time, #id_end_time").timepicker({
+                timeFormat: 'hh:mm:ss',
+                stepHour: 1,
+                stepMinute: 10,
+            });
+        });
+    </script>
+{% endblock %}

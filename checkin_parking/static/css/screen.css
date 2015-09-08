@@ -122,3 +122,7 @@ form .horizontal_fields p {
     cursor: pointer;
     text-decoration: underline !important;
 }
+
+div.ui-datepicker{
+    font-size:12px;
+}

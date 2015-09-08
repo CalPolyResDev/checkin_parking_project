@@ -15,20 +15,26 @@ from django.forms.models import ModelMultipleChoiceField
 
 from ..administration.models import AdminSettings
 from ..zones.models import Zone
-from .models import CLASS_LEVEL_CHOICES
+from .models import CLASS_LEVEL_CHOICES, CLASS_LEVELS
 
 
 class GenerateReservationsForm(Form):
     date = DateField(label="Date")
     start_time = TimeField(label='Start Time', input_formats=['%H:%M:%S'], error_messages={'required': 'A start time is required'})
     end_time = TimeField(label='End Time', input_formats=['%H:%M:%S'], error_messages={'required': 'An end time is required'})
-    class_level = ChoiceField(label='Class Level', choices=CLASS_LEVEL_CHOICES)
-    zones = ModelMultipleChoiceField(queryset=Zone.objects.all())
+    class_level = ChoiceField(label='Class Level', choices=CLASS_LEVEL_CHOICES, initial=CLASS_LEVELS.index("Freshman/Transfer/Continuing"), error_messages={'required': 'A class level is required'})
+    zones = ModelMultipleChoiceField(queryset=Zone.objects.all(), error_messages={'required': 'At least one zone must be selected.'})
 
     error_messages = {
         'time_conflict': "The start time must be before the end time.",
         'interval_conflict': "The time window must be greater than the set timeslot length ({length} Minutes)",
     }
+
+    def __init__(self, *args, **kwargs):
+        super(GenerateReservationsForm, self).__init__(*args, **kwargs)
+
+        self.fields["class_level"].widget.attrs['autocomplete'] = "off"
+        self.fields["zones"].help_text = ""
 
     def clean(self):
         cleaned_data = super(GenerateReservationsForm, self).clean()

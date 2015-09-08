@@ -14,9 +14,10 @@ def reservation_status(request):
 
     extra_context = {}
 
-    settings_instance, created = AdminSettings.objects.get_or_create(id=1)
+    admin_settings = AdminSettings.objects.get_settings()
 
-    extra_context["reservation_open"] = settings_instance.reservation_open
+    extra_context["reservation_open"] = admin_settings.reservation_open
+    extra_context["timeslot_length"] = admin_settings.timeslot_length
 
     return extra_context
 
