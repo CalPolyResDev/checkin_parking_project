@@ -6,6 +6,7 @@
 
 """
 import sys
+import traceback
 
 from django.template.context import RequestContext
 from django.views.generic import TemplateView
@@ -31,20 +32,9 @@ def handler500(request):
     template = loader.get_template('500.html')
     context = RequestContext(request)
 
-    exception = sys.exc_info()[0]
-
-    message = ''
-
-    try:
-        message = exception.message
-    except:
-        pass
-
-    if not message:
-        try:
-            message = exception.messages
-        except:
-            message = str(exception)
+    exc_type, exc_value, exc_traceback = sys.exc_info()
+    lines = traceback.format_exception(exc_type, exc_value, exc_traceback)
+    message = ''.join('!! ' + line for line in lines)
 
     context['exception_text'] = message
 
