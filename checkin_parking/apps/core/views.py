@@ -31,10 +31,13 @@ def handler500(request):
     template = loader.get_template('500.html')
 
     context = RequestContext(request)
-    logger = logging.getLogger('raven')
     context_string = ''
     for k, v in context.items():
         context_string.append(k + ': ' + v)
+
+    print(context_string)
+
+    logger = logging.getLogger('raven')
     logger.info(context_string)
 
     return HttpResponseServerError(template.render(context))
