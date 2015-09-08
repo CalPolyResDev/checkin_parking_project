@@ -32,12 +32,14 @@ def handler500(request):
 
     context = RequestContext(request)
     context_string = ''
-    for k, v in context.items():
+    for k, v in context.flatten().items():
         context_string.append(k + ': ' + v)
 
     print(context_string)
 
     logger = logging.getLogger('raven')
     logger.info(context_string)
+
+    RequestContext
 
     return HttpResponseServerError(template.render(context))
