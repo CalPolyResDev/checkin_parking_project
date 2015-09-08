@@ -11,6 +11,7 @@ from pathlib import Path
 
 from django.core.exceptions import FieldError
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.db import transaction
 from django.http.response import HttpResponse
 from django.template.context import Context
 from django.template.loader import get_template
@@ -40,27 +41,28 @@ class GenerateReservationSlotsView(FormView):
         admin_settings = AdminSettings.objects.get_settings()
         end_datetime = datetime.combine(datetime_date.today(), end_time)
 
-        delta = end_datetime - datetime.datetime.combine(datetime_date.today(), start_time)
+        delta = end_datetime - datetime.combine(datetime_date.today(), start_time)
 
-        # Split the time span into admin_settings.timeslot_length chunks
-        while delta.total_seconds() > 0:
-            timeslot = TimeSlot()
-            timeslot.date = date
-            timeslot.time = start_time
-            timeslot.term_code = admin_settings.term_code
-            timeslot.save()
+        with transaction.atomic():
+            # Split the time span into admin_settings.timeslot_length chunks
+            while delta.total_seconds() > 0:
+                timeslot = TimeSlot()
+                timeslot.date = date
+                timeslot.time = start_time
+                timeslot.term_code = admin_settings.term_code
+                timeslot.save()
 
-            # For each zone, create zone.capacity reservation slots
-            for zone in zones:
-                for index in range(zone.capacity):
-                    reservationslot = ReservationSlot()
-                    reservationslot.class_level = class_level
-                    reservationslot.timeslot = timeslot
-                    reservationslot.zone = zone
-                    reservationslot.save()
+                # For each zone, create zone.capacity reservation slots
+                for zone in zones:
+                    for index in range(zone.capacity):
+                        reservationslot = ReservationSlot()
+                        reservationslot.class_level = class_level
+                        reservationslot.timeslot = timeslot
+                        reservationslot.zone = zone
+                        reservationslot.save()
 
-            start_time += timedelta(minutes=admin_settings.timeslot_length).time()
-            delta = end_datetime - datetime.datetime.combine(datetime_date.today(), start_time)
+                start_time = (datetime.combine(datetime_date.today(), start_time) + timedelta(minutes=admin_settings.timeslot_length)).time()
+                delta = end_datetime - datetime.combine(datetime_date.today(), start_time)
 
         return super(GenerateReservationSlotsView, self).form_valid(form)
 

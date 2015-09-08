@@ -43,7 +43,7 @@ class TimeSlot(Model):
         return self.time + timedelta(minutes=AdminSettings.objects.get_settings().timeslot_length)
 
     def __str__(self):
-        return self.datetime + " (" + str(self.term) + ")"
+        return self.datetime + " (" + str(self.term_code) + ")"
 
 
 class ReservationSlot(Model):
