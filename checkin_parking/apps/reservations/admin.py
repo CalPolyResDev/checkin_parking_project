@@ -12,8 +12,8 @@ from .models import TimeSlot, ReservationSlot
 
 
 class TimeSlotAdmin(admin.ModelAdmin):
-    list_display = ['datetime', 'term']
-    list_filter = ['term']
+    list_display = ['datetime', 'term_code']
+    list_filter = ['term_code']
 
 
 class ReservationSlotAdmin(admin.ModelAdmin):
