@@ -8,6 +8,7 @@
 
 from collections import defaultdict
 from datetime import date as datetime_date, datetime, timedelta
+import logging
 from operator import attrgetter
 
 from django.template.context import RequestContext
@@ -15,6 +16,8 @@ from django.views.generic import TemplateView
 
 from ..administration.models import AdminSettings
 from ..reservations.models import TimeSlot
+
+logger = logging.getLogger(__name__)
 
 
 class IndexView(TemplateView):
@@ -63,5 +66,7 @@ def handler500(request):
         if exception_text.startswith("['"):
             exception_text = exception_text[2:-2]
         context['exception_text'] = exception_text
+
+        logger.exception(exc)
 
     return HttpResponseServerError(template.render(context))
