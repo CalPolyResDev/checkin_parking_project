@@ -23,9 +23,9 @@
                     <th scope="col">Cancel</th>
                 </tr>
                 <tr>
-                    <td>{{ reservationslot.timeslot.date|date }}</td>
-                    <td>{{ reservationslot.timeslot.time|time:"H:i" }}</td>
-                    <td>{{ reservationslot.timeslot.end_time|time:"H:i" }}</td>
+                    <td>{{ reservationslot.timeslot.date }}</td>
+                    <td>{{ reservationslot.timeslot.time }}</td>
+                    <td>{{ reservationslot.timeslot.end_time }}</td>
                     <td>{{ reservationslot.zone.name }}</td>
                     <td style="cursor: pointer; color: red; text-decoration: underline;" onclick="cancel_reservation();">Cancel</td>
                 </tr>

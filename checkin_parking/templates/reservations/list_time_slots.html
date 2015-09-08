@@ -20,9 +20,9 @@
                 </tr>
                 {% for timeslot in timeslot_list %}
                 <tr id="timeslot_{{ timeslot.id }}">
-                    <td>{{ timeslot.date|date }}</td>
-                    <td>{{ timeslot.time|time:"H:i" }}</td>
-                    <td>{{ timeslot.end_time|time:"H:i" }}</td>
+                    <td>{{ timeslot.date}}</td>
+                    <td>{{ timeslot.time}}</td>
+                    <td>{{ timeslot.end_time }}</td>
                     <td style="cursor: pointer; color: red; text-decoration: underline;" onclick="delete_timeslot('{{timeslot.id}}');">Delete</td>
                 </tr>
                 {% empty %}
