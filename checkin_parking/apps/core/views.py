@@ -10,6 +10,7 @@ from collections import defaultdict
 from datetime import date as datetime_date, datetime, timedelta
 from operator import attrgetter
 
+from django.conf import settings
 from django.template.context import RequestContext
 from django.views.generic import TemplateView
 
@@ -26,7 +27,7 @@ class IndexView(TemplateView):
         move_in_slot_list = []
 
         timeslot_date_dict = defaultdict(list)
-        timeslots = TimeSlot.objects.filter(reservationslots__isnull=False)
+        timeslots = TimeSlot.objects.filter(reservationslots__isnull=False).distinct()
 
         timeslot_length = AdminSettings.objects.get_settings().timeslot_length
 
@@ -36,9 +37,11 @@ class IndexView(TemplateView):
         for date, timeslots in timeslot_date_dict.items():
             timeslots.sort(key=attrgetter("time"))
 
+            delta = (datetime.combine(datetime_date.today(), timeslots[-1].time) + timedelta(minutes=timeslot_length)).time()
+
             move_in_slot_list.append({
                 "date": date,
-                "time_range": str(timeslots[0].time) + " - " + str((datetime.combine(datetime_date.today(), timeslots[-1].time) + timedelta(minutes=timeslot_length)).time()),
+                "time_range": timeslots[0].time.strftime(settings.PYTHON_TIME_FORMAT) + " - " + delta.strftime(settings.PYTHON_TIME_FORMAT),
                 "class_level": timeslots[0].reservationslots.all()[0].class_level,
             })
 

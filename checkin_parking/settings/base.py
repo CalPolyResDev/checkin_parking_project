@@ -47,6 +47,7 @@ SITE_ID = 1
 DATE_FORMAT = 'l, F d, Y'
 
 TIME_FORMAT = 'h:i a'
+PYTHON_TIME_FORMAT = '%I:%M%p'
 
 DATETIME_FORMAT = 'l, F d, Y h:i a'
 PYTHON_DATETIME_FORMAT = '%A, %B %d, %Y %I:%M%p'  # Format: Monday, January 01, 2012 08:00am'
