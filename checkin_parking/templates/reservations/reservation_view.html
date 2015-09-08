@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
 {% block subtitle %} | Zones{% endblock %}
 
@@ -15,16 +16,18 @@
         <table border="1" class="table_directory">
             <tbody>
                 <tr>
-                    <th scope="col" width="25%">Date</th>
-                    <th scope="col" width="18%">Start Time</th>
-                    <th scope="col" width="18%">End Time</th>
-                    <th scope="col" width="18%">Zone</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Start Time</th>
+                    <th scope="col">End Time</th>
+                    <th scope="col">Zone</th>
+                    <th scope="col">Cancel</th>
                 </tr>
                 <tr>
                     <td>{{ reservationslot.timeslot.date|date }}</td>
                     <td>{{ reservationslot.timeslot.time|time:"H:i" }}</td>
                     <td>{{ reservationslot.timeslot.end_time|time:"H:i" }}</td>
                     <td>{{ reservationslot.zone.name }}</td>
+                    <td style="cursor: pointer; color: red; text-decoration: underline;" onclick="cancel_reservation();">Cancel</td>
                 </tr>
             </tbody>
         </table>
@@ -52,5 +55,26 @@
             </p>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_script %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'js/jquery.blockUI.js' %}"></script>
+<script type="text/javascript">
+    function cancel_reservation() {
+        if (confirm('Would you like to cancel your reservation?')) {
+            $.blockUI({message: '<h1>Canceling your reservation. Please wait...</h1>'});
+            ajaxPost("{% url 'cancel_reservation' %}", {}, function(response) {
+                if (response['success']) {
+                    window.open("{% url 'reserve' %}", '_self');
+                }
+                else {
+                    $.unblockUI();
+                    alert('An error occurred when trying to cancel your reservation. Please try again later.');
+                }
+            });
+            
+        }
+    };
+</script>
 {% endblock %}

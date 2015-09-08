@@ -135,22 +135,28 @@ class ReserveView(ListView):
     template_name = 'reservations/reserve.html'
     model = TimeSlot
 
-    def get_queryset(self):
+    def get_queryset(self, **kwargs):
         building = self.request.user.building
         term_type = self.request.user.term_type
 
-        try:
-            ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
-            raise ValidationError('You can not reserve a slot if you already have one.')
-        except ReservationSlot.DoesNotExist:
-            pass
+        if 'change_reservation' not in kwargs:
+            try:
+                ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
+                raise ValidationError('You can not reserve a slot if you already have one.')
+            except ReservationSlot.DoesNotExist:
+                pass
 
         if not building:
             raise FieldError('We could not find an assigned building for you. Please call University Housing if you believe this message is in error.')
         if not term_type:
             raise FieldError('Could not retrieve class level. Please call ResNet at (805) 756-6500.')
 
-        return TimeSlot.objects.filter(reservationslots__zone__buildings__name__contains=building, reservationslots__resident=None, reservationslots__class_level__contains=term_type).distinct()
+        queryset = TimeSlot.objects.filter(reservationslots__zone__buildings__name__contains=building, reservationslots__resident=None, reservationslots__class_level__contains=term_type)
+
+        if 'change_reservation' in kwargs:
+            return queryset.exclude(reservationslots__resident=self.request.user).distinct()
+        else:
+            return queryset.distinct()
 
 
 class ViewReservationView(DetailView):
@@ -164,3 +170,15 @@ class ViewReservationView(DetailView):
             raise ValidationError('You do not have a parking reservation on file. If you believe this is in error, call ResNet at (805) 756-5600.')
 
         return reservation_slot
+
+
+class ChangeReservationView(ReserveView):
+
+    def get_context_data(self, **kwargs):
+        context = super(ChangeReservationView, self).get_context_data(**kwargs)
+        context['change_reservation'] = True
+        return context
+
+    def get_queryset(self, **kwargs):
+        kwargs['change_reservation'] = True
+        return super(ChangeReservationView, self).get_queryset(**kwargs)

@@ -71,7 +71,6 @@
                     {% if request.user.reservationslot %}
                     <li><a href="{% url 'view_reservation' %}">View Reservation</a></li>
                     <li><a href="{% url 'change_reservation' %}">Change Reservation</a></li>
-                    <li><a href="{% url 'cancel_reservation' %}">Cancel Reservation</a></li>
                     {% else %}
                     <li><a href="{% url 'reserve' %}">Reserve</a></li>
                     {% endif %}

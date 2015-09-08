@@ -21,13 +21,12 @@ from django.views.defaults import permission_denied, page_not_found
 from django.views.generic import TemplateView, RedirectView
 from django_cas_ng.views import login as auth_login, logout as auth_logout
 
-from checkin_parking.apps.reservations.views import ViewReservationView
 
 from .apps.administration.ajax import purge
 from .apps.administration.views import AdminSettingsUpdateView, PurgeView, PDFMapUploadView
 from .apps.core.views import IndexView, handler500
-from .apps.reservations.ajax import reserve_slot
-from .apps.reservations.views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPassVerificationView, ReserveView
+from .apps.reservations.ajax import reserve_slot, cancel_reservation
+from .apps.reservations.views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPassVerificationView, ReserveView, ViewReservationView, ChangeReservationView
 from .apps.zones.ajax import update_buildings, delete_zone
 from .apps.zones.views import ZoneListView, ZoneCreateView, ZoneUpdateView
 
@@ -89,8 +88,8 @@ urlpatterns += [
     url(r'^reservations/reserve/$', login_required(ReserveView.as_view()), name='reserve'),
     url(r'^reservations/ajax/reserve_slot/$', login_required(reserve_slot), name='reserve_slot'),
     url(r'^reservations/view/$', login_required(ViewReservationView.as_view()), name='view_reservation'),
-    url(r'^reservations/change/$', login_required(IndexView.as_view()), name='change_reservation'),
-    url(r'^reservations/cancel/$', login_required(IndexView.as_view()), name='cancel_reservation'),
+    url(r'^reservations/change/$', login_required(ChangeReservationView.as_view()), name='change_reservation'),
+    url(r'^reservations/ajax/cancel/$', login_required(cancel_reservation), name='cancel_reservation'),
 
     url(r'^reservations/parking-pass/generate/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
     url(r'^reservations/parking-pass/verify/(?P<reservation_id>\d+)/(?P<user_id>\d+)/$', ParkingPassVerificationView.as_view(), name='verify_parking_pass'),
