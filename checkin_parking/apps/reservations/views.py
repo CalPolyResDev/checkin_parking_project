@@ -9,8 +9,7 @@
 from datetime import date as datetime_date, datetime, timedelta
 from pathlib import Path
 
-from django.core.exceptions import FieldError, ObjectDoesNotExist,\
-    ValidationError
+from django.core.exceptions import FieldError, ValidationError
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import transaction
 from django.http.response import HttpResponse
@@ -100,7 +99,7 @@ class ParkingPassPDFView(TemplateView):
 
         try:
             reservation_slot = ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
-        except ObjectDoesNotExist:
+        except ReservationSlot.DoesNotExist:
             raise ValidationError('You do not have a parking reservation on file. If you believe this is in error, call ResNet at (805) 756-5600.')
 
         parking = {
@@ -140,6 +139,12 @@ class ReserveView(ListView):
         building = self.request.user.building
         term_type = self.request.user.term_type
 
+        try:
+            ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
+            raise ValidationError('You can not reserve a slot if you already have one.')
+        except ReservationSlot.DoesNotExist:
+            pass
+
         if not building:
             raise FieldError('We could not find an assigned building for you. Please call University Housing if you believe this message is in error.')
         if not term_type:
@@ -155,7 +160,7 @@ class ViewReservationView(DetailView):
     def get_object(self, queryset=None):
         try:
             reservation_slot = ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
-        except ObjectDoesNotExist:
+        except ReservationSlot.DoesNotExist:
             raise ValidationError('You do not have a parking reservation on file. If you believe this is in error, call ResNet at (805) 756-5600.')
 
         return reservation_slot

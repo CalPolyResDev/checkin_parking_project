@@ -29,7 +29,8 @@
             </tbody>
         </table>
         
-                    <p>The links below are documents that contain your {% if request.session.settings.mode_is_move_in %}move-in{% else %}move-out{% endif %} date, time and location as well as instructions and a detailed map with directions to your {% if request.session.settings.mode_is_move_in %}move-in{% else %}move-out{% endif %} location. You must print out this information and present it to the parking staff at your {% if request.session.settings.mode_is_move_in %}move-in{% else %}move-out{% endif %} location.</p>
+            <p>The links below are documents that contain your {% if request.session.settings.mode_is_move_in %}move-in{% else %}move-out{% endif %} date, time and location as well as instructions and a detailed map with directions to your {% if request.session.settings.mode_is_move_in %}move-in{% else %}move-out{% endif %} location. You must print out this information and present it to the parking staff at your {% if request.session.settings.mode_is_move_in %}move-in{% else %}move-out{% endif %} location.</p>
+            <br /><h3>Information & Parking Pass</h3>
             <p>
             {% if reservationslot.zone.community.name == 'Poly Canyon Village' %}
                 {% if not 'Continuing' in reservationslot.class_level %}
@@ -48,6 +49,7 @@
             {% endif %}
             <br />
             <a href="{% url 'generate_parking_pass' %}">Move-in Registration Parking Pass (PDF)</a>
+            </p>
     </div>
 </div>
 
