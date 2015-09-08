@@ -9,7 +9,8 @@
 from datetime import date as datetime_date, datetime, timedelta
 from pathlib import Path
 
-from django.core.exceptions import FieldError
+from django.core.exceptions import FieldError, ObjectDoesNotExist,\
+    ValidationError
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import transaction
 from django.http.response import HttpResponse
@@ -96,7 +97,10 @@ class ParkingPassPDFView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ParkingPassPDFView, self).get_context_data(**kwargs)
 
-        reservation_slot = ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
+        try:
+            reservation_slot = ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
+        except ObjectDoesNotExist:
+            raise ValidationError('You do not have a parking reservation on file. If you believe this is in error, call ResNet.')
 
         parking = {
             'date': reservation_slot.timeslot.date,

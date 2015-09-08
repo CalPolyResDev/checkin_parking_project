@@ -5,6 +5,7 @@
 .. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
 
 """
+import logging
 
 from django.template.context import RequestContext
 from django.views.generic import TemplateView
@@ -29,4 +30,11 @@ def handler500(request):
 
     template = loader.get_template('500.html')
 
-    return HttpResponseServerError(template.render(RequestContext(request)))
+    context = RequestContext(request)
+    logger = logging.getLogger('raven')
+    context_string = ''
+    for k, v in context.items():
+        context_string.append(k + ': ' + v)
+    logger.info(context_string)
+
+    return HttpResponseServerError(template.render(context))
