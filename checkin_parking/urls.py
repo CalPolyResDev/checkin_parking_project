@@ -25,7 +25,7 @@ from .apps.administration.ajax import purge
 from .apps.administration.views import AdminSettingsUpdateView, PurgeView, PDFMapUploadView
 from .apps.core.views import IndexView, handler500
 from .apps.reservations.ajax import reserve_slot
-from .apps.reservations.views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPassVerificationView, ReserveView
+from .apps.reservations.views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPassVerificationView, ReserveView, TimeSlotListView
 from .apps.zones.ajax import update_buildings, delete_zone
 from .apps.zones.views import ZoneListView, ZoneCreateView, ZoneUpdateView
 
@@ -80,7 +80,7 @@ urlpatterns = [
 urlpatterns += [
     url(r'^reservations/slots/generate/$', login_required(administrative_access(GenerateReservationSlotsView.as_view())), name='generate_reservation_slots'),
 
-    url(r'^reservations/slots/list/$', login_required(administrative_access(IndexView.as_view())), name='list_time_slots'),
+    url(r'^reservations/slots/list/$', login_required(administrative_access(TimeSlotListView.as_view())), name='list_time_slots'),
     url(r'^reservations/slots/(?P<id>\d+)/$', login_required(administrative_access(IndexView.as_view())), name='update_time_slot'),
     url(r'^reservations/slots/(?P<id>\d+)/delete/$', login_required(administrative_access(IndexView.as_view())), name='delete_time_slot'),
 

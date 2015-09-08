@@ -67,6 +67,11 @@ class GenerateReservationSlotsView(FormView):
         return super(GenerateReservationSlotsView, self).form_valid(form)
 
 
+class TimeSlotListView(ListView):
+    template_name = "reservations/list_time_slots.html"
+    model = TimeSlot
+
+
 class ParkingPassVerificationView(TemplateView):
     template_name = 'reservations/parking_pass_verification.html'
 

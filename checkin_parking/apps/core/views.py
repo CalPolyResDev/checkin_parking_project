@@ -6,8 +6,15 @@
 
 """
 
+from collections import defaultdict
+from datetime import date as datetime_date, datetime, timedelta
+from operator import attrgetter
+
 from django.template.context import RequestContext
 from django.views.generic import TemplateView
+
+from ..administration.models import AdminSettings
+from ..reservations.models import TimeSlot
 
 
 class IndexView(TemplateView):
@@ -16,7 +23,26 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(TemplateView, self).get_context_data(**kwargs)
 
-        # TODO: Add Session data to context
+        move_in_slot_list = []
+
+        timeslot_date_dict = defaultdict(list)
+        timeslots = TimeSlot.objects.filter(reservationslots__isnull=False)
+
+        timeslot_length = AdminSettings.objects.get_settings().timeslot_length
+
+        for timeslot in timeslots:
+            timeslot_date_dict[timeslot.date].append(timeslot)
+
+        for date, timeslots in timeslot_date_dict.items():
+            timeslots.sort(key=attrgetter("time"))
+
+            move_in_slot_list.append({
+                "date": date,
+                "time_range": str(timeslots[0].time) + " - " + str((datetime.combine(datetime_date.today(), timeslots[-1].time) + timedelta(minutes=timeslot_length)).time()),
+                "class_level": timeslots[0].reservationslots.all()[0].class_level,
+            })
+
+        context["move_in_slot_list"] = move_in_slot_list
 
         return context
 
