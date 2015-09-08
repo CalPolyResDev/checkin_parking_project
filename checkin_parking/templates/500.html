@@ -9,7 +9,7 @@
         <h1>Internal Server Error (HTTP 500)</h1>
         <p>Oh no! It looks like something went wrong with our code!</p>
         {% if exception_text %}
-        <p>ERROR_MESSAGE = {{ exception_text }}</p>
+        <p><strong>ERROR MESSAGE = {{ exception_text }}</strong></p>
         {% endif %}
         <p>If this is a frequent occurence, please consider notifying us via email at <a href="mailto:resdev@calpoly.edu">resdev@calpoly.edu</a> with a description of what's happening.
         {% if request.sentry.id %}

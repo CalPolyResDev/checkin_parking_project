@@ -40,6 +40,9 @@ def handler500(request):
     try:
         raise
     except Exception as exc:
-        context['exception_text'] = str(exc)
+        exception_text = str(exc)
+        if exception_text.startswith("['"):
+            exception_text = exception_text[2:-2]
+        context['exception_text'] = exception_text
 
     return HttpResponseServerError(template.render(context))
