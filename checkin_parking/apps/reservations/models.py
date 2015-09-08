@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.db.models.base import Model
 from django.db.models.deletion import SET_NULL
-from django.db.models.fields import DateField, TimeField, PositiveSmallIntegerField
+from django.db.models.fields import CharField, DateField, TimeField, PositiveSmallIntegerField
 from django.db.models.fields.related import ForeignKey, OneToOneField
 from django.utils.functional import cached_property
 
@@ -23,7 +23,7 @@ from ..zones.models import Zone
 
 
 CLASS_LEVELS = ['Freshman', 'Transfer', 'Continuing', 'Freshman/Transfer', 'Freshman/Continuing', 'Transfer/Continuing', 'Freshman/Transfer/Continuing']
-CLASS_LEVEL_CHOICES = [(CLASS_LEVELS.index(class_level), class_level) for class_level in CLASS_LEVELS]
+CLASS_LEVEL_CHOICES = [(class_level, class_level) for class_level in CLASS_LEVELS]
 
 
 class TimeSlot(Model):
@@ -49,7 +49,7 @@ class TimeSlot(Model):
 class ReservationSlot(Model):
     """ A parking session."""
 
-    class_level = PositiveSmallIntegerField(default=CLASS_LEVELS.index('Freshman/Transfer/Continuing'), choices=CLASS_LEVEL_CHOICES, verbose_name='Class Level')
+    class_level = CharField(max_length=30, default=CLASS_LEVELS.index('Freshman/Transfer/Continuing'), choices=CLASS_LEVEL_CHOICES, verbose_name='Class Level')
     timeslot = ForeignKey(TimeSlot, related_name="reservationslots", verbose_name="Time Slot")
     zone = ForeignKey(Zone, related_name="reservationslots", verbose_name="Zone")
     resident = OneToOneField(CheckinParkingUser, null=True, blank=True, related_name="reservationslot", verbose_name="Resident", on_delete=SET_NULL)
