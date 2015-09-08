@@ -6,20 +6,61 @@
 
 """
 
-from datetime import timedelta
+from datetime import date as datetime_date, datetime, timedelta
 from pathlib import Path
 
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http.response import HttpResponse
 from django.template.context import Context
 from django.template.loader import get_template
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormView
 import trml2pdf
 
-from checkin_parking.apps.administration.models import AdminSettings
-
 from ...settings.base import MEDIA_ROOT
-from ..reservations.models import ReservationSlot
+from ..administration.models import AdminSettings
+from .forms import GenerateReservationsForm
+from .models import TimeSlot, ReservationSlot
+
+
+class GenerateReservationSlotsView(FormView):
+    template_name = "reservations/generate_reservation_slots.html"
+    form_class = GenerateReservationsForm
+    success_url = reverse_lazy('list_time_slots')
+
+    def form_valid(self, form):
+        date = form.cleaned_data["date"]
+        start_time = form.cleaned_data["start_time"]
+        end_time = form.cleaned_data["end_time"]
+        class_level = form.cleaned_data["class_level"]
+        zones = form.cleaned_data["zones"]
+
+        admin_settings = AdminSettings.objects.get_settings()
+        end_datetime = datetime.combine(datetime_date.today(), end_time)
+
+        delta = end_datetime - datetime.datetime.combine(datetime_date.today(), start_time)
+
+        # Split the time span into admin_settings.timeslot_length chunks
+        while delta.total_seconds() > 0:
+            timeslot = TimeSlot()
+            timeslot.date = date
+            timeslot.time = start_time
+            timeslot.term_code = admin_settings.term_code
+            timeslot.save()
+
+            # For each zone, create zone.capacity reservation slots
+            for zone in zones:
+                for index in range(zone.capacity):
+                    reservationslot = ReservationSlot()
+                    reservationslot.class_level = class_level
+                    reservationslot.timeslot = timeslot
+                    reservationslot.zone = zone
+                    reservationslot.save()
+
+            start_time += timedelta(minutes=admin_settings.timeslot_length).time()
+            delta = end_datetime - datetime.datetime.combine(datetime_date.today(), start_time)
+
+        return super(GenerateReservationSlots, self).form_valid(form)
 
 
 class ParkingPassVerificationView(TemplateView):

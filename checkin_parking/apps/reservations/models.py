@@ -29,7 +29,7 @@ class TimeSlot(Model):
 
     date = DateField(verbose_name="Date")
     time = TimeField(verbose_name="Time")
-    term = PositiveSmallIntegerField(verbose_name="Term Code")
+    term_code = PositiveSmallIntegerField(verbose_name="Term Code")
 
     @cached_property
     def datetime(self):

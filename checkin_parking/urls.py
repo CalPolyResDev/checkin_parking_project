@@ -23,7 +23,7 @@ from django_cas_ng.views import login as auth_login, logout as auth_logout
 
 from .apps.administration.views import AdminSettingsUpdateView
 from .apps.core.views import IndexView, handler500
-from .apps.reservations.views import ParkingPassPDFView, ParkingPassVerificationView
+from .apps.reservations.views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPassVerificationView
 from .apps.zones.ajax import update_buildings, delete_zone
 from .apps.zones.views import ZoneListView, ZoneCreateView, ZoneUpdateView
 
@@ -76,7 +76,7 @@ urlpatterns = [
 
 # Reservations
 urlpatterns += [
-    url(r'^reservations/slots/generate/$', login_required(administrative_access(IndexView.as_view())), name='generate_reservation_slots'),
+    url(r'^reservations/slots/generate/$', login_required(administrative_access(GenerateReservationSlotsView.as_view())), name='generate_reservation_slots'),
 
     url(r'^reservations/slots/list/$', login_required(administrative_access(IndexView.as_view())), name='list_time_slots'),
     url(r'^reservations/slots/(?P<id>\d+)/$', login_required(administrative_access(IndexView.as_view())), name='update_time_slot'),
