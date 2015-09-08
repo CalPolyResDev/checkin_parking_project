@@ -3,7 +3,7 @@ Django~=1.8.4
 django-cas-ng==3.4.2
 
 git+https://github.com/CalPolyResDev/trml2pdf.git
-git+ssh://git@code.its.calpoly.edu:7999/rmsc/rmsconnector.git
+
 colorama==0.3.3
 termcolor==1.1.0
 
