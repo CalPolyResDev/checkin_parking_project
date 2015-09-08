@@ -9,12 +9,14 @@
 from datetime import date as datetime_date, datetime, timedelta
 from pathlib import Path
 
+from django.core.exceptions import FieldError
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http.response import HttpResponse
 from django.template.context import Context
 from django.template.loader import get_template
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
 import trml2pdf
 
 from ...settings.base import MEDIA_ROOT
@@ -60,7 +62,7 @@ class GenerateReservationSlotsView(FormView):
             start_time += timedelta(minutes=admin_settings.timeslot_length).time()
             delta = end_datetime - datetime.datetime.combine(datetime_date.today(), start_time)
 
-        return super(GenerateReservationSlots, self).form_valid(form)
+        return super(GenerateReservationSlotsView, self).form_valid(form)
 
 
 class ParkingPassVerificationView(TemplateView):
@@ -121,3 +123,29 @@ class ParkingPassPDFView(TemplateView):
         response.write(pdf_data)
 
         return response
+
+
+class ReserveView(ListView):
+    template_name = 'reservations/reserve.html'
+    model = TimeSlot
+
+    def get_context_data(self, **kwargs):
+        context = super(ReserveView, self).get_context_data(**kwargs)
+
+        building = self.request.user.building
+        term_type = self.request.user.term_type
+        try:
+            if not building:
+                raise FieldError('We could not find an assigned building for you. Please call University Housing if you believe this message is in error.')
+            if not term_type:
+                raise FieldError('Could not retrieve class level. Please call ResNet at (805) 756-6500.')
+        except FieldError as exc:
+            context['error_text'] = str(exc)
+
+        return context
+
+    def get_queryset(self):
+        building = self.request.user.building
+        term_type = self.request.user.term_type
+
+        return TimeSlot.objects.filter(reservationslots__zone__buildings__name__contains=building, reservationslots__resident=None, reservationslots__class_level__contains=term_type)
