@@ -100,7 +100,7 @@ class ParkingPassPDFView(TemplateView):
         try:
             reservation_slot = ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
         except ObjectDoesNotExist:
-            raise ValidationError('You do not have a parking reservation on file. If you believe this is in error, call ResNet.')
+            raise ValidationError('You do not have a parking reservation on file. If you believe this is in error, call ResNet at (805) 756-5600.')
 
         parking = {
             'date': reservation_slot.timeslot.date,
