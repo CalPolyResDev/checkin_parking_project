@@ -150,4 +150,4 @@ class ReserveView(ListView):
         building = self.request.user.building
         term_type = self.request.user.term_type
 
-        return TimeSlot.objects.filter(reservationslots__zone__buildings__name__contains=building, reservationslots__resident=None, reservationslots__class_level__contains=term_type)
+        return TimeSlot.objects.filter(reservationslots__zone__buildings__name__contains=building, reservationslots__resident=None, reservationslots__class_level__contains=term_type).distinct()

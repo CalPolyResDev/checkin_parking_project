@@ -20,10 +20,12 @@ def reserve_slot(request):
     query = ReservationSlot.objects.filter(timeslot__id=slot_id, zone__buildings__name__contains=request.user.building, resident=None)
 
     success = False
-    with transaction():
+    with transaction.atomic():
         query.select_for_update()
         if query.exists():
-            query.first().resident = request.user
+            slot = query.first()
+            slot.resident = request.user
+            slot.save()
             success = True
 
     data = {'success': success}
