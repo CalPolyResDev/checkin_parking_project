@@ -33,6 +33,8 @@ def handler500(request):
 
     exception = sys.exc_info()[0]
 
+    message = ''
+
     try:
         message = exception.message
     except:
