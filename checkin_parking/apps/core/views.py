@@ -31,6 +31,19 @@ def handler500(request):
     template = loader.get_template('500.html')
     context = RequestContext(request)
 
-    context['exception_text'] = sys.exc_info()[0].message
+    exception = sys.exc_info()[0]
+
+    try:
+        message = exception.message
+    except:
+        pass
+
+    if not message:
+        try:
+            message = exception.messages
+        except:
+            message = str(exception)
+
+    context['exception_text'] = message
 
     return HttpResponseServerError(template.render(context))
