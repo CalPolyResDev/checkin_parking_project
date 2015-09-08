@@ -21,6 +21,8 @@ from django.views.defaults import permission_denied, page_not_found
 from django.views.generic import TemplateView, RedirectView
 from django_cas_ng.views import login as auth_login, logout as auth_logout
 
+from checkin_parking.apps.reservations.views import ViewReservationView
+
 from .apps.administration.ajax import purge
 from .apps.administration.views import AdminSettingsUpdateView, PurgeView, PDFMapUploadView
 from .apps.core.views import IndexView, handler500
@@ -86,7 +88,7 @@ urlpatterns += [
 
     url(r'^reservations/reserve/$', login_required(ReserveView.as_view()), name='reserve'),
     url(r'^reservations/ajax/reserve_slot/$', login_required(reserve_slot), name='reserve_slot'),
-    url(r'^reservations/view/$', login_required(IndexView.as_view()), name='view_reservation'),
+    url(r'^reservations/view/$', login_required(ViewReservationView.as_view()), name='view_reservation'),
     url(r'^reservations/change/$', login_required(IndexView.as_view()), name='change_reservation'),
     url(r'^reservations/cancel/$', login_required(IndexView.as_view()), name='cancel_reservation'),
 

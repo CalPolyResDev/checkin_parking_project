@@ -17,6 +17,7 @@ from django.http.response import HttpResponse
 from django.template.context import Context
 from django.template.loader import get_template
 from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 import trml2pdf
@@ -145,3 +146,16 @@ class ReserveView(ListView):
             raise FieldError('Could not retrieve class level. Please call ResNet at (805) 756-6500.')
 
         return TimeSlot.objects.filter(reservationslots__zone__buildings__name__contains=building, reservationslots__resident=None, reservationslots__class_level__contains=term_type).distinct()
+
+
+class ViewReservationView(DetailView):
+    template_name = 'reservations/reservation_view.html'
+    model = ReservationSlot
+
+    def get_object(self, queryset=None):
+        try:
+            reservation_slot = ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
+        except ObjectDoesNotExist:
+            raise ValidationError('You do not have a parking reservation on file. If you believe this is in error, call ResNet at (805) 756-5600.')
+
+        return reservation_slot
