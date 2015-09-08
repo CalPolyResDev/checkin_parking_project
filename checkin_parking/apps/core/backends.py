@@ -15,6 +15,7 @@ from ldap3 import Server, Connection, ObjectDef, AttrDef, Reader
 from ldap_groups.groups import ADGroup
 
 from rmsconnector.utils import Resident
+from ..administration.models import AdminSettings
 
 
 logger = logging.getLogger(__name__)
@@ -67,12 +68,15 @@ class CASLDAPBackend(CASBackend):
                 if not user.is_admin or not user.is_superuser:
                     # See if the user exists in the rms database (alias is valid)
                     try:
-                        Resident(principal_name=principal_name)
+                        resident = Resident(principal_name=principal_name, term_code=AdminSettings.objects.get_settings().term_code)
                     except ObjectDoesNotExist as exc:
                         if str(exc).startswith("A room booking could not be found"):
                             raise ValidationError("{principal_name} does not currently reside in University Housing.".format(principal_name=principal_name))
                         else:
                             raise ValidationError("University Housing has no record of {principal_name}.".format(principal_name=principal_name))
+                    else:
+                        user.building = resident.address_dict['building']
+                        user.term_type = resident.term_type
 
                 user.full_name = user_info["displayName"]
                 user.first_name = user_info["givenName"]

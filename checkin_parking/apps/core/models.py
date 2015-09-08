@@ -40,6 +40,8 @@ class CheckinParkingUser(AbstractBaseUser, PermissionsMixin):
     last_name = CharField(max_length=30, blank=True, verbose_name='Last Name')
     full_name = CharField(max_length=30, blank=True, verbose_name='Full Name')
     email = EmailField(blank=True, verbose_name='Email Address')
+    building = CharField(max_length=30, blank=True, verbose_name='Building')
+    term_type = CharField(max_length=15, blank=True, verbose_name='Class Level')
 
     is_active = BooleanField(default=True)
     is_staff = BooleanField(default=False)

@@ -24,7 +24,8 @@ from django_cas_ng.views import login as auth_login, logout as auth_logout
 from .apps.administration.ajax import purge
 from .apps.administration.views import AdminSettingsUpdateView, PurgeView, PDFMapUploadView
 from .apps.core.views import IndexView, handler500
-from .apps.reservations.views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPassVerificationView
+from .apps.reservations.ajax import reserve_slot
+from .apps.reservations.views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPassVerificationView, ReserveView
 from .apps.zones.ajax import update_buildings, delete_zone
 from .apps.zones.views import ZoneListView, ZoneCreateView, ZoneUpdateView
 
@@ -83,7 +84,8 @@ urlpatterns += [
     url(r'^reservations/slots/(?P<id>\d+)/$', login_required(administrative_access(IndexView.as_view())), name='update_time_slot'),
     url(r'^reservations/slots/(?P<id>\d+)/delete/$', login_required(administrative_access(IndexView.as_view())), name='delete_time_slot'),
 
-    url(r'^reservations/reserve/$', login_required(IndexView.as_view()), name='reserve'),
+    url(r'^reservations/reserve/$', login_required(ReserveView.as_view()), name='reserve'),
+    url(r'^reservations/ajax/reserve_slot/$', login_required(reserve_slot), name='reserve_slot'),
     url(r'^reservations/view/$', login_required(IndexView.as_view()), name='view_reservation'),
     url(r'^reservations/change/$', login_required(IndexView.as_view()), name='change_reservation'),
     url(r'^reservations/cancel/$', login_required(IndexView.as_view()), name='cancel_reservation'),

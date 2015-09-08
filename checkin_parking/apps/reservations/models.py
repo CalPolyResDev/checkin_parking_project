@@ -6,7 +6,7 @@
 
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.db.models.base import Model
@@ -14,6 +14,8 @@ from django.db.models.deletion import SET_NULL
 from django.db.models.fields import DateField, TimeField, PositiveSmallIntegerField
 from django.db.models.fields.related import ForeignKey, OneToOneField
 from django.utils.functional import cached_property
+
+from checkin_parking.apps.administration.models import AdminSettings
 
 from ..core.managers import DefaultRelatedManager
 from ..core.models import CheckinParkingUser
@@ -35,6 +37,10 @@ class TimeSlot(Model):
     def datetime(self):
         combined = datetime.combine(self.date, self.time)
         return datetime.strftime(combined, settings.PYTHON_DATETIME_FORMAT)
+
+    @cached_property
+    def end_time(self):
+        return self.time + timedelta(minutes=AdminSettings.objects.get_settings().timeslot_length)
 
     def __str__(self):
         return self.datetime + " (" + str(self.term) + ")"
