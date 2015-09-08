@@ -63,8 +63,8 @@ def delete_timeslot(request):
     except ReservationSlot.DoesNotExist:
         return {'success': False}
 
-    if time_slot.reservationslots.exists() and datetime.combine(time_slot.date, time_slot.time) < datetime.now():
-        return {'success': False, 'reservation_count': time_slot.reservationslots.count()}
+    if time_slot.reservationslots.exclude(resident__isnull=True).exists() and datetime.combine(time_slot.date, time_slot.time) < datetime.now():
+        return {'success': False, 'reservation_count': time_slot.reservationslots.exclude(resident__isnull=True).count()}
 
     time_slot.delete()
     return {'success': True}
