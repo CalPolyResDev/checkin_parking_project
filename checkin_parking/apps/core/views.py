@@ -33,7 +33,7 @@ def handler500(request):
     context = RequestContext(request)
     context_string = ''
     for k, v in context.flatten().items():
-        context_string.append(k + ': ' + v)
+        context_string += k + ': ' + v
 
     print(context_string)
 
