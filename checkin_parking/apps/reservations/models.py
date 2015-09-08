@@ -57,4 +57,4 @@ class ReservationSlot(Model):
     objects = DefaultRelatedManager(select_related=["timeslot", "zone", "resident"])
 
     def __str__(self):
-        return str(self.timeslot) + " - " + str(self.zone) + ": " + str(self.resident) if self.resident else "Open"
+        return str(self.timeslot) + " - " + str(self.zone) + ": " + (str(self.resident) if self.resident else "Open")
