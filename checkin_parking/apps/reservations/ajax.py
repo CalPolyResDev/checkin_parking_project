@@ -12,6 +12,7 @@ from django.views.decorators.http import require_POST
 from django_ajax.decorators import ajax
 
 from .models import ReservationSlot, TimeSlot
+from .tasks import send_confirmation_email
 
 
 @ajax
@@ -33,6 +34,7 @@ def reserve_slot(request):
             slot = query.first()
             slot.resident = request.user
             slot.save()
+            send_confirmation_email.spool(slot)
             success = True
 
     data = {'success': success}
