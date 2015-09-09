@@ -14,6 +14,7 @@ try:
     from uwsgidecorators import spool
 except:
     def spool(f):
+        print('Using Spooling Emulation')
         f.spool = f
         return f
 
@@ -29,19 +30,19 @@ def send_confirmation_email(reservation_slot):
         message.reply_to = ['University Housing <resnet@calpoly.edu>']
         message.body = 'Hi ' + reservation_slot.resident.full_name + """,
 
-        Your parking slot has been successfully reserved. Please be sure to print and place your parking pass on your dashboard.
+Your parking slot has been successfully reserved. Please be sure to print and place your parking pass on your dashboard.
 
-        Reservation Details:
+Reservation Details:
 
-        Date: """ + str(reservation_slot.timeslot.date) + """
-        Start Time: """ + str(reservation_slot.timeslot.time) + """
-        End Time: """ + str(reservation_slot.timeslot.end_time) + """
-        Zone: """ + reservation_slot.zone.name + """
+Date: """ + str(reservation_slot.timeslot.date) + """
+Start Time: """ + str(reservation_slot.timeslot.time) + """
+End Time: """ + str(reservation_slot.timeslot.end_time) + """
+Zone: """ + reservation_slot.zone.name + """
 
-        If you need to make any changes, please visit http://checkin.housing.calpoly.edu.
+If you need to make any changes, please visit http://checkin.housing.calpoly.edu.
 
-        Thank you,
-        University Housing
-        """
+Thank you,
+University Housing
+"""
         print(message.to)
         message.send()
