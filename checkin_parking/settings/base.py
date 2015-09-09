@@ -100,7 +100,7 @@ INCOMING_EMAIL = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.calpoly.edu'
+EMAIL_HOST = 'outlook.office365.com'
 EMAIL_PORT = 25  # The port to use. Default values: 25, 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = INCOMING_EMAIL['IMAP4']['USER']
