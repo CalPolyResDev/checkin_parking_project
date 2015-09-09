@@ -66,15 +66,21 @@
             {% block sidenav %}
             {% if request.user.is_authenticated %}
             <div id="rightCol">
+                {% if reservation_open or request.user.reservationslot %}
                 <h2>Resident Resources</h2>
                 <ul>
                     {% if request.user.reservationslot %}
                     <li><a href="{% url 'view_reservation' %}">View Reservation</a></li>
-                    <li><a href="{% url 'change_reservation' %}">Change Reservation</a></li>
+                        {% if reservation_open %}
+                        <li><a href="{% url 'change_reservation' %}">Change Reservation</a></li>
+                        {% endif %}
                     {% else %}
-                    <li><a href="{% url 'reserve' %}">Reserve</a></li>
+                        {% if reservation_open %}
+                        <li><a href="{% url 'reserve' %}">Reserve</a></li>
+                        {% endif %}
                     {% endif %}
                 </ul>
+                {% endif %}
                 {% if request.user.is_admin %}
                 <h2>Administrator Resources</h2>
                 <ul>
