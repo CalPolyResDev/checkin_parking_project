@@ -13,13 +13,16 @@ from django.core.mail import EmailMessage
 try:
     from uwsgidecorators import spool
 except:
-    def spool(f):
-        print('Using Spooling Emulation')
-        f.spool = f
-        return f
+    def spool(**kwargs):
+        def wrap(f):
+            def wrapped_f(*args):
+                f(*args)
+            wrapped_f.spool = f
+            return wrapped_f
+        return wrap
 
 
-@spool
+@spool(pass_arguments=True)
 def send_confirmation_email(reservation_slot):
     with mail.get_connection() as connection:
         message = EmailMessage()
