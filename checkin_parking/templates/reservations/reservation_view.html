@@ -68,7 +68,7 @@
 <script type="text/javascript">
     function cancel_reservation() {
         if (confirm('Would you like to cancel your reservation?')) {
-            $.blockUI({message: '<h1 style="padding 6px 6px;">Canceling your reservation. Please wait...</h1>'});
+            $.blockUI({message: '<h1 style="padding 6px 6px; margin-bottom: 0px;">Canceling your reservation. Please wait...</h1>'});
             ajaxPost("{% url 'cancel_reservation' %}", {}, function(response) {
                 if (response['success']) {
                     window.open("{% url 'reserve' %}", '_self');

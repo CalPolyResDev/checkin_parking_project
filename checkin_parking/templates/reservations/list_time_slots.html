@@ -42,7 +42,7 @@
 <script type="text/javascript">
     function delete_timeslot(timeslot_id) {
         if (confirm('Would you like to delete this timeslot?')) {
-            $.blockUI({message: '<h1 style="padding: 6px 6px;">Deleting the timeslot. Please wait...</h1>'});
+            $.blockUI({message: '<h1 style="padding: 6px 6px; margin-bottom: 0px;">Deleting the timeslot. Please wait...</h1>'});
             ajaxPost("{% url 'delete_time_slot' %}", {'timeslot_id': timeslot_id}, function(response) {
                 $.unblockUI();
                 if (response['success']) {
