@@ -77,7 +77,7 @@ class ParkingPassVerificationView(TemplateView):
     template_name = 'reservations/parking_pass_verification.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ParkingPassVerificationView, self).get_context_data(kwargs)
+        context = super(ParkingPassVerificationView, self).get_context_data(**kwargs)
 
         reservation_id = kwargs['reservation_id']
         user_id = kwargs['user_id']
