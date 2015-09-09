@@ -31,10 +31,10 @@
     </div>
 {% endblock %}
 
-{% block extra_scripts %}
+{% block extra_script %}
 {{ block.super }}
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.min.js"></script>
-    <script type="text/javascript" src="{% static 'js/jqueryui-1.8.22.cp.min.js' %}"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#id_date").datepicker({
