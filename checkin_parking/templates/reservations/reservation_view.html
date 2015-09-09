@@ -30,7 +30,7 @@
                     <td>{{ reservationslot.timeslot.end_time }}</td>
                     <td>{{ reservationslot.zone.name }}</td>
                     {% if reservation_open %}
-                    <td style="cursor: pointer; color: red; text-decoration: underline;" onclick="cancel_reservation();">Cancel</td>
+                    <td onclick="cancel_reservation();"><a class="delete">Cancel</a></td>
                     {% endif %}
                 </tr>
             </tbody>

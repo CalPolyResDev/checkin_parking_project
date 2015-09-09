@@ -14,12 +14,14 @@
                         <th>Date</th>
                         <th>Start Time</th>
                         <th>End Time</th>
+                        <th>Reserve</th>
                     </tr>
                     {% for slot in timeslot_list %}
                     <tr id="slot_{{ slot.id }}" onclick="reserve_slot({{ slot.id }}, '{{ slot.time }}', '{{ slot.date }}');" style="cursor: pointer;">
                         <td>{{ slot.date }}</td>
                         <td>{{ slot.time }}</td>
                         <td>{{ slot.end_time }}</td>
+                        <td><a class="update">Reserve</a></td>
                     </tr>
                     {% empty %}
                         {% if error_text %}
