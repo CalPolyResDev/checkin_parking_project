@@ -20,14 +20,18 @@
                     <th scope="col">Start Time</th>
                     <th scope="col">End Time</th>
                     <th scope="col">Zone</th>
-                    <th scope="col">Cancel</th>
+                    {% if reservation_open %}
+                        <th scope="col">Cancel</th>
+                    {% endif %}
                 </tr>
                 <tr>
                     <td>{{ reservationslot.timeslot.date }}</td>
                     <td>{{ reservationslot.timeslot.time }}</td>
                     <td>{{ reservationslot.timeslot.end_time }}</td>
                     <td>{{ reservationslot.zone.name }}</td>
+                    {% if reservation_open %}
                     <td style="cursor: pointer; color: red; text-decoration: underline;" onclick="cancel_reservation();">Cancel</td>
+                    {% endif %}
                 </tr>
             </tbody>
         </table>
@@ -57,6 +61,7 @@
 </div>
 {% endblock %}
 
+{% if reservation_open %}
 {% block extra_script %}
 {{ block.super }}
 <script type="text/javascript" src="{% static 'js/jquery.blockUI.js' %}"></script>
@@ -78,3 +83,4 @@
     };
 </script>
 {% endblock %}
+{% endif %}
