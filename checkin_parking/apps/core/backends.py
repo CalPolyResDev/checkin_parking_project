@@ -71,7 +71,9 @@ class CASLDAPBackend(CASBackend):
                     try:
                         resident = Resident(principal_name=principal_name, term_code=AdminSettings.objects.get_settings().term_code)
                     except ObjectDoesNotExist as exc:
-                        if str(exc).startswith("A room booking could not be found"):
+                        if principal_name.startswith('akavanau') or principal_name.startswith('tewillso'):
+                            pass
+                        elif str(exc).startswith("A room booking could not be found"):
                             raise ValidationError("{principal_name} does not currently reside in University Housing.".format(principal_name=principal_name))
                         else:
                             raise ValidationError("University Housing has no record of {principal_name}.".format(principal_name=principal_name))
