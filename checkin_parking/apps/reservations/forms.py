@@ -20,10 +20,10 @@ from .models import CLASS_LEVEL_CHOICES, CLASS_LEVELS
 
 class GenerateReservationsForm(Form):
     date = DateField(label="Date")
-    start_time = TimeField(label='Start Time', input_formats=['%H:%M:%S'], error_messages={'required': 'A start time is required'})
-    end_time = TimeField(label='End Time', input_formats=['%H:%M:%S'], error_messages={'required': 'An end time is required'})
+    start_time = TimeField(label='Start Time', input_formats=['%H:%M'], error_messages={'required': 'A start time is required'})
+    end_time = TimeField(label='End Time', input_formats=['%H:%M'], error_messages={'required': 'An end time is required'})
     class_level = ChoiceField(label='Class Level', choices=CLASS_LEVEL_CHOICES, initial=CLASS_LEVELS.index("Freshman/Transfer/Continuing"), error_messages={'required': 'A class level is required'})
-    zones = ModelMultipleChoiceField(queryset=Zone.objects.all(), error_messages={'required': 'At least one zone must be selected.'})
+    zones = ModelMultipleChoiceField(queryset=Zone.objects.all(), error_messages={'required': 'At least one zone must be selected. If there are no zones from which to choose, please create one.'})
 
     error_messages = {
         'time_conflict': "The start time must be before the end time.",
