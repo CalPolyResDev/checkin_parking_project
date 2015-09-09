@@ -9,7 +9,8 @@
 from django.core import mail
 from django.core.mail import EmailMessage
 
-# See: http://projects.unbit.it/uwsgi/wiki/TipsAndTricks#TestingPythonModulesThatUseuwsgidecorators
+# Emulate spool decorator in order to not cause an error when running locally.
+# The extra layer of wrapping is necessary to properly handle decorator arguments.
 try:
     from uwsgidecorators import spool
 except:
