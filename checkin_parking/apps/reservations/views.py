@@ -80,13 +80,13 @@ class ParkingPassVerificationView(TemplateView):
         context = super(ParkingPassVerificationView, self).get_context_data(**kwargs)
 
         reservation_id = kwargs['reservation_id']
-        user_id = kwargs['user_id']
+        user_id = int(kwargs['user_id'])
         valid_pass = True
 
         try:
             reservation_slot = ReservationSlot.objects.get(id=reservation_id)
 
-            if reservation_slot.resident.id != user_id:
+            if not reservation_slot.resident or reservation_slot.resident.id != user_id:
                 valid_pass = False
         except ReservationSlot.DoesNotExist:
             valid_pass = False
