@@ -108,7 +108,7 @@ class ParkingPassPDFView(TemplateView):
         return context
 
     def render_to_response(self, context, **response_kwargs):
-        pdf_data = generate_pdf_file(context['reservation_slot'], self.request)
+        pdf_data = generate_pdf_file(context['reservation_slot'], self.request.get_host())
 
         response = HttpResponse()
         response['Content-Type'] = 'application/pdf'

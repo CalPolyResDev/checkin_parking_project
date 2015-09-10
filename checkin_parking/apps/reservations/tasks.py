@@ -25,7 +25,7 @@ except:
 
 
 @spool(pass_arguments=True)
-def send_confirmation_email(reservation_slot, request):
+def send_confirmation_email(reservation_slot, uri_prefix):
     with mail.get_connection() as connection:
         message = EmailMessage()
         message.connection = connection
@@ -33,7 +33,7 @@ def send_confirmation_email(reservation_slot, request):
         message.from_email = 'University Housing <resnet@calpoly.edu>'
         message.to = [reservation_slot.resident.email]
         message.reply_to = ['University Housing <resnet@calpoly.edu>']
-        message.attach('Parking Pass.pdf', generate_pdf_file(reservation_slot, request), 'application/pdf')
+        message.attach('Parking Pass.pdf', generate_pdf_file(reservation_slot, uri_prefix), 'application/pdf')
         message.body = 'Hi ' + reservation_slot.resident.full_name + """,
 
 Your parking slot has been successfully reserved and your parking pass is attached. Please be sure to print and place the parking pass on your dashboard.
