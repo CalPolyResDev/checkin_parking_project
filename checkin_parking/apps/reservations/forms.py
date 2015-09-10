@@ -38,8 +38,8 @@ class GenerateReservationsForm(Form):
 
     def clean(self):
         cleaned_data = super(GenerateReservationsForm, self).clean()
-        start_time = cleaned_data["start_time"]
-        end_time = cleaned_data["end_time"]
+        start_time = cleaned_data.get("start_time")
+        end_time = cleaned_data.get("end_time")
 
         if start_time and end_time:
             time_delta = datetime.combine(date.today(), end_time) - datetime.combine(date.today(), start_time)
