@@ -7,24 +7,20 @@
 """
 
 from datetime import date as datetime_date, datetime, timedelta
-from pathlib import Path
 
 from django.core.exceptions import FieldError, ValidationError
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.urlresolvers import reverse_lazy
 from django.db import transaction
 from django.http.response import HttpResponse
-from django.template.context import Context
-from django.template.loader import get_template
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
-import trml2pdf
 
-from ...settings.base import MEDIA_ROOT
 from ..administration.models import AdminSettings
 from .forms import GenerateReservationsForm
 from .models import TimeSlot, ReservationSlot
+from .utils import generate_pdf_file
 
 
 class GenerateReservationSlotsView(FormView):
@@ -107,25 +103,12 @@ class ParkingPassPDFView(TemplateView):
         except ReservationSlot.DoesNotExist:
             raise ValidationError('You do not have a parking reservation on file. If you believe this is in error, call ResNet at (805) 756-5600.')
 
-        parking = {
-            'date': reservation_slot.timeslot.date,
-            'start': reservation_slot.timeslot.time,
-            'end': reservation_slot.timeslot.end_time,
-            'zone': reservation_slot.zone.name,
-        }
-
-        context['resident_name'] = reservation_slot.resident.full_name
-        context['cal_poly_logo_path'] = Path(MEDIA_ROOT).joinpath('pdf_assets/cp_logo.gif')
-        context['parking'] = parking
-        context['qr_code_url'] = self.request.build_absolute_uri(reverse('verify_parking_pass', kwargs={'reservation_id': reservation_slot.id, 'user_id': reservation_slot.resident.id}))
+        context['reservation_slot'] = reservation_slot
 
         return context
 
     def render_to_response(self, context, **response_kwargs):
-        template = get_template(self.template_name)
-
-        source_xml = template.render(Context(context))
-        pdf_data = trml2pdf.parseString(source_xml)
+        pdf_data = generate_pdf_file(context['reservation_slot'], self.request.get_host())
 
         response = HttpResponse()
         response['Content-Type'] = 'application/pdf'

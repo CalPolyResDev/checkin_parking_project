@@ -39,6 +39,14 @@ class AdminSettingsUpdateView(UpdateView):
 class PurgeView(TemplateView):
     template_name = 'administration/purge.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(PurgeView, self).get_context_data(**kwargs)
+
+        context['reservation_count'] = ReservationSlot.objects.count()
+        context['timeslot_count'] = TimeSlot.objects.count()
+
+        return context
+
 
 class PDFMapUploadView(FormView):
     template_name = "administration/map_upload.html"
