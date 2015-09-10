@@ -8,7 +8,9 @@
 
 from django.core import mail
 from django.core.mail import EmailMessage
-from checkin_parking.apps.reservations.utils import generate_pdf_file
+
+from ...apps.reservations.utils import generate_pdf_file
+
 
 # Emulate spool decorator in order to not cause an error when running locally.
 # The extra layer of wrapping is necessary to properly handle decorator arguments.
