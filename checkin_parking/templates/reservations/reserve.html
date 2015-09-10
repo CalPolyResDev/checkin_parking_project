@@ -14,21 +14,23 @@
                         <th>Date</th>
                         <th>Start Time</th>
                         <th>End Time</th>
+                        <th>Reserve</th>
                     </tr>
                     {% for slot in timeslot_list %}
                     <tr id="slot_{{ slot.id }}" onclick="reserve_slot({{ slot.id }}, '{{ slot.time }}', '{{ slot.date }}');" style="cursor: pointer;">
                         <td>{{ slot.date }}</td>
                         <td>{{ slot.time }}</td>
                         <td>{{ slot.end_time }}</td>
+                        <td><a class="update">Reserve</a></td>
                     </tr>
                     {% empty %}
                         {% if error_text %}
                         <tr>
-                            <td colspan="3">{{error_text}}</td>
+                            <td colspan="4">{{error_text}}</td>
                         </tr>
                         {% else %}
                         <tr>
-                           <td colspan="3">There are no available timeslots.</td>
+                           <td colspan="4">There are no available timeslots.</td>
                         </tr>
                         {% endif %}
                     {% endfor %}
@@ -44,7 +46,7 @@
 <script type="text/javascript">
     function reserve_slot(slot_id, slot_time, slot_date) {
         if (confirm('Would you like to reserve the slot starting at ' + slot_time + ' on ' + slot_date + '?')) {
-            $.blockUI({message: '<h1 style="padding: 6px 6px;">Reserving your slot. Please wait...</h1>'});
+            $.blockUI({message: '<h1 style="padding: 6px 6px; margin-bottom: 0px;">Reserving your slot. Please wait...</h1>'});
             ajaxPost("{% url 'reserve_slot' %}", {'slot_id': slot_id{% if change_reservation %}, 'change_reservation': true{% endif %}}, function(response) {
                 if (response['success']) {
                     window.open("{% url 'view_reservation' %}", '_self');
