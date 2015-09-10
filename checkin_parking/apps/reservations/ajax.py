@@ -35,7 +35,6 @@ def reserve_slot(request):
             slot.resident = request.user
             slot.save()
             send_confirmation_email.spool(slot, str(request.get_host()))
-            print(request.get_host())
             success = True
 
     data = {'success': success}
