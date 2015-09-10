@@ -13,12 +13,12 @@ from django.template.context import Context
 from django.template.loader import get_template
 import trml2pdf
 
-import checkin_parking.urls
-
 from ...settings.base import MEDIA_ROOT
 
 
 def generate_pdf_file(reservation_slot, uri_prefix):
+    from checkin_parking import urls
+
     context = {}
 
     parking = {
@@ -32,7 +32,7 @@ def generate_pdf_file(reservation_slot, uri_prefix):
     context['cal_poly_logo_path'] = Path(MEDIA_ROOT).joinpath('pdf_assets/cp_logo.gif')
     context['parking'] = parking
     context['qr_code_url'] = urllib.parse.urljoin('https://' + uri_prefix, reverse('verify_parking_pass',
-                                                  kwargs={'reservation_id': reservation_slot.id, 'user_id': reservation_slot.resident.id}, urlconf=checkin_parking.urls))
+                                                  kwargs={'reservation_id': reservation_slot.id, 'user_id': reservation_slot.resident.id}, urlconf=urls))
 
     template = get_template('reservations/parking_pass.rml')
 
