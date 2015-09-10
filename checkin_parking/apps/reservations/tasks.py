@@ -8,6 +8,7 @@
 
 from django.core import mail
 from django.core.mail import EmailMessage
+from checkin_parking.apps.reservations.utils import generate_pdf_file
 
 # Emulate spool decorator in order to not cause an error when running locally.
 # The extra layer of wrapping is necessary to properly handle decorator arguments.
@@ -24,7 +25,7 @@ except:
 
 
 @spool(pass_arguments=True)
-def send_confirmation_email(reservation_slot):
+def send_confirmation_email(reservation_slot, request):
     with mail.get_connection() as connection:
         message = EmailMessage()
         message.connection = connection
@@ -32,9 +33,10 @@ def send_confirmation_email(reservation_slot):
         message.from_email = 'University Housing <resnet@calpoly.edu>'
         message.to = [reservation_slot.resident.email]
         message.reply_to = ['University Housing <resnet@calpoly.edu>']
+        message.attach('Parking Pass.pdf', generate_pdf_file(reservation_slot, request), 'application/pdf')
         message.body = 'Hi ' + reservation_slot.resident.full_name + """,
 
-Your parking slot has been successfully reserved. Please be sure to print and place your parking pass on your dashboard.
+Your parking slot has been successfully reserved and your parking pass is attached. Please be sure to print and place the parking pass on your dashboard.
 
 Reservation Details:
 
@@ -48,5 +50,4 @@ If you need to make any changes, please visit http://checkin.housing.calpoly.edu
 Thank you,
 University Housing
 """
-        print(message.to)
         message.send()

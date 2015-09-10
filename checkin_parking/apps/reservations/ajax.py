@@ -34,7 +34,7 @@ def reserve_slot(request):
             slot = query.first()
             slot.resident = request.user
             slot.save()
-            send_confirmation_email.spool(slot)
+            send_confirmation_email.spool(slot, request)
             success = True
 
     data = {'success': success}
