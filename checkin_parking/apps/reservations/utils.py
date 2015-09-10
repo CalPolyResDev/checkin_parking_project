@@ -1,10 +1,11 @@
 """
 .. module:: checkin_parking.apps.reservations.utils
-  :synopsis: Checkin Parking Reservation {app name} {file name}.
+  :synopsis: Checkin Parking Reservation Reservations Utils.
 
 .. moduleauthor:: Thomas E. Willson <thomas.willson@me.com>
 
 """
+
 from pathlib import Path
 import urllib.parse
 
