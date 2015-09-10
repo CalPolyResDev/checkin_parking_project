@@ -27,7 +27,7 @@ except:
 
 
 @spool(pass_arguments=True)
-def send_confirmation_email(reservation_slot, uri_prefix):
+def send_confirmation_email(reservation_slot, uri_prefix):  # Needs uri_prefix to generate absolute url. Requests can't be pickled.
     with mail.get_connection() as connection:
         message = EmailMessage()
         message.connection = connection
