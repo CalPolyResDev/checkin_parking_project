@@ -47,7 +47,7 @@ Start Time: """ + str(reservation_slot.timeslot.time) + """
 End Time: """ + str(reservation_slot.timeslot.end_time) + """
 Zone: """ + reservation_slot.zone.name + """
 
-If you need to make any changes, please visit http://checkin.housing.calpoly.edu.
+If you need to make any changes to your reservation, please visit http://checkin.housing.calpoly.edu.
 
 Thank you,
 University Housing
