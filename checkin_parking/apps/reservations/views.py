@@ -17,6 +17,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 
+from checkin_parking.apps.reservations.utils import generate_verification_url
+
 from ..administration.models import AdminSettings
 from .forms import GenerateReservationsForm
 from .models import TimeSlot, ReservationSlot
@@ -108,7 +110,7 @@ class ParkingPassPDFView(TemplateView):
         return context
 
     def render_to_response(self, context, **response_kwargs):
-        pdf_data = generate_pdf_file(context['reservation_slot'], self.request.get_host())
+        pdf_data = generate_pdf_file(context['reservation_slot'], generate_verification_url(context['reservation_slot'], self.request))
 
         response = HttpResponse()
         response['Content-Type'] = 'application/pdf'
