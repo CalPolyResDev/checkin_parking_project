@@ -18,6 +18,7 @@
                     <th scope="col">End Time</th>
                     <th scope="col">Zone Name</th>
                     <th scope="col">Zone Cap.</th>
+                    <th scope="col">Class Level</th>
                     <th scope="col">Delete</th>
                 </tr>
                 {% for timeslot in timeslot_list %}
@@ -27,6 +28,7 @@
                     <td>{{ timeslot.end_time }}</td>
                     <td>{{ timeslot.reservationslots.first.zone.name }}</td>
                     <td>{{ timeslot.reservationslots.first.zone.capacity }}</td>
+                    <td>{{ timeslot.reservationslots.first.class_level }}</td>
                     <td onclick="delete_timeslot('{{timeslot.id}}');"><a class="delete">Delete</a></td>
                 </tr>
                 {% empty %}
