@@ -10,7 +10,9 @@ import os
 
 from django.core.exceptions import ValidationError
 from django.forms import Form
-from django.forms.fields import FileField
+from django.forms.fields import FileField, ChoiceField
+from django.forms.models import ModelChoiceField
+from checkin_parking.apps.zones.models import Community, Building
 
 
 class PDFMapForm(Form):
@@ -29,3 +31,8 @@ class PDFMapForm(Form):
                 if ext != '.pdf':
                     raise ValidationError("One or more of the files are not PDF documents.")
         return cleaned_data
+
+
+class BecomeStudentForm(Form):
+    building = ModelChoiceField(label='Buildings', queryset=Building.objects.all())
+    term_type = ChoiceField(label='Class Level', choices=[('Freshman', 'Freshman'), ('Transfer', 'Transfer'), ('Continuing', 'Continuing')])

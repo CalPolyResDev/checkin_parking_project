@@ -24,7 +24,7 @@ from django_cas_ng.views import login as auth_login, logout as auth_logout
 from checkin_parking.apps.reservations.ajax import delete_timeslot
 
 from .apps.administration.ajax import purge
-from .apps.administration.views import AdminSettingsUpdateView, PurgeView, PDFMapUploadView
+from .apps.administration.views import AdminSettingsUpdateView, PurgeView, PDFMapUploadView, BecomeStudentView
 from .apps.core.views import IndexView, handler500
 from .apps.reservations.ajax import reserve_slot, cancel_reservation
 from .apps.reservations.views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPassVerificationView, ReserveView, ViewReservationView, ChangeReservationView, TimeSlotListView
@@ -116,6 +116,7 @@ urlpatterns += [
     url(r'^settings/purge/$', login_required(administrative_access(PurgeView.as_view())), name='purge'),
     url(r'^settings/ajax/run_purge/$', login_required(administrative_access(purge)), name='run_purge'),
     url(r'^settings/maps/$', login_required(administrative_access(PDFMapUploadView.as_view())), name='update_maps'),
+    url(r'^settings/become_student/$', login_required(administrative_access(BecomeStudentView.as_view())), name="become_student")
 ]
 
 # Raise errors on purpose

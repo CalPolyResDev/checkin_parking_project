@@ -9,7 +9,7 @@
 from django.core import mail
 from django.core.mail import EmailMessage
 
-from ...apps.reservations.utils import generate_pdf_file
+from .utils import generate_verification_url, generate_pdf_file
 
 
 # Emulate spool decorator in order to not cause an error when running locally.
@@ -26,8 +26,13 @@ except:
         return wrap
 
 
+def send_confirmation_email(reservation_slot, request):
+    verification_url = generate_verification_url(reservation_slot, request)
+    send_confirmation_email_spooler.spool(reservation_slot, verification_url)
+
+
 @spool(pass_arguments=True)
-def send_confirmation_email(reservation_slot, uri_prefix):  # Needs uri_prefix to generate absolute url. Requests can't be pickled.
+def send_confirmation_email_spooler(reservation_slot, verification_url):  # Needs uri_prefix to generate absolute url. Requests can't be pickled.
     with mail.get_connection() as connection:
         message = EmailMessage()
         message.connection = connection
@@ -35,7 +40,7 @@ def send_confirmation_email(reservation_slot, uri_prefix):  # Needs uri_prefix t
         message.from_email = 'University Housing <resnet@calpoly.edu>'
         message.to = [reservation_slot.resident.email]
         message.reply_to = ['University Housing <resnet@calpoly.edu>']
-        message.attach('Parking Pass.pdf', generate_pdf_file(reservation_slot, uri_prefix), 'application/pdf')
+        message.attach('Parking Pass.pdf', generate_pdf_file(reservation_slot, verification_url), 'application/pdf')
         message.body = 'Hi ' + reservation_slot.resident.full_name + """,
 
 Your parking slot has been successfully reserved and your parking pass is attached. Please be sure to print and place the parking pass on your dashboard.

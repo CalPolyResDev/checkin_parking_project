@@ -12,10 +12,9 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView, UpdateView
 
-from checkin_parking.apps.administration.forms import PDFMapForm
-
 from ...settings.base import MEDIA_ROOT
 from ..reservations.models import TimeSlot, ReservationSlot
+from .forms import PDFMapForm, BecomeStudentForm
 from .models import AdminSettings
 
 
@@ -80,3 +79,17 @@ class PDFMapUploadView(FormView):
                 dest.close()
 
         return super(FormView, self).form_valid(form)
+
+
+class BecomeStudentView(FormView):
+    template_name = "administration/become_student.html"
+    form_class = BecomeStudentForm
+    success_url = reverse_lazy('become_student')
+
+    def form_valid(self, form):
+        user = self.request.user
+        user.building = form.cleaned_data['building'].name
+        user.term_type = form.cleaned_data['term_type']
+        user.save()
+
+        return super(BecomeStudentView, self).form_valid(form)
