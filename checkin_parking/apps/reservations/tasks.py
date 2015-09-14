@@ -48,8 +48,8 @@ Your parking slot has been successfully reserved and your parking pass is attach
 Reservation Details:
 
 Date: """ + str(reservation_slot.timeslot.date) + """
-Start Time: """ + str(reservation_slot.timeslot.time) + """
-End Time: """ + str(reservation_slot.timeslot.end_time) + """
+Start Time: """ + reservation_slot.timeslot.time.strftime('%I:%M%p') + """
+End Time: """ + reservation_slot.timeslot.end_time.strftime('%I:%M%p') + """
 Zone: """ + reservation_slot.zone.name + """
 
 If you need to make any changes to your reservation, please visit http://checkin.housing.calpoly.edu.
