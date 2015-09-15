@@ -21,12 +21,10 @@ from django.views.defaults import permission_denied, page_not_found
 from django.views.generic import TemplateView, RedirectView
 from django_cas_ng.views import login as auth_login, logout as auth_logout
 
-from checkin_parking.apps.reservations.ajax import delete_timeslot
-
 from .apps.administration.ajax import purge
 from .apps.administration.views import AdminSettingsUpdateView, PurgeView, PDFMapUploadView, BecomeStudentView
 from .apps.core.views import IndexView, handler500
-from .apps.reservations.ajax import reserve_slot, cancel_reservation
+from .apps.reservations.ajax import reserve_slot, cancel_reservation, delete_timeslot
 from .apps.reservations.views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPassVerificationView, ReserveView, ViewReservationView, ChangeReservationView, TimeSlotListView
 from .apps.zones.ajax import update_buildings, delete_zone
 from .apps.zones.views import ZoneListView, ZoneCreateView, ZoneUpdateView
