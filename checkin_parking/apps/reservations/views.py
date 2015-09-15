@@ -11,7 +11,7 @@ from datetime import date as datetime_date, datetime, timedelta
 from django.core.exceptions import FieldError, ValidationError
 from django.core.urlresolvers import reverse_lazy
 from django.db import transaction
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormView
@@ -129,13 +129,6 @@ class ReserveView(ListView):
         building = self.request.user.building
         term_type = self.request.user.term_type
 
-        if 'change_reservation' not in kwargs:
-            try:
-                ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
-                raise ValidationError('You can not reserve a slot if you already have one.')
-            except ReservationSlot.DoesNotExist:
-                pass
-
         if not building:
             raise FieldError('We could not find an assigned building for you. Please call University Housing if you believe this message is in error.')
         if not term_type:
@@ -147,6 +140,16 @@ class ReserveView(ListView):
             return queryset.exclude(reservationslots__resident=self.request.user).distinct()
         else:
             return queryset.distinct()
+
+    def render_to_response(self, context, **response_kwargs):
+        if 'change_reservation' not in response_kwargs:
+            try:
+                ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
+                return HttpResponseRedirect(reverse_lazy('view_reservation'))
+            except:
+                pass
+
+        return super(ReserveView, self).render_to_response(context, **response_kwargs)
 
 
 class ViewReservationView(DetailView):
