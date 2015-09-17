@@ -65,21 +65,21 @@ class CASLDAPBackend(CASBackend):
                     user.is_superuser = True
 
                 # Ensure that non-admins who log in are future residents
-                # TODO: Remove user hackery.
-                if not user.is_admin and not user.is_superuser or principal_name.startswith('akavanau') or principal_name.startswith('tewillso'):
+                if not user.is_admin and not user.is_superuser:
                     # See if the user exists in the rms database (alias is valid)
                     try:
                         resident = Resident(principal_name=principal_name, term_code=AdminSettings.objects.get_settings().term_code)
                     except ObjectDoesNotExist as exc:
-                        if principal_name.startswith('akavanau') or principal_name.startswith('tewillso'):
-                            pass
-                        elif str(exc).startswith("A room booking could not be found"):
+                        if str(exc).startswith("A room booking could not be found"):
                             raise ValidationError("{principal_name} does not currently reside in University Housing.".format(principal_name=principal_name))
                         else:
                             raise ValidationError("University Housing has no record of {principal_name}.".format(principal_name=principal_name))
                     else:
                         user.building = resident.address_dict['building']
                         user.term_type = resident.term_type
+                else:
+                    user.building = None
+                    user.term_type = None
 
                 user.full_name = user_info["displayName"]
                 user.first_name = user_info["givenName"]
