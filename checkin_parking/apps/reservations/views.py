@@ -132,7 +132,7 @@ class ReserveView(ListView):
         if not building:
             raise FieldError('We could not find an assigned building for you. Please call University Housing if you believe this message is in error.')
         if not term_type:
-            raise FieldError('Could not retrieve class level. Please call ResNet at (805) 756-6500.')
+            raise FieldError('Could not retrieve class level. Please call ResNet at (805) 756-5600.')
 
         queryset = TimeSlot.objects.filter(reservationslots__zone__buildings__name__contains=building, reservationslots__resident=None, reservationslots__class_level__contains=term_type)
 
