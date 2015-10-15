@@ -27,3 +27,6 @@ build
 # Secret Files
 *.secret
 .env
+
+# OS X Files
+.DS_Store

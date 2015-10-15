@@ -12,7 +12,12 @@ from django.core.exceptions import ValidationError
 from django.forms import Form
 from django.forms.fields import FileField, ChoiceField
 from django.forms.models import ModelChoiceField
-from checkin_parking.apps.zones.models import Community, Building
+
+from ..zones.models import Building
+
+
+CLASS_LEVELS = ["Freshman", "Transfer", "Continuing"]
+CLASS_LEVEL_CHOICES = [(class_level, class_level) for class_level in CLASS_LEVELS]
 
 
 class PDFMapForm(Form):
@@ -35,4 +40,4 @@ class PDFMapForm(Form):
 
 class BecomeStudentForm(Form):
     building = ModelChoiceField(label='Buildings', queryset=Building.objects.all())
-    term_type = ChoiceField(label='Class Level', choices=[('Freshman', 'Freshman'), ('Transfer', 'Transfer'), ('Continuing', 'Continuing')])
+    term_type = ChoiceField(label='Class Level', choices=CLASS_LEVEL_CHOICES)
