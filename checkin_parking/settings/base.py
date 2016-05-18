@@ -62,9 +62,11 @@ USE_I18N = False
 # calendars according to the current locale
 USE_L10N = False
 
-ROOT_URLCONF = 'checkin_parking.urls'
-
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+MAIN_APP_NAME = 'checkin_parking'
+
+ROOT_URLCONF = MAIN_APP_NAME + '.urls'
 
 # ======================================================================================================== #
 #                                          Database Configuration                                          #
@@ -121,13 +123,15 @@ LOGIN_REDIRECT_URL = '/login/'
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'checkin_parking.apps.core.backends.CASLDAPBackend',
+    MAIN_APP_NAME + '.apps.core.backends.CASLDAPBackend',
 )
 
 AUTH_USER_MODEL = 'core.CheckinParkingUser'
 
 CAS_ADMIN_PREFIX = "flugzeug/"
 CAS_LOGOUT_COMPLETELY = False
+CAS_LOGIN_MSG = None
+CAS_LOGGED_MSG = None
 
 CAS_SERVER_URL = "https://my.calpoly.edu/cas/"
 CAS_LOGOUT_URL = "https://my.calpoly.edu/cas/casClientLogout.jsp?logoutApp=University%20Housing%20Checkin%20Parking%20Reservation"
@@ -191,7 +195,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    str(PROJECT_DIR.joinpath("checkin_parking", "static").resolve()),
+    str(PROJECT_DIR.joinpath(MAIN_APP_NAME, "static").resolve()),
 )
 
 # List of finder classes that know how to find static files in various
@@ -201,29 +205,31 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-TEMPLATE_DIRS = (
-    str(PROJECT_DIR.joinpath("checkin_parking", "templates").resolve()),
-)
+# Django-JS-Reverse Variable Name
+JS_REVERSE_JS_VAR_NAME = 'DjangoReverse'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    'django.template.loaders.eggs.Loader',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            str(PROJECT_DIR.joinpath(MAIN_APP_NAME, "templates").resolve()),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.core.context_processors.debug',
+                'django.core.context_processors.media',
+                'django.core.context_processors.static',
+                'django.core.context_processors.request',
+                MAIN_APP_NAME + '.apps.core.context_processors.display_name',
+                MAIN_APP_NAME + '.apps.core.context_processors.reservation_status',
+            ],
+        },
+    },
+]
 
-# List of processors used by RequestContext to populate the context.
-# Each one should be a callable that takes the request object as its
-# only parameter and returns a dictionary to add to the context.
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.core.context_processors.request',
-    'checkin_parking.apps.core.context_processors.display_name',
-    'checkin_parking.apps.core.context_processors.reservation_status',
-)
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -240,14 +246,15 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.admin',
     'django.contrib.staticfiles',
+    'django_cas_ng',
     'raven.contrib.django.raven_compat',
     'django_ajax',
     'rmsconnector',
-    'checkin_parking.apps.administration',
-    'checkin_parking.apps.core',
-    'checkin_parking.apps.reservations',
-    'checkin_parking.apps.statistics',
-    'checkin_parking.apps.zones',
+    MAIN_APP_NAME + '.apps.administration',
+    MAIN_APP_NAME + '.apps.core',
+    MAIN_APP_NAME + '.apps.reservations',
+    MAIN_APP_NAME + '.apps.statistics',
+    MAIN_APP_NAME + '.apps.zones',
 )
 
 # ======================================================================================================== #

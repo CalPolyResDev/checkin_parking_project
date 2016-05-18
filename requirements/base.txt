@@ -1,19 +1,18 @@
-Django~=1.8.4
+# Django must be first to avoid dependencies installing their own version.
+git+https://github.com/CalPolyResDev/django.git@1.9.6-with-Cookie-Patch
 
-django-cas-ng==3.4.2
-
-git+https://github.com/CalPolyResDev/trml2pdf.git
-
-colorama==0.3.3
-termcolor==1.1.0
-
-djangoajax==2.2.15
-raven~=5.5
-ldap-groups==4.2.0
-dj_database_url==0.3.0
+colorama==0.3.7
+cx_Oracle==5.2.1
+djangoajax~=2.3.4
+django-cas-ng==3.5.4
+dj_database_url~=0.4.1
+ldap-groups==4.2.1
 mysqlclient~=1.3.3
+raven~=5.13
 psycopg2~=2.6.1
+termcolor==1.1.0
 uwsgidecorators~=1.1.0
 
-# The only non-pure python package!
-cx_Oracle==5.2
+git+ssh://git@code.its.calpoly.edu:7999/rmsc/rmsconnector.git
+
+git+https://github.com/CalPolyResDev/trml2pdf.git

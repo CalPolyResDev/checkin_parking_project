@@ -1,13 +1,13 @@
 from .base import *  # noqa
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 SESSION_COOKIE_NAME = 'CPRKDevSessionID'
 
 ALLOWED_HOSTS = [
     "localhost",
 ]
+
 
 # ======================================================================================================== #
 #                                        Authentication Configuration                                      #
@@ -37,7 +37,7 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.templates.TemplatesPanel',
     'debug_toolbar.panels.cache.CachePanel',
     'debug_toolbar.panels.signals.SignalsPanel',
-    'debug_toolbar.panels.profiling.ProfilingPanel',
+    #     'debug_toolbar.panels.profiling.ProfilingPanel',
     'debug_toolbar.panels.logging.LoggingPanel',
     'debug_toolbar.panels.redirects.RedirectsPanel',
 )
