@@ -21,7 +21,7 @@ from .models import AdminSettings
 class AdminSettingsUpdateView(UpdateView):
     template_name = 'administration/admin_settings.djhtml'
     model = AdminSettings
-    fields = ['reservation_open', 'term_code', 'timeslot_length']
+    fields = ['reservation_open', 'term_code', 'timeslot_length', 'application_term', 'application_year']
     success_url = reverse_lazy('administration:settings')
 
     def get_object(self, queryset=None):

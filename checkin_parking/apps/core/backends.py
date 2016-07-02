@@ -66,17 +66,18 @@ class CASLDAPBackend(CASBackend):
 
                 # Ensure that non-admins who log in are future residents
                 if not user.is_admin and not user.is_superuser:
-                    # See if the user exists in the rms database (alias is valid)
+                    admin_settings = AdminSettings.objects.get_settings()
+
                     try:
-                        resident = Resident(principal_name=principal_name, term_code=AdminSettings.objects.get_settings().term_code)
-                    except ObjectDoesNotExist as exc:
-                        if str(exc).startswith("A room booking could not be found"):
-                            raise ValidationError("{principal_name} does not currently reside in University Housing.".format(principal_name=principal_name))
-                        else:
-                            raise ValidationError("University Housing has no record of {principal_name}.".format(principal_name=principal_name))
+                        resident = Resident(principal_name=principal_name, term_code=admin_settings.term_code)
+                    except ObjectDoesNotExist:
+                        raise ValidationError("University Housing has no record of {principal_name}.".format(principal_name=principal_name))
                     else:
-                        user.building = resident.address_dict['building']
-                        user.term_type = resident.term_type
+                        if not resident.has_valid_and_current_application(application_term=admin_settings.application_term, application_year=admin_settings.application_year):
+                            raise ValidationError("{principal_name} does not have a valid room booking or housing application.".format(principal_name=principal_name))
+
+                        user.building = resident.address_dict['building'] if resident.address_dict else None
+                        user.term_type = resident.booking_term_type if resident.room_booking else resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
                 else:
                     user.building = None
                     user.term_type = None
