@@ -2,7 +2,7 @@
 .. module:: checkin_parking.apps.zones.views
    :synopsis: Checkin Parking Reservation Zone Views.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 

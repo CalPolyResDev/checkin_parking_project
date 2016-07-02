@@ -2,7 +2,7 @@
 .. module:: checkin_parking.zones.models
    :synopsis: Checkin Parking Reservation Zone Models.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 

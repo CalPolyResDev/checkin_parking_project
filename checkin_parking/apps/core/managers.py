@@ -2,7 +2,7 @@
 .. module:: checkin_parking.apps.core.managers
    :synopsis: Checkin Parking Reservation Core Managers.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 

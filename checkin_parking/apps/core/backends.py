@@ -2,7 +2,7 @@
 .. module:: checkin_parking.apps.core.backends
    :synopsis: Checkin Parking Reservation Core Authentication Backends.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 
