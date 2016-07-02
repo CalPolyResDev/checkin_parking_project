@@ -249,6 +249,7 @@ INSTALLED_APPS = (
     'django_cas_ng',
     'raven.contrib.django.raven_compat',
     'django_ajax',
+    'clever_selects',
     'rmsconnector',
     MAIN_APP_NAME + '.apps.administration',
     MAIN_APP_NAME + '.apps.core',

@@ -26,7 +26,7 @@ from .apps.administration.views import AdminSettingsUpdateView, PurgeView, PDFMa
 from .apps.core.views import IndexView, handler500
 from .apps.reservations.ajax import reserve_slot, cancel_reservation, delete_timeslot
 from .apps.reservations.views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPassVerificationView, ReserveView, ViewReservationView, ChangeReservationView, TimeSlotListView
-from .apps.zones.ajax import update_buildings, delete_zone
+from .apps.zones.ajax import BuildingChainedAjaxView, delete_zone
 from .apps.zones.views import ZoneListView, ZoneCreateView, ZoneUpdateView
 
 
@@ -100,7 +100,7 @@ urlpatterns += [
     url(r'^zones/create/$', login_required(administrative_access(ZoneCreateView.as_view())), name='create_zone'),
     url(r'^zones/update/(?P<id>\d+)/$', login_required(administrative_access(ZoneUpdateView.as_view())), name='update_zone'),
     url(r'^zones/ajax/delete/$', login_required(administrative_access(delete_zone)), name='delete_zone'),
-    url(r'^zones/ajax/update_buildings/$', login_required(update_buildings), name='ajax_update_building'),
+    url(r'^zones/ajax/update_buildings/$', login_required(BuildingChainedAjaxView.as_view()), name='chained_building'),
 ]
 
 # Statistics
