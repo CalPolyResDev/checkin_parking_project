@@ -9,8 +9,7 @@ from datetime import datetime
 
 
 from django.db.models.base import Model
-from django.db.models.fields import BooleanField, PositiveSmallIntegerField,\
-    CharField
+from django.db.models.fields import BooleanField, PositiveSmallIntegerField, CharField
 
 from rmsconnector.utils import get_current_term
 
