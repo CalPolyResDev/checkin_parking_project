@@ -19,18 +19,8 @@ from django.core.exceptions import PermissionDenied
 from django.views.defaults import permission_denied, page_not_found
 from django.views.generic import TemplateView
 
-<<<<<<< HEAD
-from .apps.administration.ajax import purge
-from .apps.administration.views import AdminSettingsUpdateView, PurgeView, PDFMapUploadView, BecomeStudentView
-from .apps.core.views import IndexView, handler500
-from .apps.reservations.ajax import reserve_slot, cancel_reservation, delete_timeslot
-from .apps.reservations.views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPassVerificationView, ReserveView, ViewReservationView, ChangeReservationView, TimeSlotListView
-from .apps.zones.ajax import BuildingChainedAjaxView, delete_zone
-from .apps.zones.views import ZoneListView, ZoneCreateView, ZoneUpdateView
-=======
 from .apps.core.views import handler500
 from .settings.base import MAIN_APP_NAME
->>>>>>> 162fb0838f7a0655298cf54f72052efb0d241eae
 
 
 def permissions_check(test_func, raise_exception=True):
