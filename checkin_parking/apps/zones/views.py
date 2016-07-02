@@ -23,7 +23,7 @@ class ZoneCreateView(CreateView):
     template_name = "zones/create_zone.html"
     form_class = ZoneForm
     model = Zone
-    success_url = reverse_lazy('list_zones')
+    success_url = reverse_lazy('zones:list_zones')
 
 
 class ZoneUpdateView(UpdateView):
@@ -31,4 +31,4 @@ class ZoneUpdateView(UpdateView):
     template_name = "zones/update_zone.html"
     form_class = ZoneForm
     model = Zone
-    success_url = reverse_lazy('list_zones')
+    success_url = reverse_lazy('zones:list_zones')

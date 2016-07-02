@@ -21,7 +21,7 @@
                         <td>{{ zone.name }}</td>
                         <td>{{ zone.community }}</td>
                         <td>{{ zone.formatted_building_list }}</td>
-                        <td><a class="update" href="{% url 'update_zone' id=zone.id %}">Update</a></td>
+                        <td><a class="update" href="{% url 'zones:update_zone' id=zone.id %}">Update</a></td>
                         <td><a class="delete" onclick="delete_zone({{ zone.id }}, '{{ zone.name }}')">Delete</a></td>
                     </tr>
                     {% empty %}
@@ -44,7 +44,7 @@
 <script type="text/javascript">
     function delete_zone(zone_id, zone_name) {
         if (confirm("Are you sure you want to delete '" + zone_name + "'?")) {
-            ajaxPost("{% url 'delete_zone' %}", {'zone_id': zone_id}, function(response_context) {
+            ajaxPost("{% url 'zones:delete_zone' %}", {'zone_id': zone_id}, function(response_context) {
                 if (response_context["success"]) {
                     $("#zone_" + zone_id).remove();
                     return true;

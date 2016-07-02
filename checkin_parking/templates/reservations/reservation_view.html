@@ -55,7 +55,7 @@
                 {% endif %}
             {% endif %}
             <br />
-            <a href="{% url 'generate_parking_pass' %}">Move-in Registration Parking Pass (PDF)</a>
+            <a href="{% url 'reservations:generate_parking_pass' %}">Move-in Registration Parking Pass (PDF)</a>
             </p>
     </div>
 </div>
@@ -69,9 +69,9 @@
     function cancel_reservation() {
         if (confirm('Would you like to cancel your reservation?')) {
             $.blockUI({message: '<h1 style="padding 6px 6px; margin-bottom: 0px;">Canceling your reservation. Please wait...</h1>'});
-            ajaxPost("{% url 'cancel_reservation' %}", {}, function(response) {
+            ajaxPost("{% url 'reservations:cancel_reservation' %}", {}, function(response) {
                 if (response['success']) {
-                    window.open("{% url 'reserve' %}", '_self');
+                    window.open("{% url 'reservations:reserve' %}", '_self');
                 }
                 else {
                     $.unblockUI();

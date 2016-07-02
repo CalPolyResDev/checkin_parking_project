@@ -47,9 +47,9 @@
     function reserve_slot(slot_id, slot_time, slot_date) {
         if (confirm('Would you like to reserve the slot starting at ' + slot_time + ' on ' + slot_date + '?')) {
             $.blockUI({message: '<h1 style="padding: 6px 6px; margin-bottom: 0px;">Reserving your slot. Please wait...</h1>'});
-            ajaxPost("{% url 'reserve_slot' %}", {'slot_id': slot_id{% if change_reservation %}, 'change_reservation': true{% endif %}}, function(response) {
+            ajaxPost("{% url 'reservations:reserve_slot' %}", {'slot_id': slot_id{% if change_reservation %}, 'change_reservation': true{% endif %}}, function(response) {
                 if (response['success']) {
-                    window.open("{% url 'view_reservation' %}", '_self');
+                    window.open("{% url 'reservations:view_reservation' %}", '_self');
                 }
                 else {
                     $('#slot_' + slot_id).remove();

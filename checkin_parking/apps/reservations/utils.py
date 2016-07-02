@@ -17,7 +17,7 @@ from ...settings.base import MEDIA_ROOT
 
 
 def generate_verification_url(reservation_slot, request):
-    return request.build_absolute_uri(reverse('verify_parking_pass',
+    return request.build_absolute_uri(reverse('reservations:verify_parking_pass',
                                kwargs={'reservation_id': reservation_slot.id, 'user_id': reservation_slot.resident.id}))
 
 

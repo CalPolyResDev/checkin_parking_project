@@ -40,12 +40,12 @@
                 Once you receive your keys, you are then welcome to unload your vehicle from your designated parking lot/structure.</p>
                 <p>Early arrivers may wait until their move-in time to get access to short-term loading/unloading parking. Late arrivers may receive a new short-term parking loading/unloading pass as space permits.</p>
 
-                {% if not request.user.is_authenticated %}<h2>Please <a href="{% url 'login' %}" style="text-decoration: underline;">log in</a> to get started.</h2>{% endif %}
+                {% if not request.user.is_authenticated %}<h2>Please <a href="{% url 'core:login' %}" style="text-decoration: underline;">log in</a> to get started.</h2>{% endif %}
             {% else %}
                 <p>The window to schedule a short-term loading/unloading time for move-in is now closed. If you missed the window, you may receive a short-term parking loading/unloading pass after checking in as space permits.</p>
                 <p>If you have any questions, please call the Poly Canyon Village Housing Administration Office at +1 (805) 756-9300.</p>
 
-                {% if not request.user.is_authenticated %}<h2>If you reserved a session while reservation was still open, you may view your reservation by <a href="{% url 'login' %}">logging in</a>.</h2>{% endif %}
+                {% if not request.user.is_authenticated %}<h2>If you reserved a session while reservation was still open, you may view your reservation by <a href="{% url 'core:login' %}">logging in</a>.</h2>{% endif %}
             {% endif %}
         </div>
     </div>

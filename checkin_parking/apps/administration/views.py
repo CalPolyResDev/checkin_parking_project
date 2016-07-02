@@ -22,7 +22,7 @@ class AdminSettingsUpdateView(UpdateView):
     template_name = 'administration/admin_settings.html'
     model = AdminSettings
     fields = ['reservation_open', 'term_code', 'timeslot_length']
-    success_url = reverse_lazy('settings')
+    success_url = reverse_lazy('administration:settings')
 
     def get_object(self, queryset=None):
         return AdminSettings.objects.get_settings()
@@ -50,7 +50,7 @@ class PurgeView(TemplateView):
 class PDFMapUploadView(FormView):
     template_name = "administration/map_upload.html"
     form_class = PDFMapForm
-    success_url = reverse_lazy('update_maps')
+    success_url = reverse_lazy('administration:update_maps')
 
     def form_valid(self, form):
         upload_dir = 'documents'
@@ -84,7 +84,7 @@ class PDFMapUploadView(FormView):
 class BecomeStudentView(FormView):
     template_name = "administration/become_student.html"
     form_class = BecomeStudentForm
-    success_url = reverse_lazy('become_student')
+    success_url = reverse_lazy('administration:become_student')
 
     def form_valid(self, form):
         user = self.request.user

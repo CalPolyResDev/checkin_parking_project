@@ -28,12 +28,12 @@
     $(document).ready(function () {
     $("#id_buildings").html("");
         {% if form.buildings.value %}
-            ajaxPost("{% url 'ajax_update_building' %}", {'community_id': '{{ form.community.value }}', 'building_selections': '{{ form.buildings.value }}', 'css_target': '#id_buildings'});
+            ajaxPost("{% url 'zones:ajax_update_building' %}", {'community_id': '{{ form.community.value }}', 'building_selections': '{{ form.buildings.value }}', 'css_target': '#id_buildings'});
         {% endif %}
     });
     
     $("#id_community").change(function () {
-        ajaxPost("{% url 'ajax_update_building' %}", {'community_id': $(this).val(), 'css_target': '#id_buildings'});
+        ajaxPost("{% url 'zones:ajax_update_building' %}", {'community_id': $(this).val(), 'css_target': '#id_buildings'});
     });
 </script>
 {% endblock %}

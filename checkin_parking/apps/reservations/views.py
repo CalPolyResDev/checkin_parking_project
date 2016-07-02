@@ -28,7 +28,7 @@ from .utils import generate_pdf_file
 class GenerateReservationSlotsView(FormView):
     template_name = "reservations/generate_reservation_slots.html"
     form_class = GenerateReservationsForm
-    success_url = reverse_lazy('list_time_slots')
+    success_url = reverse_lazy('reservations:list_time_slots')
 
     def form_valid(self, form):
         date = form.cleaned_data["date"]
@@ -145,7 +145,7 @@ class ReserveView(ListView):
         if 'change_reservation' not in response_kwargs:
             try:
                 ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
-                return HttpResponseRedirect(reverse_lazy('view_reservation'))
+                return HttpResponseRedirect(reverse_lazy('reservations:view_reservation'))
             except:
                 pass
 
