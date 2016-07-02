@@ -6,12 +6,16 @@
 
 """
 
+from clever_selects.form_fields import ModelChoiceField, ChainedModelMultipleChoiceField
 from django.forms.models import ModelForm
+from django.core.urlresolvers import reverse_lazy
 
-from .models import Zone
+from .models import Zone, Community, Building
 
 
 class ZoneForm(ModelForm):
+    community = ModelChoiceField(queryset=Community.objects.all())
+    buildings = ChainedModelMultipleChoiceField('community', reverse_lazy('zones:chained_building'), Building)
 
     def __init__(self, *args, **kwargs):
         super(ZoneForm, self).__init__(*args, **kwargs)

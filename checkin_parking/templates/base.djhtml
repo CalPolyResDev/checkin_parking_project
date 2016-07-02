@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load staticfiles %}
+{% load clever_selects_extras %}
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -137,6 +138,9 @@
             {% endblock %}
             <div class="clear"></div>
         </div>
+        {% if request %}
+            {% clever_selects_js_import %}
+        {% endif %}
         {% block extra_script %}{% endblock %}
     </body>
 </html>

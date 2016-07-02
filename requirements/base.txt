@@ -21,3 +21,4 @@ git+ssh://git@code.its.calpoly.edu:7999/rmsc/rmsconnector.git@5.0.0
 
 git+https://github.com/CalPolyResDev/django-clever-selects.git
 git+https://github.com/CalPolyResDev/trml2pdf.git
+git+https://github.com/CalPolyResDev/django-clever-selects.git

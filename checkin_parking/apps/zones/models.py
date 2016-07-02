@@ -28,7 +28,7 @@ class Building(Model):
     community = ForeignKey(Community, verbose_name="Community", related_name="buildings")
 
     def __str__(self):
-        return str(self.community) + " " + self.name
+        return self.name
 
 
 class Zone(Model):
