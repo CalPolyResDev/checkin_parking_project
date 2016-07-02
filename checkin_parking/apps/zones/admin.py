@@ -2,7 +2,7 @@
 .. module:: checkin_parking.apps.zones.admin
    :synopsis: Checkin Parking Reservation Zone Admin Configuration.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 

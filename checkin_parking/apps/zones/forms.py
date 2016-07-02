@@ -2,7 +2,7 @@
 .. module:: checkin_parking.zones.forms
    :synopsis: Checkin Parking Reservation Zone Forms.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 

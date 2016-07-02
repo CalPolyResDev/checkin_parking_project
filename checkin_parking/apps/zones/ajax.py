@@ -2,7 +2,7 @@
 .. module:: checkin_parking.zones.ajax
    :synopsis: Checkin Parking Reservation Zone AJAX Methods.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 

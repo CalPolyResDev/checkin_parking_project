@@ -2,7 +2,7 @@
 .. module:: checkin_parking.checkin_sessions.models
    :synopsis: Checkin Parking Reservation Models.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 

@@ -19,10 +19,10 @@ from .models import AdminSettings
 
 
 class AdminSettingsUpdateView(UpdateView):
-    template_name = 'administration/admin_settings.html'
+    template_name = 'administration/admin_settings.djhtml'
     model = AdminSettings
     fields = ['reservation_open', 'term_code', 'timeslot_length']
-    success_url = reverse_lazy('settings')
+    success_url = reverse_lazy('administration:settings')
 
     def get_object(self, queryset=None):
         return AdminSettings.objects.get_settings()
@@ -36,7 +36,7 @@ class AdminSettingsUpdateView(UpdateView):
 
 
 class PurgeView(TemplateView):
-    template_name = 'administration/purge.html'
+    template_name = 'administration/purge.djhtml'
 
     def get_context_data(self, **kwargs):
         context = super(PurgeView, self).get_context_data(**kwargs)
@@ -48,9 +48,9 @@ class PurgeView(TemplateView):
 
 
 class PDFMapUploadView(FormView):
-    template_name = "administration/map_upload.html"
+    template_name = "administration/map_upload.djhtml"
     form_class = PDFMapForm
-    success_url = reverse_lazy('update_maps')
+    success_url = reverse_lazy('administration:update_maps')
 
     def form_valid(self, form):
         upload_dir = 'documents'
@@ -82,9 +82,9 @@ class PDFMapUploadView(FormView):
 
 
 class BecomeStudentView(FormView):
-    template_name = "administration/become_student.html"
+    template_name = "administration/become_student.djhtml"
     form_class = BecomeStudentForm
-    success_url = reverse_lazy('become_student')
+    success_url = reverse_lazy('administration:become_student')
 
     def form_valid(self, form):
         user = self.request.user

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.djhtml" %}
 {% load staticfiles %}
 
 {% block subtitle %} | Change Settings{% endblock %}

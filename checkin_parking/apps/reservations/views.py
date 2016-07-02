@@ -26,9 +26,9 @@ from .utils import generate_pdf_file
 
 
 class GenerateReservationSlotsView(FormView):
-    template_name = "reservations/generate_reservation_slots.html"
+    template_name = "reservations/generate_reservation_slots.djhtml"
     form_class = GenerateReservationsForm
-    success_url = reverse_lazy('list_time_slots')
+    success_url = reverse_lazy('reservations:list_time_slots')
 
     def form_valid(self, form):
         date = form.cleaned_data["date"]
@@ -67,12 +67,12 @@ class GenerateReservationSlotsView(FormView):
 
 
 class TimeSlotListView(ListView):
-    template_name = "reservations/list_time_slots.html"
+    template_name = "reservations/list_time_slots.djhtml"
     model = TimeSlot
 
 
 class ParkingPassVerificationView(TemplateView):
-    template_name = 'reservations/parking_pass_verification.html'
+    template_name = 'reservations/parking_pass_verification.djhtml'
 
     def get_context_data(self, **kwargs):
         context = super(ParkingPassVerificationView, self).get_context_data(**kwargs)
@@ -122,7 +122,7 @@ class ParkingPassPDFView(TemplateView):
 
 
 class ReserveView(ListView):
-    template_name = 'reservations/reserve.html'
+    template_name = 'reservations/reserve.djhtml'
     model = TimeSlot
 
     def get_queryset(self, **kwargs):
@@ -145,7 +145,7 @@ class ReserveView(ListView):
         if 'change_reservation' not in response_kwargs:
             try:
                 ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
-                return HttpResponseRedirect(reverse_lazy('view_reservation'))
+                return HttpResponseRedirect(reverse_lazy('reservations:view_reservation'))
             except:
                 pass
 
@@ -153,7 +153,7 @@ class ReserveView(ListView):
 
 
 class ViewReservationView(DetailView):
-    template_name = 'reservations/reservation_view.html'
+    template_name = 'reservations/reservation_view.djhtml'
     model = ReservationSlot
 
     def get_object(self, queryset=None):

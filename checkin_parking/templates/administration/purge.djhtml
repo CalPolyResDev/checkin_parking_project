@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.djhtml" %}
 {% load staticfiles %}
 
 {% block subtitle %} | Pure Reservations{% endblock %}
@@ -22,7 +22,7 @@
     function purge() {
         if (confirm('Are you sure you want to delete all reservations and time slots? THIS CANNOT BE UNDONE!')) {
             $.blockUI({message: '<h1 style="padding 6px 6px; margin-bottom: 0px;">Purging the database. Please wait...</h1>'});
-            ajaxPost("{% url 'run_purge' %}", {'confirmation': true}, function(response){
+            ajaxPost("{% url 'administration:run_purge' %}", {'confirmation': true}, function(response){
                 $.unblockUI()
                 alert(response['reservation_count'].toString() + ' Reservations Deleted & ' + response['timeslot_count'] + ' Timeslots Deleted.');
 

@@ -39,11 +39,11 @@
                     <ul>
                         {% if request.user.is_authenticated %} {# User is logged in - display user information. #}
                         <li>
-                            You are logged in as {{ user_display_name }}. (<a href="{% url 'logout' %}">Logout</a>)
+                            You are logged in as {{ user_display_name }}. (<a href="{% url 'core:logout' %}">Logout</a>)
                         </li>
                         {% else %} {# User is not logged in - display log in link. #}
                         <li>
-                            You are not currently logged in. (<a href="{% url 'login' %}">Login</a>)
+                            You are not currently logged in. (<a href="{% url 'core:login' %}">Login</a>)
                         </li>
                         {% endif %}
                     </ul>
@@ -56,7 +56,7 @@
                         <a href="http://www.calpoly.edu/" ><img src="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/images_html/header/cp_logo.jpg" alt="Cal Poly, San Luis Obispo" height="75" width="150" /></a>
                     </div>
                     <div style="width: auto;" id="deptName">
-                        <h2><a href="{% url 'home' %}">University Housing - Parking Reservation</a></h2>
+                        <h2><a href="{% url 'core:home' %}">University Housing - Parking Reservation</a></h2>
 
                         <h3>Embrace Your Unlimited Possibilities</h3>
                     </div>
@@ -71,13 +71,13 @@
                 <h2>Resident Resources</h2>
                 <ul>
                     {% if request.user.reservationslot %}
-                    <li><a href="{% url 'view_reservation' %}">View Reservation</a></li>
+                    <li><a href="{% url 'reservations:view_reservation' %}">View Reservation</a></li>
                         {% if reservation_open %}
-                        <li><a href="{% url 'change_reservation' %}">Change Reservation</a></li>
+                        <li><a href="{% url 'reservations:change_reservation' %}">Change Reservation</a></li>
                         {% endif %}
                     {% else %}
                         {% if reservation_open %}
-                        <li><a href="{% url 'reserve' %}">Reserve</a></li>
+                        <li><a href="{% url 'reservations:reserve' %}">Reserve</a></li>
                         {% endif %}
                     {% endif %}
                 </ul>
@@ -87,27 +87,27 @@
                 <ul>
                     <li><a>Reservation Management</a>
                         <ul>
-                           <li><a href="{% url 'generate_reservation_slots' %}">Generate Reservation Slots</a></li>
-                           <li><a href="{% url 'list_time_slots' %}">List Time Slots</a></li>
+                           <li><a href="{% url 'reservations:generate_reservation_slots' %}">Generate Reservation Slots</a></li>
+                           <li><a href="{% url 'reservations:list_time_slots' %}">List Time Slots</a></li>
                         </ul>
                     </li>
                     <li><a>Parking Zone Management</a>
                         <ul>
-                          <li><a href="{% url 'list_zones' %}">List Zones</a></li>
-                          <li><a href="{% url 'create_zone' %}">Create Zone</a></li>
+                          <li><a href="{% url 'zones:list_zones' %}">List Zones</a></li>
+                          <li><a href="{% url 'zones:create_zone' %}">Create Zone</a></li>
                         </ul>
                     </li>
                     <li><a>PDF Management</a>
                         <ul>
-                          <li><a href="{% url 'update_maps' %}">Update Parking Maps</a></li>
+                          <li><a href="{% url 'administration:update_maps' %}">Update Parking Maps</a></li>
                         </ul>
                     </li>
-                    <!-- <li><a href="{% url 'statistics' %}">Statistics</a></li> -->
+                    <!-- <li><a href="{% url 'statistics:statistics' %}">Statistics</a></li> -->
                     <li><a>Settings</a>
                         <ul>
-                           <li><a href="{% url 'settings' %}">Edit Settings</a></li>
-                           <li><a href="{% url 'purge' %}">Purge Reservations</a></li>
-                           <li><a href="{% url 'become_student' %}">Become a Student</a></li>
+                           <li><a href="{% url 'administration:settings' %}">Edit Settings</a></li>
+                           <li><a href="{% url 'administration:purge' %}">Purge Reservations</a></li>
+                           <li><a href="{% url 'administration:become_student' %}">Become a Student</a></li>
                         </ul>
                     </li>
                 </ul>

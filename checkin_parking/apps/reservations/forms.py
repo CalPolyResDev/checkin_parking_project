@@ -2,7 +2,7 @@
 .. module:: checkin_parking.apps.reservations.forms
    :synopsis: Checkin Parking Reservation Reservation Forms.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 

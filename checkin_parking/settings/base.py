@@ -1,36 +1,9 @@
-import os
 from pathlib import Path
 
 import dj_database_url
-from django.core.exceptions import ImproperlyConfigured
+import raven
 
-
-def get_env_variable(name):
-    """ Gets the specified environment variable.
-
-    :param name: The name of the variable.
-    :type name: str
-    :returns: The value of the specified variable.
-    :raises: **ImproperlyConfigured** when the specified variable does not exist.
-
-    """
-
-    try:
-        return os.environ[name]
-    except KeyError:
-        error_msg = "The %s environment variable is not set!" % name
-        raise ImproperlyConfigured(error_msg)
-
-
-# ======================================================================================================== #
-#                                         General Management                                               #
-# ======================================================================================================== #
-
-ADMINS = (
-    ('ResDev', 'resdev@calpoly.edu'),
-)
-
-MANAGERS = ADMINS
+from checkin_parking.manage import get_env_variable
 
 # ======================================================================================================== #
 #                                         General Settings                                                 #
@@ -41,8 +14,6 @@ TIME_ZONE = 'America/Los_Angeles'
 
 # Language code for this installation.
 LANGUAGE_CODE = 'en-us'
-
-SITE_ID = 1
 
 DATE_FORMAT = 'l, F d, Y'
 
@@ -79,6 +50,7 @@ DATABASES = {
         'NAME': 'mercprd.db.calpoly.edu:1521/mercprd',
         'USER': get_env_variable('CHECKIN_PARKING_DB_RMS_USERNAME'),
         'PASSWORD': get_env_variable('CHECKIN_PARKING_DB_RMS_PASSWORD'),
+        'OPTIONS': {'threaded': True},
     },
 }
 
@@ -163,13 +135,9 @@ LDAP_DEVELOPER_GROUP = 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,' +
 #                                      Session/Security Configuration                                      #
 # ======================================================================================================== #
 
-# Cookie settings.
 SESSION_COOKIE_HTTPONLY = True
-
-# Session expiraton
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-# Make this unique, and don't share it with anybody.
 SECRET_KEY = get_env_variable('CHECKIN_PARKING_SECRET_KEY')
 
 # ======================================================================================================== #
@@ -178,32 +146,21 @@ SECRET_KEY = get_env_variable('CHECKIN_PARKING_SECRET_KEY')
 
 PROJECT_DIR = Path(__file__).parents[2]
 
-# The directory that will hold user-uploaded files.
 MEDIA_ROOT = str(PROJECT_DIR.joinpath("media").resolve())
-
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
 MEDIA_URL = '/media/'
 
-# The directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
 STATIC_ROOT = str(PROJECT_DIR.joinpath("static").resolve())
 
-# URL prefix for static files. Make sure to use a trailing slash.
 STATIC_URL = '/static/'
 
-# Additional locations of static files
-STATICFILES_DIRS = (
+STATICFILES_DIRS = [
     str(PROJECT_DIR.joinpath(MAIN_APP_NAME, "static").resolve()),
-)
+]
 
-# List of finder classes that know how to find static files in various
-# locations.
-STATICFILES_FINDERS = (
+STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
+]
 
 # Django-JS-Reverse Variable Name
 JS_REVERSE_JS_VAR_NAME = 'DjangoReverse'
@@ -231,16 +188,16 @@ TEMPLATES = [
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware',
-)
+]
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -256,7 +213,7 @@ INSTALLED_APPS = (
     MAIN_APP_NAME + '.apps.reservations',
     MAIN_APP_NAME + '.apps.statistics',
     MAIN_APP_NAME + '.apps.zones',
-)
+]
 
 # ======================================================================================================== #
 #                                         Logging Configuration                                            #
@@ -264,14 +221,15 @@ INSTALLED_APPS = (
 
 RAVEN_CONFIG = {
     'dsn': get_env_variable('CHECKIN_PARKING_SENTRY_DSN'),
+    'release': raven.fetch_git_sha(str(PROJECT_DIR.resolve())),
 }
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'root': {
-        'level': 'DEBUG',
-        'handlers': ['sentry', 'console'],
+        'level': 'INFO',
+        'handlers': ['sentry'],
     },
     'formatters': {
         'verbose': {
@@ -305,25 +263,5 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': False,
         },
-        'django_auth_ldap': {
-            'level': 'INFO',
-            'handlers': ['sentry'],
-            'propagate': True,
-        },
-        'django_ajax': {
-            'level': 'INFO',
-            'handlers': ['sentry'],
-            'propagate': True,
-        },
-        'django_datatables_view': {
-            'level': 'INFO',
-            'handlers': ['sentry'],
-            'propagate': True,
-        },
-        'ldap3': {
-            'level': 'WARNING',
-            'handlers': ['sentry'],
-            'propagate': True,
-        }
-    }
+    },
 }

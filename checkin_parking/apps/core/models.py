@@ -2,7 +2,7 @@
 .. module:: checkin_parking.apps.core.models
    :synopsis: Checkin Parking Reservation Core Models.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 

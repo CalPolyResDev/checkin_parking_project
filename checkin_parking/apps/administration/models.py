@@ -2,7 +2,7 @@
 .. module:: checkin_parking.apps.administration.models
    :synopsis: Checkin Parking Reservation Administration Models.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 

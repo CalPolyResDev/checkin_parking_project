@@ -3,17 +3,22 @@ git+https://github.com/CalPolyResDev/django.git@1.9.6-with-Cookie-Patch
 
 colorama==0.3.7
 cx_Oracle==5.2.1
-djangoajax~=2.3.4
+djangoajax~=2.3.6
 django-cas-ng==3.5.4
+# django-crispy-forms~=1.6.0
+# django-js-reverse~=0.7.2
 dj_database_url~=0.4.1
 ldap-groups==4.2.1
 mysqlclient~=1.3.3
-raven~=5.13
+
 psycopg2~=2.6.1
+python_dotenv~=0.5.1
+raven~=5.19
 termcolor==1.1.0
 uwsgidecorators~=1.1.0
 
 git+ssh://git@code.its.calpoly.edu:7999/rmsc/rmsconnector.git
 
+git+https://github.com/CalPolyResDev/django-clever-selects.git
 git+https://github.com/CalPolyResDev/trml2pdf.git
 git+https://github.com/CalPolyResDev/django-clever-selects.git
