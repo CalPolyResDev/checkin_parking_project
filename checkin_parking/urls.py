@@ -59,7 +59,7 @@ handler500 = handler500
 
 
 urlpatterns = [
-    url(r'^admin/', TemplateView.as_view(template_name="honeypot.html"), name="honeypot"),  # admin site urls, honeypot
+    url(r'^admin/', TemplateView.as_view(template_name="honeypot.djhtml"), name="honeypot"),  # admin site urls, honeypot
     url(r'^flugzeug/', include(admin.site.urls)),  # admin site urls, masked
     url(r'^reservations/', include(MAIN_APP_NAME + '.apps.reservations.urls')),
     url(r'^zones/', include(MAIN_APP_NAME + '.apps.zones.urls')),

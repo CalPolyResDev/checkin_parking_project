@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class IndexView(TemplateView):
-    template_name = "core/index.html"
+    template_name = "core/index.djhtml"
 
     def get_context_data(self, **kwargs):
         context = super(TemplateView, self).get_context_data(**kwargs)
@@ -59,7 +59,7 @@ def handler500(request):
     from django.template import loader
     from django.http import HttpResponseServerError
 
-    template = loader.get_template('500.html')
+    template = loader.get_template('500.djhtml')
     context = RequestContext(request)
 
     try:
