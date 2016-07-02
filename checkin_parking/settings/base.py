@@ -153,14 +153,14 @@ STATIC_ROOT = str(PROJECT_DIR.joinpath("static").resolve())
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (
+STATICFILES_DIRS = [
     str(PROJECT_DIR.joinpath(MAIN_APP_NAME, "static").resolve()),
-)
+]
 
-STATICFILES_FINDERS = (
+STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
+]
 
 # Django-JS-Reverse Variable Name
 JS_REVERSE_JS_VAR_NAME = 'DjangoReverse'
@@ -188,16 +188,16 @@ TEMPLATES = [
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware',
-)
+]
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -212,7 +212,7 @@ INSTALLED_APPS = (
     MAIN_APP_NAME + '.apps.reservations',
     MAIN_APP_NAME + '.apps.statistics',
     MAIN_APP_NAME + '.apps.zones',
-)
+]
 
 # ======================================================================================================== #
 #                                         Logging Configuration                                            #
