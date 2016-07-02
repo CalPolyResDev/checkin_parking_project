@@ -15,7 +15,7 @@ from .models import Zone, Community, Building
 
 class ZoneForm(ModelForm):
     community = ModelChoiceField(queryset=Community.objects.all())
-    buildings = ChainedModelMultipleChoiceField('community', reverse_lazy('chained_building'), Building)
+    buildings = ChainedModelMultipleChoiceField('community', reverse_lazy('zones:chained_building'), Building)
 
     def __init__(self, *args, **kwargs):
         super(ZoneForm, self).__init__(*args, **kwargs)
