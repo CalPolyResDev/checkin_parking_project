@@ -9,10 +9,10 @@
 from django.conf import settings
 from django.conf.urls import url
 from django.contrib.staticfiles.templatetags.staticfiles import static
-from django.views.decorators.cache import cache_page
+# from django.views.decorators.cache import cache_page
 from django.views.generic.base import RedirectView
 from django_cas_ng.views import login as auth_login, logout as auth_logout
-from django_js_reverse.views import urls_js
+# from django_js_reverse.views import urls_js
 
 from .views import IndexView
 
@@ -24,5 +24,5 @@ urlpatterns = [
     url(r'^logout/$', auth_logout, name='logout', kwargs={'next_page': settings.CAS_LOGOUT_URL}),
     url(r'^favicon\.ico$', RedirectView.as_view(url=static('images/icons/favicon.ico')), name='favicon'),
 
-    url(r'^jsreverse/$', cache_page(3600)(urls_js), name='js_reverse'),
+    # url(r'^jsreverse/$', cache_page(3600)(urls_js), name='js_reverse'),
 ]
