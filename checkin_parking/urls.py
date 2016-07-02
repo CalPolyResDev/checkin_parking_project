@@ -64,7 +64,7 @@ urlpatterns = [
     url(r'^reservations/', include(MAIN_APP_NAME + '.apps.reservations.urls')),
     url(r'^zones/', include(MAIN_APP_NAME + '.apps.zones.urls')),
     url(r'^statistics/', include(MAIN_APP_NAME + '.apps.statistics.urls')),
-    url(r'^settings/', include(MAIN_APP_NAME + '.apps.administraion.urls')),
+    url(r'^settings/', include(MAIN_APP_NAME + '.apps.administration.urls')),
     url(r'^', include(MAIN_APP_NAME + '.apps.core.urls')),
 ]
 
