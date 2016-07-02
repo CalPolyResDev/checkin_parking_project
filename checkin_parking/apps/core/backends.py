@@ -74,10 +74,10 @@ class CASLDAPBackend(CASBackend):
                         raise ValidationError("University Housing has no record of {principal_name}.".format(principal_name=principal_name))
                     else:
                         if not resident.has_valid_and_current_application(application_term=admin_settings.application_term, application_year=admin_settings.application_year):
-                            raise ValidationError("{principal_name} does not have a valid room booking or housing application.".format(principal_name=principal_name))
+                            raise ValidationError("{principal_name} does not have a valid housing application.".format(principal_name=principal_name))
 
                         user.building = resident.address_dict['building'] if resident.address_dict else None
-                        user.term_type = resident.booking_term_type if resident.room_booking else resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
+                        user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
                 else:
                     user.building = None
                     user.term_type = None
