@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.db.models.base import Model
 from django.db.models.deletion import SET_NULL
-from django.db.models.fields import CharField, DateField, TimeField, PositiveSmallIntegerField
+from django.db.models.fields import CharField, DateField, TimeField, PositiveSmallIntegerField, BooleanField
 from django.db.models.fields.related import ForeignKey, OneToOneField
 from django.utils.functional import cached_property
 
@@ -52,6 +52,7 @@ class ReservationSlot(Model):
     """ A parking session."""
 
     class_level = CharField(max_length=30, default=CLASS_LEVELS.index(FRESHMAN + '/' + TRANSFER + '/' + CONTINUING), choices=CLASS_LEVEL_CHOICES, verbose_name="Class Level")
+    out_of_state = BooleanField(default=False, verbose_name="In State?")
     timeslot = ForeignKey(TimeSlot, related_name="reservationslots", verbose_name="Time Slot")
     zone = ForeignKey(Zone, related_name="reservationslots", verbose_name="Zone")
     resident = OneToOneField(CheckinParkingUser, null=True, blank=True, related_name="reservationslot", verbose_name="Resident", on_delete=SET_NULL)

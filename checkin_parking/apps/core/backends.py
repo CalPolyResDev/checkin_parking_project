@@ -78,9 +78,11 @@ class CASLDAPBackend(CASBackend):
 
                         user.building = resident.address_dict['building']
                         user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
+                        user.out_of_state = resident.is_out_of_state
                 else:
                     user.building = None
                     user.term_type = None
+                    user.out_of_state = None
 
                 user.full_name = user_info["displayName"]
                 user.first_name = user_info["givenName"]

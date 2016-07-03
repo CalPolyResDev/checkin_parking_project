@@ -46,6 +46,7 @@ class IndexView(TemplateView):
                 "date": date,
                 "time_range": timeslots[0].time.strftime(settings.PYTHON_TIME_FORMAT) + " - " + delta.strftime(settings.PYTHON_TIME_FORMAT),
                 "class_level": timeslots[0].reservationslots.all()[0].class_level,
+                "out_of_state": timeslots[0].reservationslots.all()[0].out_of_state,
             })
 
         context["move_in_slot_list"] = move_in_slot_list

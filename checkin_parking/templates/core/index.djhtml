@@ -9,18 +9,20 @@
                 <h3>Move-in Dates (Subject to Change)</h3>
                 <table border="1" class="table_directory">
                     <caption>
-                        <strong>Poly Canyon Village Residents</strong><br />
+                        <strong>Residents</strong><br />
                     </caption>
                     <tbody>
                         <tr>
                             <th>Date</th>
                             <th>Times</th>
+                            <th>&nbsp;</th>
                             <th>Class Level(s)</th>
                         </tr>
                         {% for move_in_slot in move_in_slot_list %}
                         <tr>
                             <td>{{ move_in_slot.date }}</td>
                             <td>{{ move_in_slot.time_range }}</td>
+                            <td>{% if move_in_slot.out_of_state %}Out of State{% else %}In State{% endif %}</td>
                             <td>{{ move_in_slot.class_level }}</td>
                         </tr>
                         {% empty %}
