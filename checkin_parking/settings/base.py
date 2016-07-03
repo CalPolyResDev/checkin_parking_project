@@ -45,6 +45,7 @@ ROOT_URLCONF = MAIN_APP_NAME + '.urls'
 
 DATABASES = {
     'default': dj_database_url.config(default=get_env_variable('CHECKIN_PARKING_DB_DEFAULT_DATABASE_URL')),
+    'uhin': dj_database_url.config(default=get_env_variable('RESNET_INTERNAL_DB_DEFAULT_DATABASE_URL')),
     'rms': {
         'ENGINE': 'django.db.backends.oracle',
         'NAME': 'mercprd.db.calpoly.edu:1521/mercprd',
