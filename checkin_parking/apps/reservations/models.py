@@ -17,6 +17,7 @@ from django.utils.functional import cached_property
 
 from rmsconnector.constants import FRESHMAN, TRANSFER, CONTINUING
 
+from ..administration.models import AdminSettings
 from ..core.managers import DefaultRelatedManager
 from ..core.models import CheckinParkingUser
 from ..zones.models import Zone
