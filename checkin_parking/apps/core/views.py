@@ -27,10 +27,10 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(TemplateView, self).get_context_data(**kwargs)
 
-        move_in_slot_list = []
+        move_in_slot_dict = defaultdict(list)
 
         reservation_date_dict = defaultdict(list)
-        reservation_slots = ReservationSlot.objects.filter(resident__isnull=True).distinct().select_related()
+        reservation_slots = ReservationSlot.objects.filter(resident__isnull=True).distinct().select_related('timeslot', 'zone', 'zone__community')
 
         timeslot_length = AdminSettings.objects.get_settings().timeslot_length
 
@@ -44,16 +44,16 @@ class IndexView(TemplateView):
 
             first_reservation = reservation_slots[0]
 
-            move_in_slot_list.append({
+            move_in_slot_dict[first_reservation.zone.community.name].append({
                 "date": date,
                 "time_range": first_reservation.timeslot.time.strftime(settings.PYTHON_TIME_FORMAT) + " - " + delta.strftime(settings.PYTHON_TIME_FORMAT),
                 "class_level": first_reservation.class_level,
                 "out_of_state": first_reservation.out_of_state,
-                "community": first_reservation.zone.community,
                 "buildings": ', '.join(first_reservation.zone.buildings.values_list('name', flat=True)),
             })
 
-        context["move_in_slot_list"] = move_in_slot_list
+        context["move_in_slot_dict"] = move_in_slot_dict
+        print(move_in_slot_dict)
 
         return context
 
