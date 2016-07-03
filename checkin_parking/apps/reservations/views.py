@@ -129,12 +129,17 @@ class ReserveView(ListView):
         building = self.request.user.building
         term_type = self.request.user.term_type
 
-        if not building:
-            raise FieldError('We could not find an assigned building for you. Please call University Housing if you believe this message is in error.')
         if not term_type:
             raise FieldError('Could not retrieve class level. Please call ResNet at (805) 756-5600.')
 
-        queryset = TimeSlot.objects.filter(reservationslots__zone__buildings__name__contains=building, reservationslots__resident=None, reservationslots__class_level__contains=term_type)
+        base_queryset = TimeSlot.objects.filter(reservationslots__resident=None, reservationslots__class_level__contains=term_type)
+
+        # Show all open zone slots
+        queryset = base_queryset.filter(reservationslots__zone__buildings__name__contains="All")
+
+        # Show building specific slots as well
+        if building:
+            queryset = queryset | base_queryset.filter(reservationslots__zone__buildings__name__contains=building)
 
         if 'change_reservation' in kwargs:
             return queryset.exclude(reservationslots__resident=self.request.user).distinct()

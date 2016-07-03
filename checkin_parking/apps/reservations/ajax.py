@@ -28,7 +28,14 @@ def reserve_slot(request):
     except ReservationSlot.DoesNotExist:
         pass
 
-    query = ReservationSlot.objects.filter(timeslot__id=slot_id, zone__buildings__name__contains=request.user.building, resident=None)
+    base_queryset = ReservationSlot.objects.filter(timeslot__id=slot_id, resident=None)
+
+    # Show all open zone slots
+    queryset = base_queryset.filter(zone__buildings__name__contains="All")
+
+    # Show building specific slots as well
+    if request.user.building:
+        queryset = queryset | base_queryset.filter(zone__buildings__name__contains=request.user.building)
 
     success = False
     with transaction.atomic():
@@ -36,9 +43,9 @@ def reserve_slot(request):
             existing_slot = ReservationSlot.objects.get(resident=request.user)
             existing_slot.resident = None
             existing_slot.save()
-        query.select_for_update()
-        if query.exists():
-            slot = query.first()
+        queryset.select_for_update()
+        if queryset.exists():
+            slot = queryset.first()
             slot.resident = request.user
             slot.save()
             send_confirmation_email(slot, request)
