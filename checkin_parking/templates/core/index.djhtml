@@ -15,19 +15,23 @@
                         <tr>
                             <th>Date</th>
                             <th>Times</th>
-                            <th>&nbsp;</th>
+                            <th>Out of State?</th>
                             <th>Class Level(s)</th>
+                            <th>Community</th>
+                            <th>Building(s)</th>
                         </tr>
                         {% for move_in_slot in move_in_slot_list %}
                         <tr>
                             <td>{{ move_in_slot.date }}</td>
                             <td>{{ move_in_slot.time_range }}</td>
-                            <td>{% if move_in_slot.out_of_state %}Out of State{% else %}In State{% endif %}</td>
+                            <td>{% if move_in_slot.out_of_state %}&#10003;{% else %}X{% endif %}</td>
                             <td>{{ move_in_slot.class_level }}</td>
+                            <td>{{ move_in_slot.community }}</td>
+                            <td>{{ move_in_slot.buildings }}</td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="3">There are currently no move-in time slots.</td>
+                            <td colspan="6">There are currently no available move-in time slots.</td>
                         </tr>
                         {% endfor %}
                     </tbody>

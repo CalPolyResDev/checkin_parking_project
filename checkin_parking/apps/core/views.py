@@ -16,7 +16,7 @@ from django.template.context import RequestContext
 from django.views.generic import TemplateView
 
 from ..administration.models import AdminSettings
-from ..reservations.models import TimeSlot
+from ..reservations.models import ReservationSlot
 
 logger = logging.getLogger(__name__)
 
@@ -29,24 +29,28 @@ class IndexView(TemplateView):
 
         move_in_slot_list = []
 
-        timeslot_date_dict = defaultdict(list)
-        timeslots = TimeSlot.objects.filter(reservationslots__isnull=False).distinct()
+        reservation_date_dict = defaultdict(list)
+        reservation_slots = ReservationSlot.objects.filter(resident__isnull=True).distinct().select_related()
 
         timeslot_length = AdminSettings.objects.get_settings().timeslot_length
 
-        for timeslot in timeslots:
-            timeslot_date_dict[timeslot.date].append(timeslot)
+        for reservation in reservation_slots:
+            reservation_date_dict[reservation.timeslot.date].append(reservation)
 
-        for date, timeslots in timeslot_date_dict.items():
-            timeslots.sort(key=attrgetter("time"))
+        for date, reservation_slots in reservation_date_dict.items():
+            reservation_slots.sort(key=attrgetter("timeslot.time"))
 
-            delta = (datetime.combine(datetime_date.today(), timeslots[-1].time) + timedelta(minutes=timeslot_length)).time()
+            delta = (datetime.combine(datetime_date.today(), reservation_slots[-1].timeslot.time) + timedelta(minutes=timeslot_length)).time()
+
+            first_reservation = reservation_slots[0]
 
             move_in_slot_list.append({
                 "date": date,
-                "time_range": timeslots[0].time.strftime(settings.PYTHON_TIME_FORMAT) + " - " + delta.strftime(settings.PYTHON_TIME_FORMAT),
-                "class_level": timeslots[0].reservationslots.all()[0].class_level,
-                "out_of_state": timeslots[0].reservationslots.all()[0].out_of_state,
+                "time_range": first_reservation.timeslot.time.strftime(settings.PYTHON_TIME_FORMAT) + " - " + delta.strftime(settings.PYTHON_TIME_FORMAT),
+                "class_level": first_reservation.class_level,
+                "out_of_state": first_reservation.out_of_state,
+                "community": first_reservation.zone.community,
+                "buildings": ', '.join(first_reservation.zone.buildings.values_list('name', flat=True)),
             })
 
         context["move_in_slot_list"] = move_in_slot_list
