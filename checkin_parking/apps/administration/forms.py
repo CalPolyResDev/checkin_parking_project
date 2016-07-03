@@ -13,10 +13,12 @@ from django.forms import Form
 from django.forms.fields import FileField, ChoiceField
 from django.forms.models import ModelChoiceField
 
+from rmsconnector.constants import FRESHMAN, TRANSFER, CONTINUING
+
 from ..zones.models import Building
 
 
-CLASS_LEVELS = ["Freshman", "Transfer", "Continuing"]
+CLASS_LEVELS = [FRESHMAN, TRANSFER, CONTINUING]
 CLASS_LEVEL_CHOICES = [(class_level, class_level) for class_level in CLASS_LEVELS]
 
 
