@@ -17,7 +17,7 @@ raven~=5.19
 termcolor==1.1.0
 uwsgidecorators~=1.1.0
 
-git+ssh://git@code.its.calpoly.edu:7999/rmsc/rmsconnector.git@5.1.1
+git+ssh://git@code.its.calpoly.edu:7999/rmsc/rmsconnector.git@5.1.2
 
 git+https://github.com/CalPolyResDev/django-clever-selects.git
 git+https://github.com/CalPolyResDev/trml2pdf.git
