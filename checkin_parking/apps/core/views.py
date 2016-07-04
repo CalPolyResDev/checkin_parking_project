@@ -52,7 +52,7 @@ class IndexView(TemplateView):
                 "buildings": ', '.join(first_reservation.zone.buildings.values_list('name', flat=True)),
             })
 
-        context["move_in_slot_dict"] = dict(move_in_slot_dict)
+        context["move_in_slot_dict"] = dict(move_in_slot_dict)  # Reason for conversion: https://code.djangoproject.com/ticket/16335
 
         return context
 
