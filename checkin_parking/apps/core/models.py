@@ -9,7 +9,7 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
 from django.core.mail import send_mail
-from django.db.models.fields import CharField, EmailField, BooleanField
+from django.db.models.fields import CharField, EmailField, BooleanField, NullBooleanField
 from django.utils import timezone
 from django.utils.functional import cached_property
 
@@ -42,6 +42,7 @@ class CheckinParkingUser(AbstractBaseUser, PermissionsMixin):
     email = EmailField(blank=True, verbose_name='Email Address')
     building = CharField(max_length=30, null=True, blank=True, verbose_name='Building')
     term_type = CharField(max_length=15, null=True, blank=True, verbose_name='Class Level')
+    out_of_state = NullBooleanField()
 
     is_active = BooleanField(default=True)
     is_staff = BooleanField(default=False)
