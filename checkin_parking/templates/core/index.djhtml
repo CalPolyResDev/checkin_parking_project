@@ -10,7 +10,7 @@
                 {% for community, move_in_slot_list in move_in_slot_dict.items %}
                     <table border="1" class="table_directory">
                         <caption>
-                            <strong>{{ community.name }} Residents</strong><br />
+                            <strong>{{ community }} Residents</strong><br />
                         </caption>
                         <tbody>
                             <tr>
