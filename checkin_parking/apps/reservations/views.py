@@ -156,7 +156,7 @@ class ReserveView(ListView):
             return queryset.distinct()
 
     def render_to_response(self, context, **response_kwargs):
-        if 'change_reservation' not in response_kwargs:
+        if 'change_reservation' not in context:
             try:
                 ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
                 return HttpResponseRedirect(reverse_lazy('reservations:view_reservation'))
