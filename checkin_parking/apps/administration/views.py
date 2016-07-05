@@ -8,6 +8,7 @@
 
 from pathlib import Path
 
+from clever_selects.views import ChainedSelectFormViewMixin
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView, UpdateView
@@ -81,7 +82,7 @@ class PDFMapUploadView(FormView):
         return super(FormView, self).form_valid(form)
 
 
-class BecomeStudentView(FormView):
+class BecomeStudentView(ChainedSelectFormViewMixin, FormView):
     template_name = "administration/become_student.djhtml"
     form_class = BecomeStudentForm
     success_url = reverse_lazy('administration:become_student')
