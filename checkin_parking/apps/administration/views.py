@@ -88,7 +88,7 @@ class BecomeStudentView(FormView):
 
     def form_valid(self, form):
         user = self.request.user
-        user.building = form.cleaned_data['building'].name
+        user.building = form.cleaned_data['building']
         user.term_type = form.cleaned_data['term_type']
         user.save()
 
