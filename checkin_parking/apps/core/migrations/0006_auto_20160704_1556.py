@@ -6,10 +6,14 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
+def delete_users(apps, schema_editor):
+    apps.get_model('core', 'CheckinParkingUser').objects.all().delete()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0004_auto_20160518_1654'),
+        ('core', '0005_auto_20160704_1557'),
     ]
 
     operations = [
