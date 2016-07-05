@@ -142,7 +142,7 @@ class ReserveView(ListView):
 
         # Show building specific slots as well
         if building:
-            queryset = queryset | base_queryset.filter(reservationslots__zone__buildings__name__contains=building)
+            queryset = queryset | base_queryset.filter(reservationslots__zone__buildings=building)
 
         if 'change_reservation' in kwargs:
             return queryset.exclude(reservationslots__resident=self.request.user).distinct()

@@ -13,9 +13,10 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django_cas_ng.backends import CASBackend
 from ldap3 import Server, Connection, ObjectDef, AttrDef, Reader
 from ldap_groups.groups import ADGroup
-
 from rmsconnector.utils import Resident
+
 from ..administration.models import AdminSettings
+from ..zones.models import Building
 
 
 logger = logging.getLogger(__name__)
@@ -76,7 +77,7 @@ class CASLDAPBackend(CASBackend):
                         if not resident.has_valid_and_current_application(application_term=admin_settings.application_term, application_year=admin_settings.application_year):
                             raise ValidationError("{principal_name} does not have a valid housing application.".format(principal_name=principal_name))
 
-                        user.building = resident.address_dict['building']
+                        user.building = Building.objects.get(name=resident.address_dict['building'], community__name=resident.address_dict['community']) if resident.address_dict['building'] else None
                         user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
                         user.out_of_state = resident.is_out_of_state
                 else:

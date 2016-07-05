@@ -5,7 +5,7 @@
 .. moduleauthor:: Thomas E. Willson <thomas.willson@me.com>
 
 """
-from _datetime import datetime
+from datetime import datetime
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -35,7 +35,7 @@ def reserve_slot(request):
 
     # Show building specific slots as well
     if request.user.building:
-        queryset = queryset | base_queryset.filter(zone__buildings__name__contains=request.user.building)
+        queryset = queryset | base_queryset.filter(zone__buildings=request.user.building, zone__buildings__community=request.user.building.community)
 
     success = False
     with transaction.atomic():
