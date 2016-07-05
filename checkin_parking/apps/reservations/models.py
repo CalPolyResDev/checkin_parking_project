@@ -2,7 +2,7 @@
 .. module:: checkin_parking.checkin_sessions.models
    :synopsis: Checkin Parking Reservation Models.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 
@@ -11,18 +11,21 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.db.models.base import Model
 from django.db.models.deletion import SET_NULL
-from django.db.models.fields import CharField, DateField, TimeField, PositiveSmallIntegerField
+from django.db.models.fields import CharField, DateField, TimeField, PositiveSmallIntegerField, BooleanField
 from django.db.models.fields.related import ForeignKey, OneToOneField
 from django.utils.functional import cached_property
 
-from checkin_parking.apps.administration.models import AdminSettings
+from rmsconnector.constants import FRESHMAN, TRANSFER, CONTINUING
 
+from ..administration.models import AdminSettings
 from ..core.managers import DefaultRelatedManager
 from ..core.models import CheckinParkingUser
 from ..zones.models import Zone
 
 
-CLASS_LEVELS = ['Freshman', 'Transfer', 'Continuing', 'Freshman/Transfer', 'Freshman/Continuing', 'Transfer/Continuing', 'Freshman/Transfer/Continuing']
+CLASS_LEVELS = [FRESHMAN, TRANSFER, CONTINUING,
+                FRESHMAN + '/' + TRANSFER, FRESHMAN + '/' + CONTINUING, TRANSFER + '/' + CONTINUING,
+                FRESHMAN + '/' + TRANSFER + '/' + CONTINUING]
 CLASS_LEVEL_CHOICES = [(class_level, class_level) for class_level in CLASS_LEVELS]
 
 
@@ -49,7 +52,8 @@ class TimeSlot(Model):
 class ReservationSlot(Model):
     """ A parking session."""
 
-    class_level = CharField(max_length=30, default=CLASS_LEVELS.index('Freshman/Transfer/Continuing'), choices=CLASS_LEVEL_CHOICES, verbose_name='Class Level')
+    class_level = CharField(max_length=30, default=CLASS_LEVELS.index(FRESHMAN + '/' + TRANSFER + '/' + CONTINUING), choices=CLASS_LEVEL_CHOICES, verbose_name="Class Level")
+    out_of_state = BooleanField(default=False, verbose_name="In State?")
     timeslot = ForeignKey(TimeSlot, related_name="reservationslots", verbose_name="Time Slot")
     zone = ForeignKey(Zone, related_name="reservationslots", verbose_name="Zone")
     resident = OneToOneField(CheckinParkingUser, null=True, blank=True, related_name="reservationslot", verbose_name="Resident", on_delete=SET_NULL)

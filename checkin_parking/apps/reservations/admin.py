@@ -2,7 +2,7 @@
 .. module:: checkin_parking.apps.reservations.admin
    :synopsis: Checkin Parking Reservation Reservation Admin Configuration.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 
@@ -17,8 +17,8 @@ class TimeSlotAdmin(admin.ModelAdmin):
 
 
 class ReservationSlotAdmin(admin.ModelAdmin):
-    list_display = ['class_level', 'timeslot', 'zone', 'resident']
-    list_filter = ['zone', 'class_level', 'timeslot']
+    list_display = ['class_level', 'out_of_state', 'timeslot', 'zone', 'resident']
+    list_filter = ['zone', 'class_level', 'out_of_state', 'timeslot']
 
 
 admin.site.register(TimeSlot, TimeSlotAdmin)

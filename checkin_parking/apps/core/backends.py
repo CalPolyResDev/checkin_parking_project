@@ -2,7 +2,7 @@
 .. module:: checkin_parking.apps.core.backends
    :synopsis: Checkin Parking Reservation Core Authentication Backends.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 
@@ -13,9 +13,10 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django_cas_ng.backends import CASBackend
 from ldap3 import Server, Connection, ObjectDef, AttrDef, Reader
 from ldap_groups.groups import ADGroup
-
 from rmsconnector.utils import Resident
+
 from ..administration.models import AdminSettings
+from ..zones.models import Building
 
 
 logger = logging.getLogger(__name__)
@@ -66,20 +67,23 @@ class CASLDAPBackend(CASBackend):
 
                 # Ensure that non-admins who log in are future residents
                 if not user.is_admin and not user.is_superuser:
-                    # See if the user exists in the rms database (alias is valid)
+                    admin_settings = AdminSettings.objects.get_settings()
+
                     try:
-                        resident = Resident(principal_name=principal_name, term_code=AdminSettings.objects.get_settings().term_code)
-                    except ObjectDoesNotExist as exc:
-                        if str(exc).startswith("A room booking could not be found"):
-                            raise ValidationError("{principal_name} does not currently reside in University Housing.".format(principal_name=principal_name))
-                        else:
-                            raise ValidationError("University Housing has no record of {principal_name}.".format(principal_name=principal_name))
+                        resident = Resident(principal_name=principal_name, term_code=admin_settings.term_code)
+                    except ObjectDoesNotExist:
+                        raise ValidationError("University Housing has no record of {principal_name}.".format(principal_name=principal_name))
                     else:
-                        user.building = resident.address_dict['building']
-                        user.term_type = resident.term_type
+                        if not resident.has_valid_and_current_application(application_term=admin_settings.application_term, application_year=admin_settings.application_year):
+                            raise ValidationError("{principal_name} does not have a valid housing application.".format(principal_name=principal_name))
+
+                        user.building = Building.objects.get(name=resident.address_dict['building'], community__name=resident.address_dict['community']) if resident.address_dict['building'] else None
+                        user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
+                        user.out_of_state = resident.is_out_of_state
                 else:
                     user.building = None
                     user.term_type = None
+                    user.out_of_state = None
 
                 user.full_name = user_info["displayName"]
                 user.first_name = user_info["givenName"]

@@ -8,15 +8,20 @@
 
 import os
 
+from clever_selects.forms import ChainedChoicesForm
+from clever_selects.form_fields import ChainedModelChoiceField
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse_lazy
 from django.forms import Form
-from django.forms.fields import FileField, ChoiceField
+from django.forms.fields import FileField, ChoiceField, BooleanField
 from django.forms.models import ModelChoiceField
 
-from ..zones.models import Building
+from rmsconnector.constants import FRESHMAN, TRANSFER, CONTINUING
+
+from ..zones.models import Building, Community
 
 
-CLASS_LEVELS = ["Freshman", "Transfer", "Continuing"]
+CLASS_LEVELS = [FRESHMAN, TRANSFER, CONTINUING]
 CLASS_LEVEL_CHOICES = [(class_level, class_level) for class_level in CLASS_LEVELS]
 
 
@@ -38,6 +43,8 @@ class PDFMapForm(Form):
         return cleaned_data
 
 
-class BecomeStudentForm(Form):
-    building = ModelChoiceField(label='Buildings', queryset=Building.objects.all())
+class BecomeStudentForm(ChainedChoicesForm):
+    community = ModelChoiceField(queryset=Community.objects.all())
+    building = ChainedModelChoiceField('community', reverse_lazy('zones:chained_building'), Building)
     term_type = ChoiceField(label='Class Level', choices=CLASS_LEVEL_CHOICES)
+    out_of_state = BooleanField(label='Out of State?', required=False)

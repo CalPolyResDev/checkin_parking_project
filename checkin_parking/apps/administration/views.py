@@ -8,6 +8,7 @@
 
 from pathlib import Path
 
+from clever_selects.views import ChainedSelectFormViewMixin
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView, UpdateView
@@ -19,10 +20,10 @@ from .models import AdminSettings
 
 
 class AdminSettingsUpdateView(UpdateView):
-    template_name = 'administration/admin_settings.html'
+    template_name = 'administration/admin_settings.djhtml'
     model = AdminSettings
-    fields = ['reservation_open', 'term_code', 'timeslot_length']
-    success_url = reverse_lazy('settings')
+    fields = ['reservation_open', 'term_code', 'timeslot_length', 'application_term', 'application_year']
+    success_url = reverse_lazy('administration:settings')
 
     def get_object(self, queryset=None):
         return AdminSettings.objects.get_settings()
@@ -36,7 +37,7 @@ class AdminSettingsUpdateView(UpdateView):
 
 
 class PurgeView(TemplateView):
-    template_name = 'administration/purge.html'
+    template_name = 'administration/purge.djhtml'
 
     def get_context_data(self, **kwargs):
         context = super(PurgeView, self).get_context_data(**kwargs)
@@ -48,9 +49,9 @@ class PurgeView(TemplateView):
 
 
 class PDFMapUploadView(FormView):
-    template_name = "administration/map_upload.html"
+    template_name = "administration/map_upload.djhtml"
     form_class = PDFMapForm
-    success_url = reverse_lazy('update_maps')
+    success_url = reverse_lazy('administration:update_maps')
 
     def form_valid(self, form):
         upload_dir = 'documents'
@@ -81,15 +82,16 @@ class PDFMapUploadView(FormView):
         return super(FormView, self).form_valid(form)
 
 
-class BecomeStudentView(FormView):
-    template_name = "administration/become_student.html"
+class BecomeStudentView(ChainedSelectFormViewMixin, FormView):
+    template_name = "administration/become_student.djhtml"
     form_class = BecomeStudentForm
-    success_url = reverse_lazy('become_student')
+    success_url = reverse_lazy('administration:become_student')
 
     def form_valid(self, form):
         user = self.request.user
-        user.building = form.cleaned_data['building'].name
+        user.building = form.cleaned_data['building']
         user.term_type = form.cleaned_data['term_type']
+        user.out_of_state = form.cleaned_data['out_of_state']
         user.save()
 
         return super(BecomeStudentView, self).form_valid(form)

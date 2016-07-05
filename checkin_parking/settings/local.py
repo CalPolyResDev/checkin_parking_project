@@ -21,12 +21,12 @@ CAS_LOGOUT_URL = "https://mydev.calpoly.edu/cas/casClientLogout.jsp?logoutApp=Un
 #                                          Debugging Configuration                                         #
 # ======================================================================================================== #
 
-INTERNAL_IPS = (
+INTERNAL_IPS = [
     "localhost",
     "127.0.0.1",
-)
+]
 
-DEBUG_TOOLBAR_PANELS = (
+DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',
     'debug_toolbar.panels.timer.TimerPanel',
     'debug_toolbar.panels.settings.SettingsPanel',
@@ -40,7 +40,7 @@ DEBUG_TOOLBAR_PANELS = (
     #     'debug_toolbar.panels.profiling.ProfilingPanel',
     'debug_toolbar.panels.logging.LoggingPanel',
     'debug_toolbar.panels.redirects.RedirectsPanel',
-)
+]
 
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
@@ -51,8 +51,6 @@ DEBUG_TOOLBAR_CONFIG = {
 #                                  File/Application Handling Configuration                                 #
 # ======================================================================================================== #
 
-MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+MIDDLEWARE_CLASSES += ['debug_toolbar.middleware.DebugToolbarMiddleware']
 
-INSTALLED_APPS += (
-    'debug_toolbar',
-)
+INSTALLED_APPS += ['debug_toolbar']

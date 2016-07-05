@@ -2,14 +2,14 @@
 .. module:: checkin_parking.apps.reservations.forms
    :synopsis: Checkin Parking Reservation Reservation Forms.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 
 from datetime import datetime, date
 
 from django.core.exceptions import ValidationError
-from django.forms.fields import DateField, TimeField, ChoiceField
+from django.forms.fields import DateField, TimeField, ChoiceField, BooleanField
 from django.forms.forms import Form
 from django.forms.models import ModelMultipleChoiceField
 
@@ -23,6 +23,7 @@ class GenerateReservationsForm(Form):
     start_time = TimeField(label='Start Time', input_formats=['%H:%M'], error_messages={'required': 'A start time is required'})
     end_time = TimeField(label='End Time', input_formats=['%H:%M'], error_messages={'required': 'An end time is required'})
     class_level = ChoiceField(label='Class Level', choices=CLASS_LEVEL_CHOICES, initial=CLASS_LEVELS.index("Freshman/Transfer/Continuing"), error_messages={'required': 'A class level is required'})
+    out_of_state = BooleanField(label='Out of State?', required=False)
     zones = ModelMultipleChoiceField(queryset=Zone.objects.all(), error_messages={'required': 'At least one zone must be selected. If there are no zones from which to choose, please create one.'})
 
     error_messages = {

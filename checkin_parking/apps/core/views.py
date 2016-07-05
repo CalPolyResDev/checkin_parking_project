@@ -2,53 +2,60 @@
 .. module:: checkin_parking.apps.core.views
    :synopsis: Checkin Parking Reservation Core Views.
 
-.. moduleauthor:: Alex Kavanaugh <kavanaugh.development@outlook.com>
+.. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
 
 from collections import defaultdict
 from datetime import date as datetime_date, datetime, timedelta
 import logging
-from operator import attrgetter
+from operator import attrgetter, itemgetter
 
 from django.conf import settings
 from django.template.context import RequestContext
 from django.views.generic import TemplateView
 
 from ..administration.models import AdminSettings
-from ..reservations.models import TimeSlot
+from ..reservations.models import ReservationSlot
 
 logger = logging.getLogger(__name__)
 
 
 class IndexView(TemplateView):
-    template_name = "core/index.html"
+    template_name = "core/index.djhtml"
 
     def get_context_data(self, **kwargs):
         context = super(TemplateView, self).get_context_data(**kwargs)
 
-        move_in_slot_list = []
+        move_in_slot_dict = defaultdict(list)
 
-        timeslot_date_dict = defaultdict(list)
-        timeslots = TimeSlot.objects.filter(reservationslots__isnull=False).distinct()
+        reservation_date_dict = defaultdict(list)
+        reservation_slots = ReservationSlot.objects.filter(resident__isnull=True).distinct().select_related('timeslot', 'zone', 'zone__community')
 
         timeslot_length = AdminSettings.objects.get_settings().timeslot_length
 
-        for timeslot in timeslots:
-            timeslot_date_dict[timeslot.date].append(timeslot)
+        for reservation in reservation_slots:
+            reservation_date_dict[reservation.timeslot.date].append(reservation)
 
-        for date, timeslots in timeslot_date_dict.items():
-            timeslots.sort(key=attrgetter("time"))
+        for date, reservation_slots in reservation_date_dict.items():
+            reservation_slots.sort(key=attrgetter("timeslot.time"))
 
-            delta = (datetime.combine(datetime_date.today(), timeslots[-1].time) + timedelta(minutes=timeslot_length)).time()
+            delta = (datetime.combine(datetime_date.today(), reservation_slots[-1].timeslot.time) + timedelta(minutes=timeslot_length)).time()
 
-            move_in_slot_list.append({
+            first_reservation = reservation_slots[0]
+
+            move_in_slot_dict[first_reservation.zone.community.name].append({
                 "date": date,
-                "time_range": timeslots[0].time.strftime(settings.PYTHON_TIME_FORMAT) + " - " + delta.strftime(settings.PYTHON_TIME_FORMAT),
-                "class_level": timeslots[0].reservationslots.all()[0].class_level,
+                "time_range": first_reservation.timeslot.time.strftime(settings.PYTHON_TIME_FORMAT) + " - " + delta.strftime(settings.PYTHON_TIME_FORMAT),
+                "class_level": first_reservation.class_level,
+                "out_of_state": first_reservation.out_of_state,
+                "buildings": ', '.join(first_reservation.zone.buildings.values_list('name', flat=True)),
             })
 
-        context["move_in_slot_list"] = move_in_slot_list
+        for community, reservation_slots in move_in_slot_dict.items():
+            reservation_slots.sort(key=itemgetter('date'))
+
+        context["move_in_slot_dict"] = dict(move_in_slot_dict)  # Reason for conversion: https://code.djangoproject.com/ticket/16335
 
         return context
 
@@ -59,7 +66,7 @@ def handler500(request):
     from django.template import loader
     from django.http import HttpResponseServerError
 
-    template = loader.get_template('500.html')
+    template = loader.get_template('500.djhtml')
     context = RequestContext(request)
 
     try:

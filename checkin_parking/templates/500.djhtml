@@ -1,8 +1,13 @@
-{% extends "base.html" %}
+{% extends "base.djhtml" %}
 
 {% block subtitle %} | HTTP 500{% endblock %}
 
 {% block sidenav %}{% endblock %}
+
+{% block extra_head %}
+    {{ block.super }}
+    <script src="https://cdn.ravenjs.com/2.3.0/raven.min.js"></script>
+{% endblock %}
 
 {% block content %}
     <div id="mainColFull">
@@ -15,6 +20,13 @@
         {% if request.sentry.id %}
         Include the following Sentry ID in your description:<br /><br />
         <b>SENTRY_ID = {{ request.sentry.id }}</b>
+        
+        <script>
+            Raven.showReportDialog({
+                eventId: '{{ request.sentry.id }}',
+                dsn: 'https://81990af275634a619d56963b8f309da8@logs.resdev.calpoly.edu/2',
+            });
+        </script>
         {% endif %}
         </p>
         <p>For more information on what an HTTP 500 error is and how it occurs, <a href="http://httpstatus.es/500" target="_blank">click here</a>.</p>

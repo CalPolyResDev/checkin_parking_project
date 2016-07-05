@@ -26,15 +26,16 @@ from .utils import generate_pdf_file
 
 
 class GenerateReservationSlotsView(FormView):
-    template_name = "reservations/generate_reservation_slots.html"
+    template_name = "reservations/generate_reservation_slots.djhtml"
     form_class = GenerateReservationsForm
-    success_url = reverse_lazy('list_time_slots')
+    success_url = reverse_lazy('reservations:list_time_slots')
 
     def form_valid(self, form):
         date = form.cleaned_data["date"]
         start_time = form.cleaned_data["start_time"]
         end_time = form.cleaned_data["end_time"]
         class_level = form.cleaned_data["class_level"]
+        out_of_state = form.cleaned_data["out_of_state"]
         zones = form.cleaned_data["zones"]
 
         admin_settings = AdminSettings.objects.get_settings()
@@ -56,6 +57,7 @@ class GenerateReservationSlotsView(FormView):
                     for index in range(zone.capacity):
                         reservationslot = ReservationSlot()
                         reservationslot.class_level = class_level
+                        reservationslot.out_of_state = out_of_state
                         reservationslot.timeslot = timeslot
                         reservationslot.zone = zone
                         reservationslot.save()
@@ -67,12 +69,12 @@ class GenerateReservationSlotsView(FormView):
 
 
 class TimeSlotListView(ListView):
-    template_name = "reservations/list_time_slots.html"
+    template_name = "reservations/list_time_slots.djhtml"
     model = TimeSlot
 
 
 class ParkingPassVerificationView(TemplateView):
-    template_name = 'reservations/parking_pass_verification.html'
+    template_name = 'reservations/parking_pass_verification.djhtml'
 
     def get_context_data(self, **kwargs):
         context = super(ParkingPassVerificationView, self).get_context_data(**kwargs)
@@ -122,19 +124,31 @@ class ParkingPassPDFView(TemplateView):
 
 
 class ReserveView(ListView):
-    template_name = 'reservations/reserve.html'
+    template_name = 'reservations/reserve.djhtml'
     model = TimeSlot
 
     def get_queryset(self, **kwargs):
         building = self.request.user.building
         term_type = self.request.user.term_type
+        out_of_state = self.request.user.out_of_state
 
-        if not building:
-            raise FieldError('We could not find an assigned building for you. Please call University Housing if you believe this message is in error.')
         if not term_type:
             raise FieldError('Could not retrieve class level. Please call ResNet at (805) 756-5600.')
 
-        queryset = TimeSlot.objects.filter(reservationslots__zone__buildings__name__contains=building, reservationslots__resident=None, reservationslots__class_level__contains=term_type)
+        base_queryset = TimeSlot.objects.filter(reservationslots__resident=None, reservationslots__class_level__contains=term_type)
+
+        # Show all open zone slots
+        queryset = base_queryset.filter(reservationslots__zone__buildings__name__contains="All")
+
+        # Show building specific slots as well
+        if building:
+            queryset = queryset | base_queryset.filter(reservationslots__zone__buildings=building)
+
+        # Don't let in state kids take the good times.
+        if not out_of_state:
+            queryset = queryset.exclude(reservationslots__out_of_state=True)
+
+        queryset = queryset.order_by('date', 'time')
 
         if 'change_reservation' in kwargs:
             return queryset.exclude(reservationslots__resident=self.request.user).distinct()
@@ -142,10 +156,10 @@ class ReserveView(ListView):
             return queryset.distinct()
 
     def render_to_response(self, context, **response_kwargs):
-        if 'change_reservation' not in response_kwargs:
+        if 'change_reservation' not in context:
             try:
                 ReservationSlot.objects.get(id=self.request.user.reservationslot.id)
-                return HttpResponseRedirect(reverse_lazy('view_reservation'))
+                return HttpResponseRedirect(reverse_lazy('reservations:view_reservation'))
             except:
                 pass
 
@@ -153,7 +167,7 @@ class ReserveView(ListView):
 
 
 class ViewReservationView(DetailView):
-    template_name = 'reservations/reservation_view.html'
+    template_name = 'reservations/reservation_view.djhtml'
     model = ReservationSlot
 
     def get_object(self, queryset=None):

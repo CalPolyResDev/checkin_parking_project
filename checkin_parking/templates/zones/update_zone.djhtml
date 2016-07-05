@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.djhtml" %}
 
 {% block subtitle %} | Update Zone{% endblock %}
 
@@ -21,19 +21,4 @@
             </form>
         </div>
     </div>
-{% endblock %}
-
-{% block extra_script %}
-<script type="text/javascript">
-    $(document).ready(function () {
-    $("#id_buildings").html("");
-        {% if form.buildings.value %}
-            ajaxPost("{% url 'ajax_update_building' %}", {'community_id': '{{ form.community.value }}', 'building_selections': '{{ form.buildings.value }}', 'css_target': '#id_buildings'});
-        {% endif %}
-    });
-    
-    $("#id_community").change(function () {
-        ajaxPost("{% url 'ajax_update_building' %}", {'community_id': $(this).val(), 'css_target': '#id_buildings'});
-    });
-</script>
 {% endblock %}

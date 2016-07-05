@@ -5,7 +5,7 @@
 .. moduleauthor:: Thomas E. Willson <thomas.willson@me.com>
 
 """
-from _datetime import datetime
+from datetime import datetime
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -24,11 +24,20 @@ def reserve_slot(request):
 
     try:
         ReservationSlot.objects.get(resident=request.user)
-        raise ValidationError('You have already reserved a slot. Please refresh this page.')
+        if not change_reservation:
+            raise ValidationError('You have already reserved a slot. Please refresh this page.')
     except ReservationSlot.DoesNotExist:
-        pass
+        if change_reservation:
+            raise ValidationError('Cannot change reservation as none exists. Please refresh this page.')
 
-    query = ReservationSlot.objects.filter(timeslot__id=slot_id, zone__buildings__name__contains=request.user.building, resident=None)
+    base_queryset = ReservationSlot.objects.filter(timeslot__id=slot_id, resident=None)
+
+    # Show all open zone slots
+    queryset = base_queryset.filter(zone__buildings__name__contains="All")
+
+    # Show building specific slots as well
+    if request.user.building:
+        queryset = queryset | base_queryset.filter(zone__buildings=request.user.building, zone__buildings__community=request.user.building.community)
 
     success = False
     with transaction.atomic():
@@ -36,9 +45,9 @@ def reserve_slot(request):
             existing_slot = ReservationSlot.objects.get(resident=request.user)
             existing_slot.resident = None
             existing_slot.save()
-        query.select_for_update()
-        if query.exists():
-            slot = query.first()
+        queryset.select_for_update()
+        if queryset.exists():
+            slot = queryset.first()
             slot.resident = request.user
             slot.save()
             send_confirmation_email(slot, request)
