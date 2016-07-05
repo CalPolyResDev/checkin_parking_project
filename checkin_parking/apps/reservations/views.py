@@ -135,7 +135,10 @@ class ReserveView(ListView):
         if not term_type:
             raise FieldError('Could not retrieve class level. Please call ResNet at (805) 756-5600.')
 
-        base_queryset = TimeSlot.objects.filter(reservationslots__resident=None, reservationslots__class_level__contains=term_type, reservationslots__out_of_state=out_of_state)
+        base_queryset = TimeSlot.objects.filter(reservationslots__resident=None, reservationslots__class_level__contains=term_type)
+
+        if not out_of_state:
+            base_queryset = base_queryset.exclude(reservationslots__out_of_state=True)
 
         # Show all open zone slots
         queryset = base_queryset.filter(reservationslots__zone__buildings__name__contains="All")
