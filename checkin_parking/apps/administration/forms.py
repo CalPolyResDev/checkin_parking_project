@@ -13,7 +13,7 @@ from clever_selects.form_fields import ChainedModelChoiceField
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse_lazy
 from django.forms import Form
-from django.forms.fields import FileField, ChoiceField
+from django.forms.fields import FileField, ChoiceField, BooleanField
 from django.forms.models import ModelChoiceField
 
 from rmsconnector.constants import FRESHMAN, TRANSFER, CONTINUING
@@ -47,3 +47,4 @@ class BecomeStudentForm(ChainedChoicesForm):
     community = ModelChoiceField(queryset=Community.objects.all())
     building = ChainedModelChoiceField('community', reverse_lazy('zones:chained_building'), Building)
     term_type = ChoiceField(label='Class Level', choices=CLASS_LEVEL_CHOICES)
+    out_of_state = BooleanField(label='Out of State?', required=False)
