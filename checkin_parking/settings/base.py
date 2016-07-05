@@ -51,6 +51,7 @@ DATABASES = {
         'NAME': 'mercprd.db.calpoly.edu:1521/mercprd',
         'USER': get_env_variable('CHECKIN_PARKING_DB_RMS_USERNAME'),
         'PASSWORD': get_env_variable('CHECKIN_PARKING_DB_RMS_PASSWORD'),
+        'CONN_MAX_AGE': 500,
     },
 }
 
