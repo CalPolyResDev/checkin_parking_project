@@ -7,13 +7,13 @@
 """
 
 from clever_selects.form_fields import ModelChoiceField, ChainedModelMultipleChoiceField
-from django.forms.models import ModelForm
+from clever_selects.forms import ChainedChoicesModelForm
 from django.core.urlresolvers import reverse_lazy
 
 from .models import Zone, Community, Building
 
 
-class ZoneForm(ModelForm):
+class ZoneForm(ChainedChoicesModelForm):
     community = ModelChoiceField(queryset=Community.objects.all())
     buildings = ChainedModelMultipleChoiceField('community', reverse_lazy('zones:chained_building'), Building)
 
@@ -27,7 +27,6 @@ class ZoneForm(ModelForm):
 
         if self.instance and self.instance.id:
             self.fields["capacity"].widget.attrs['readonly'] = True
-            self.fields["capacity"].widget.attrs['disabled'] = True
         self.fields["community"].widget.attrs['autocomplete'] = "off"
         self.fields["buildings"].help_text = ""
 
