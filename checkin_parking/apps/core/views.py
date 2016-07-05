@@ -9,7 +9,7 @@
 from collections import defaultdict
 from datetime import date as datetime_date, datetime, timedelta
 import logging
-from operator import attrgetter
+from operator import attrgetter, itemgetter
 
 from django.conf import settings
 from django.template.context import RequestContext
@@ -51,6 +51,9 @@ class IndexView(TemplateView):
                 "out_of_state": first_reservation.out_of_state,
                 "buildings": ', '.join(first_reservation.zone.buildings.values_list('name', flat=True)),
             })
+
+        for community, reservation_slots in move_in_slot_dict.items():
+            reservation_slots.sort(key=itemgetter('date'))
 
         context["move_in_slot_dict"] = dict(move_in_slot_dict)  # Reason for conversion: https://code.djangoproject.com/ticket/16335
 
