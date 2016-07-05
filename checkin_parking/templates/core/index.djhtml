@@ -16,7 +16,7 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Times</th>
-                                <th>Out of State?</th>
+                                <th>Out of State Only?</th>
                                 <th>Class Level(s)</th>
                                 <th>Building(s)</th>
                             </tr>
