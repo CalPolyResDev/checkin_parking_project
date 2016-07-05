@@ -44,7 +44,7 @@ class PDFMapForm(Form):
 
 
 class BecomeStudentForm(ChainedChoicesForm):
-    community = ModelChoiceField(queryset=Community.objects.all())
-    building = ChainedModelChoiceField('community', reverse_lazy('zones:chained_building'), Building)
+    community = ModelChoiceField(queryset=Community.objects.all(), required=False)
+    building = ChainedModelChoiceField('community', reverse_lazy('zones:chained_building'), Building, required=False)
     term_type = ChoiceField(label='Class Level', choices=CLASS_LEVEL_CHOICES)
     out_of_state = BooleanField(label='Out of State?', required=False)
