@@ -41,5 +41,5 @@ class PDFMapForm(Form):
 
 
 class BecomeStudentForm(Form):
-    building = ModelChoiceField(label='Buildings', queryset=Building.objects.all())
+    building = ModelChoiceField(label='Buildings', queryset=Building.objects.all(), required=False)
     term_type = ChoiceField(label='Class Level', choices=CLASS_LEVEL_CHOICES)
