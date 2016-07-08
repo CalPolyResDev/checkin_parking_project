@@ -55,6 +55,7 @@ class CASLDAPBackend(CASBackend):
 
                 staff_list = [member["userPrincipalName"] for member in ADGroup(settings.LDAP_ADMIN_GROUP).get_tree_members()]
                 developer_list = [member["userPrincipalName"] for member in ADGroup(settings.LDAP_DEVELOPER_GROUP).get_tree_members()]
+                api_list = [member["userPrincipalName"] for member in ADGroup(settings.LDAP_API_GROUP).get_tree_members()]
 
                 # Add admin flag
                 if principal_name in staff_list:
@@ -64,6 +65,11 @@ class CASLDAPBackend(CASBackend):
                 if principal_name in developer_list:
                     user.is_staff = True
                     user.is_superuser = True
+                    user.is_api = True
+
+                # Add api flag
+                if principal_name in api_list:
+                    user.is_api = True
 
                 # Ensure that non-admins who log in are future residents
                 if not user.is_admin and not user.is_superuser:

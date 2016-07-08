@@ -17,6 +17,7 @@ from .views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPass
 
 app_name = 'reservations'
 
+
 urlpatterns = [
     url(r'^slots/generate/$', login_required(administrative_access(GenerateReservationSlotsView.as_view())), name='generate_reservation_slots'),
 

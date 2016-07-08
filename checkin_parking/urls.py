@@ -20,7 +20,10 @@ from django.views.defaults import permission_denied, page_not_found
 from django.views.generic import TemplateView
 
 from .apps.core.views import handler500
+from .apps.core.viewsets import CheckinParkingUserViewset
+from .apps.reservations.viewsets import ReservationSlotViewset, TimeSlotViewset
 from .settings.base import MAIN_APP_NAME
+from .apps.core.utils import DecoratorDefaultRouter
 
 
 def permissions_check(test_func, raise_exception=True):
@@ -49,6 +52,7 @@ def permissions_check(test_func, raise_exception=True):
     return user_passes_test(check_perms)
 
 administrative_access = permissions_check((lambda user: user.is_admin))
+api_access = permissions_check((lambda user: user.is_authenticated() and user.is_api))
 
 admin.autodiscover()
 admin.site.unregister(group_unregistered)
@@ -56,6 +60,11 @@ admin.site.unregister(group_unregistered)
 logger = logging.getLogger(__name__)
 
 handler500 = handler500
+
+rest_router = DecoratorDefaultRouter(api_access)
+rest_router.register('reservationslots', ReservationSlotViewset, 'reservationslot')
+rest_router.register('residents', CheckinParkingUserViewset, 'resident')
+rest_router.register('timeslots', TimeSlotViewset, 'timeslot')
 
 
 urlpatterns = [
@@ -65,6 +74,7 @@ urlpatterns = [
     url(r'^zones/', include(MAIN_APP_NAME + '.apps.zones.urls')),
     url(r'^statistics/', include(MAIN_APP_NAME + '.apps.statistics.urls')),
     url(r'^settings/', include(MAIN_APP_NAME + '.apps.administration.urls')),
+    url(r'^api/', include(rest_router.urls, namespace='api')),
     url(r'^', include(MAIN_APP_NAME + '.apps.core.urls')),
 ]
 

@@ -129,6 +129,7 @@ LDAP_GROUPS_GROUP_LOOKUP_ATTRIBUTE = 'name'
 LDAP_GROUPS_ATTRIBUTE_LIST = ['displayName', LDAP_GROUPS_USER_LOOKUP_ATTRIBUTE]
 
 LDAP_ADMIN_GROUP = 'CN=checkinparking,OU=Websites,OU=UH,OU=Manual,OU=Groups,' + LDAP_GROUPS_BASE_DN
+LDAP_API_GROUP = 'CN=checkinparkingapi,OU=Websites,OU=UH,OU=Manual,OU=Groups,' + LDAP_GROUPS_BASE_DN
 LDAP_DEVELOPER_GROUP = 'CN=UH-RN-DevTeam,OU=ResNet,OU=UH,OU=Manual,OU=Groups,' + LDAP_GROUPS_BASE_DN
 
 
@@ -208,6 +209,7 @@ INSTALLED_APPS = [
     'raven.contrib.django.raven_compat',
     'django_ajax',
     'clever_selects',
+    'rest_framework',
     'rmsconnector',
     MAIN_APP_NAME + '.apps.administration',
     MAIN_APP_NAME + '.apps.core',
@@ -215,6 +217,18 @@ INSTALLED_APPS = [
     MAIN_APP_NAME + '.apps.statistics',
     MAIN_APP_NAME + '.apps.zones',
 ]
+
+# ======================================================================================================== #
+#                                         REST Configuration                                               #
+# ======================================================================================================== #
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 # ======================================================================================================== #
 #                                         Logging Configuration                                            #
