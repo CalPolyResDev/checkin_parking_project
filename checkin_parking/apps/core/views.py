@@ -40,7 +40,7 @@ class IndexView(TemplateView):
         for date, reservation_slots in reservation_date_dict.items():
             reservation_slots.sort(key=attrgetter("timeslot.time"))
 
-            delta = (datetime.combine(datetime_date.today(), reservation_slots[-1].timeslot.time) + timedelta(minutes=timeslot_length)).time()
+            delta = datetime.combine(datetime_date.today(), reservation_slots[-1].timeslot.time)
 
             first_reservation = reservation_slots[0]
 
