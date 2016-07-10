@@ -9,7 +9,8 @@ from datetime import datetime
 
 
 from django.db.models.base import Model
-from django.db.models.fields import BooleanField, PositiveSmallIntegerField, CharField
+from django.db.models.fields import BooleanField, PositiveSmallIntegerField, CharField, DateField
+from django.utils import timezone
 
 from rmsconnector.utils import get_current_term
 
@@ -28,6 +29,7 @@ class AdminSettings(Model):
     application_term = CharField(default=APPLICATION_TERMS_CHOICES[0][0], choices=APPLICATION_TERMS_CHOICES, max_length=2)
     application_year = PositiveSmallIntegerField(default=datetime.now().year)
     timeslot_length = PositiveSmallIntegerField(default=40, verbose_name='Time Slot Length (in Minutes)')
+    reservation_close_day = DateField(default=timezone.now)
 
     objects = AdminSettingsManager()
 

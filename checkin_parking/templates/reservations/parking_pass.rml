@@ -8,7 +8,7 @@
                 <fill color="black"/>
                 <setFont name="Helvetica-Bold" size="16"/>
                 <drawRightString x="8in" y="10.2in">University Housing</drawRightString>
-                <drawRightString x="8in" y="9.85in">Checkin Registration Confirmation</drawRightString>
+                <drawRightString x="8in" y="9.85in">Mustang Move-in Pass</drawRightString>
                 <!--For Margins: <lines>.5in 0in .5in 11in 8in 0in 8in 11in 0in .5in 8.5in .5in 0in 10.5in 8.5in 10.5in 4.25in 0in 4.25in 11in</lines> -->
                 <rect x="1in" y="2.25in" height="3in" width="6.5in"/>
                 <barCode code="QR" x="6in" y="7.85in" value="{{ qr_code_url }}" height="2in" width="2in"/>
@@ -30,28 +30,26 @@
     
     <story>
         <h1>Resident: {{ resident_name }}</h1>
-        <h3>Instructions:</h3>
+        <h3>Print and bring this pass with you.</h3>
+        <para>
+            This pass is confirmation of your move-in arrival time and allows you access to your<br /> specific {{ timeslot_length}}-minute drop-off zone and our long-term parking areas.
+        </para>
+        <h3>Maps</h3>
+        <para>
+            Your specific campus entry point, drop-off zone, long-term parking and shuttle stop locations are <strong>based on your housing assignment. A detailed map
+            with this information will be emailed to you by Sept. 1.</strong>
+        </para>
+        <h3>Parking Regs. &amp; Tips</h3>
         <ul style="bullet_list">
-            <li>Print out this page and place it on your dashboard in a clearly visible location.</li>
-            <li>At your reserved time slot, proceed to your assigned short-term parking zone.</li>
-            <li>Check in at your building’s designated check-in area as shown on the map.</li>
-            <li style='important_instruction'>After you’ve finished unloading (but before this pass expires), 
-                please move your car to the long-term parking location as shown on the map.</li>
-        </ul>
-        <h3>Additional Rules:</h3>
-        <ul style="bullet_list">
-            <li>Only one move-in parking pass may be displayed at a time.</li>
-            <li>Any vehicle parked for longer than 40 minutes will be cited or towed away at owner's expense.</li> 
-            <li>No vehicles are permitted on any lawn areas or walkways at any time.</li>
+            <li>Vehicles parked in drop-off zones for more than {{ timeslot_length }} minutes will be cited or towed at the owner's expense.</li>
+            <li>Parking is permitted in designated long-term parking lots and shot-term metered spaces only.</li>
+            <li>Curbside parking is not permitted.</li>
             <li>Parking is never permitted in fire lanes or state vehicle spaces.</li>
         </ul>
-        <para style="additional_note" spaceBefore=".2in">
-            <strong>Additional passes may be acquired if needed at the check-in desk as space permits.</strong>
-        </para>
-        <para style="date" spaceBefore=".85in">{{ parking.date }}</para>
+        <para style="date" spaceBefore="1.25in">{{ parking.date }}</para>
         <para style="time_interval" spaceBefore=".05in">{{ parking.start|time:"h:iA" }} - {{ parking.end|time:"h:iA" }}</para>
         <para style="zone_and_building" spaceBefore=".25in">Zone: {{ parking.zone }}</para>
-        <para style="dashboard_note" spaceBefore="1in">Display on Dashboard</para>        
+        <para style="dashboard_note" spaceBefore="1in">Bring This Pass with You</para>        
     </story>
     
 </document>

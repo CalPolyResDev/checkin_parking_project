@@ -8,7 +8,9 @@
 
 from django.core import mail
 from django.core.mail import EmailMessage
+from django.utils import formats
 
+from ..administration.models import AdminSettings
 from .utils import generate_verification_url, generate_pdf_file
 
 
@@ -36,25 +38,29 @@ def send_confirmation_email_spooler(reservation_slot, verification_url):  # Need
     with mail.get_connection() as connection:
         message = EmailMessage()
         message.connection = connection
-        message.subject = 'Checkin Parking Reservation Confirmation'
+        message.subject = 'Your Mustang Move-in Pass'
         message.from_email = 'University Housing <resnet@calpoly.edu>'
         message.to = [reservation_slot.resident.email]
         message.reply_to = ['University Housing <resnet@calpoly.edu>']
-        message.attach('Parking Pass.pdf', generate_pdf_file(reservation_slot, verification_url), 'application/pdf')
-        message.body = 'Hi ' + reservation_slot.resident.full_name + """,
+        message.attach('Mustang Move-in Pass.pdf', generate_pdf_file(reservation_slot, verification_url), 'application/pdf')
+        message.body = 'Hello ' + reservation_slot.resident.full_name + """,
 
-Your parking slot has been successfully reserved and your parking pass is attached. Please be sure to print and place the parking pass on your dashboard.
+Your Cal Poly Fall move-in arrival time has been successfully reserved and your Mustang Move-in Pass is attached.
 
-Reservation Details:
+My Reservation:
 
-Date: """ + str(reservation_slot.timeslot.date) + """
-Start Time: """ + reservation_slot.timeslot.time.strftime('%I:%M%p') + """
-End Time: """ + reservation_slot.timeslot.end_time.strftime('%I:%M%p') + """
+Date: """ + formats.date_format(reservation_slot.timeslot.date) + """
+Start Time: """ + formats.time_format(reservation_slot.timeslot.time) + """
+End Time: """ + formats.time_format(reservation_slot.timeslot.end_time) + """
 Zone: """ + reservation_slot.zone.name + """
 
-If you need to make any changes to your reservation, please visit http://checkin.housing.calpoly.edu.
+Since there is no parking, and very limited unloading space near housing, please arrive on your designated day and time. This will help ensure a convenient move-in experience.
 
-Thank you,
+If you need to edit your reservation, go to: http://checkin.housing.calpoly.edu. You can edit your reservation until """ + formats.date_format(AdminSettings.objects.get_settings().reservation_close_day) + """.
+
+Please finalize your travel plans based on your final reservation.
+
+Go Mustangs!
 University Housing
 """
         message.send()

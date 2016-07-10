@@ -52,8 +52,8 @@
         <div id="mainLeftFull">
             <h1>Fall Mustang Move-in Signups</h1>
             {% if reservation_open %}
+                <p>Welcome Mustangs!</p>
                 <p>
-                    Welcome Mustangs!<br />
                     To ensure a safe & convenient move-in experience, residents must have a Mustang Move-in Pass. This pass is secured by <strong>signing up for a move-in arrival time</strong> for vehicle unloading, check-in, and
                     long-term parking on the following student move-in dates.
                 </p>
@@ -87,7 +87,7 @@
                         </tbody>
                     </table>
                 {% endfor %}
-                <p>Sign up and edit your reservation anytime between now and <strong>Monday, Aug. 29, 2016.</strong></p>
+                <p>Sign up and edit your reservation anytime between now and <strong>{{ reservation_close_day }}.</strong></p>
                 <p>Forget to sign up or can't decide? University Housing will assign a move-in arrival time for you in September.</p>
                 <p>Your Mustang Move-in Pass, with your move-in arrival time, will be provided upon sign up. A confirmation including the pass will also be emailed to you. Please finalize your travel plans based on your final reserved arrival time.</p>
 
