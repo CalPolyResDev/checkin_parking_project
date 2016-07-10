@@ -11,8 +11,11 @@
             View Reservation
         </h1>
         <h3>
-            Reservation Details
+            Your Reserved Arrival Time
         </h3>
+        <p>
+            Your reserved move-in arrival time is listed below. The last day to make or edit your reservation is <strong>{{ reservation_close_day }}</strong></p>
+        </p>
         <table border="1" class="table_directory">
             <tbody>
                 <tr>
@@ -36,7 +39,9 @@
             </tbody>
         </table>
         
-            <p>The links below are documents that contain your move-in date, time and location as well as instructions and a detailed map with directions to your move-in location. You must print out the parking pass and display it on your vehicle when you enter the 40 minute unloading zones.</p>
+        <p><a href="{% url 'reservations:generate_parking_pass' %}">Print your Mustang Move-in Pass now.</a> Your Mustang Move-in Pass will also be emailed to you.</p>
+        
+            <!-- <p>The links below are documents that contain your move-in date, time and location as well as instructions and a detailed map with directions to your move-in location. You must print out the parking pass and display it on your vehicle when you enter the 40 minute unloading zones.</p>
             <br /><h3>Information & Parking Pass</h3>
             <p>
             {% if reservationslot.zone.community.name == 'Poly Canyon Village' %}
@@ -56,7 +61,7 @@
             {% endif %}
             <br />
             <a href="{% url 'reservations:generate_parking_pass' %}">Move-in Registration Parking Pass (PDF)</a>
-            </p>
+            </p> -->
     </div>
 </div>
 {% endblock %}

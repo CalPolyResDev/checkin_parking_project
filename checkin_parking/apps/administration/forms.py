@@ -13,7 +13,7 @@ from clever_selects.form_fields import ChainedModelChoiceField
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse_lazy
 from django.forms import Form
-from django.forms.fields import FileField, ChoiceField, BooleanField
+from django.forms.fields import FileField, ChoiceField, BooleanField, DateField
 from django.forms.models import ModelChoiceField
 
 from rmsconnector.constants import FRESHMAN, TRANSFER, CONTINUING

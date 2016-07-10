@@ -5,15 +5,17 @@
 .. moduleauthor:: Alex Kavanaugh <alex@kavdev.io>
 
 """
-from datetime import datetime
+from datetime import date, datetime
 
 
 from django.db.models.base import Model
-from django.db.models.fields import BooleanField, PositiveSmallIntegerField, CharField
+from django.db.models.fields import PositiveSmallIntegerField, CharField, DateField
+from django.utils import timezone
 
 from rmsconnector.utils import get_current_term
 
 from .managers import AdminSettingsManager
+from django.utils.functional import cached_property
 
 
 class AdminSettings(Model):
@@ -23,13 +25,17 @@ class AdminSettings(Model):
                                  ('SP', 'Spring'),
                                  ('SU', 'Summer')]
 
-    reservation_open = BooleanField(default=True, verbose_name='Reservation Open')
     term_code = PositiveSmallIntegerField(default=get_current_term(), verbose_name='Term Code')
     application_term = CharField(default=APPLICATION_TERMS_CHOICES[0][0], choices=APPLICATION_TERMS_CHOICES, max_length=2)
     application_year = PositiveSmallIntegerField(default=datetime.now().year)
     timeslot_length = PositiveSmallIntegerField(default=40, verbose_name='Time Slot Length (in Minutes)')
+    reservation_close_day = DateField(default=timezone.now)
 
     objects = AdminSettingsManager()
+
+    @cached_property
+    def reservation_open(self):
+        return date.today() <= self.reservation_close_day
 
     class Meta:
         verbose_name = "Admin Settings"

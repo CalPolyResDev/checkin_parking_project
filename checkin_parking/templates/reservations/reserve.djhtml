@@ -1,13 +1,19 @@
 {% extends "base.djhtml" %}
 {% load staticfiles %}
 
-{% block subtitle %} | Zones{% endblock %}
+{% block subtitle %} | Reserve{% endblock %}
 
 {% block content %}
     <div id="content">
         <div id="mainLeftFull">
-            <h1>{% if change_reservation %}Change Reservation{% else %}Available Slots{% endif %}</h1>
-            <p>Please pick one of the below available times.</p>
+            <h1>{% if change_reservation %}Change Reservation{% else %}Mustang Move-in Arrival Times{% endif %}</h1>
+            <p>Please select a move-in arrival time from the options below:</p>
+            {% if request.user.out_of_state %}
+                <p>
+                    <strong>Out-of-State Students:</strong> Your move-in day is Friday, Sept. 16 to allow you to attend the required SLODays session over the weekend. Please select a Friday arrival time unless
+                    you will or have attended your SLODays session at Cal Poly in July or August.
+                </p>
+            {% endif %}
             <table border="1" class="table_directory">
                 <tbody>
                     <tr>
