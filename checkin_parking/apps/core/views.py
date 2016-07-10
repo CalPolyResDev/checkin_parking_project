@@ -44,10 +44,10 @@ class IndexView(TemplateView):
 
             first_reservation = reservation_slots[0]
 
-            move_in_slot_dict[first_reservation.zone.community.name].append({
+            move_in_slot_dict[first_reservation.class_level].append({
                 "date": date,
                 "time_range": first_reservation.timeslot.time.strftime(settings.PYTHON_TIME_FORMAT) + " - " + delta.strftime(settings.PYTHON_TIME_FORMAT),
-                "class_level": first_reservation.class_level,
+                "community": first_reservation.zone.community.name,
                 "out_of_state": first_reservation.out_of_state,
                 "buildings": ', '.join(first_reservation.zone.buildings.values_list('name', flat=True)),
             })
