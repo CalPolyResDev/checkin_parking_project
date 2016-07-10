@@ -8,10 +8,11 @@
 
 from pathlib import Path
 
-from clever_selects.views import ChainedSelectFormViewMixin
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView, UpdateView
+
+from clever_selects.views import ChainedSelectFormViewMixin
 
 from ...settings.base import MEDIA_ROOT
 from ..reservations.models import TimeSlot, ReservationSlot
@@ -22,7 +23,7 @@ from .models import AdminSettings
 class AdminSettingsUpdateView(UpdateView):
     template_name = 'administration/admin_settings.djhtml'
     model = AdminSettings
-    fields = ['reservation_open', 'term_code', 'timeslot_length', 'application_term', 'application_year', 'reservation_close_day']
+    fields = ['term_code', 'timeslot_length', 'application_term', 'application_year', 'reservation_close_day']
     success_url = reverse_lazy('administration:settings')
 
     def get_object(self, queryset=None):
