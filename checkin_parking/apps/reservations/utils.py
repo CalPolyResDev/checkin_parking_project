@@ -33,7 +33,7 @@ def generate_pdf_file(reservation_slot, verification_url):
     }
 
     context['resident_name'] = reservation_slot.resident.full_name
-    context['cal_poly_logo_path'] = Path(MEDIA_ROOT).joinpath('pdf_assets/cp_logo.gif')
+    context['cal_poly_logo_path'] = Path(MEDIA_ROOT).joinpath('pdf_assets/cp_sa_uh_logo.jpg')
     context['parking'] = parking
     context['qr_code_url'] = verification_url
     context['timeslot_length'] = AdminSettings.objects.get_settings().timeslot_length
