@@ -10,7 +10,7 @@
             <p>Please select a move-in arrival time from the options below:</p>
             {% if request.user.out_of_state %}
                 <p>
-                    <strong>Out-of-State Students:</strong> your move-in day is Friday, Sept. 16 to allow you to attend the requires SLODays session over the weekend. Please select a Friday arrival time unless
+                    <strong>Out-of-State Students:</strong> Your move-in day is Friday, Sept. 16 to allow you to attend the requires SLODays session over the weekend. Please select a Friday arrival time unless
                     you will have attended your SLODays session at Cal Poly in July or August.
                 </p>
             {% endif %}
