@@ -57,7 +57,7 @@
                     To ensure a safe & convenient move-in experience, residents must have a Mustang Move-in Pass. This pass is secured by <strong>signing up for a move-in arrival time</strong> for vehicle unloading, check-in, and
                     long-term parking on the following student move-in dates.
                 </p>
-                <h3>Move-in Dates (Subject to Change)</h3>
+                <h3>Move-in Dates</h3>
                 {% for class_level, move_in_slot_list in move_in_slot_dict.items %}
                     <table border="1" class="table_directory">
                         <caption>
