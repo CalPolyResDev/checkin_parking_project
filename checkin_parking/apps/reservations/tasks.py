@@ -54,7 +54,7 @@ Start Time: """ + formats.time_format(reservation_slot.timeslot.time) + """
 End Time: """ + formats.time_format(reservation_slot.timeslot.end_time) + """
 Zone: """ + reservation_slot.zone.name + """
 
-Since there is no parking, and very limited unloading space near housing, please arrive on your designated day and time. This will help ensure a convenient move-in experience.
+Since there is very limited space for unloading, and no parking near or adjacent to housing, please arrive on your designated day and time. This will help ensure a convenient move-in experience.
 
 If you need to edit your reservation, go to: http://checkin.housing.calpoly.edu. You can edit your reservation until """ + formats.date_format(AdminSettings.objects.get_settings().reservation_close_day) + """.
 
