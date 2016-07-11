@@ -8,19 +8,15 @@
 
 from collections import defaultdict
 from datetime import date as datetime_date, datetime, timedelta
-from operator import attrgetter, itemgetter
 import logging
+from operator import attrgetter, itemgetter
 
 from django.conf import settings
-from django.contrib.auth import authenticate, login
-from django.core.exceptions import PermissionDenied
-from django.http.response import HttpResponse
 from django.template.context import RequestContext
 from django.views.generic import TemplateView
 
 from ..administration.models import AdminSettings
 from ..reservations.models import ReservationSlot
-
 
 logger = logging.getLogger(__name__)
 
@@ -84,15 +80,3 @@ def handler500(request):
         logger.exception(exc)
 
     return HttpResponseServerError(template.render(context))
-
-
-def api_login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-            return HttpResponse()
-    else:
-        raise PermissionDenied

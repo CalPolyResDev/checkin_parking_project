@@ -74,7 +74,6 @@ urlpatterns = [
     url(r'^zones/', include(MAIN_APP_NAME + '.apps.zones.urls')),
     url(r'^statistics/', include(MAIN_APP_NAME + '.apps.statistics.urls')),
     url(r'^settings/', include(MAIN_APP_NAME + '.apps.administration.urls')),
-    url(r'^api_login/', api_login, name='api_login')
     url(r'^api/', include(rest_router.urls, namespace='api')),
     url(r'^', include(MAIN_APP_NAME + '.apps.core.urls')),
 ]
