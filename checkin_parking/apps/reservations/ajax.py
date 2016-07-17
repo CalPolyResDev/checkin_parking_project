@@ -24,9 +24,11 @@ def reserve_slot(request):
 
     try:
         ReservationSlot.objects.get(resident=request.user)
-        raise ValidationError('You have already reserved a slot. Please refresh this page.')
+        if not change_reservation:
+            raise ValidationError('You have already reserved a slot. Please refresh this page.')
     except ReservationSlot.DoesNotExist:
-        pass
+        if change_reservation:
+            raise ValidationError('Cannot change reservation as none exists. Please refresh this page.')
 
     base_queryset = ReservationSlot.objects.filter(timeslot__id=slot_id, resident=None)
 

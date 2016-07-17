@@ -18,6 +18,7 @@ def reservation_status(request):
 
     extra_context["reservation_open"] = admin_settings.reservation_open
     extra_context["timeslot_length"] = admin_settings.timeslot_length
+    extra_context["reservation_close_day"] = admin_settings.reservation_close_day
 
     return extra_context
 

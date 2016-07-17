@@ -10,6 +10,8 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 
+from clever_selects.views import ChainedSelectFormViewMixin
+
 from .forms import ZoneForm
 from .models import Zone
 
@@ -19,14 +21,14 @@ class ZoneListView(ListView):
     model = Zone
 
 
-class ZoneCreateView(CreateView):
+class ZoneCreateView(ChainedSelectFormViewMixin, CreateView):
     template_name = "zones/create_zone.djhtml"
     form_class = ZoneForm
     model = Zone
     success_url = reverse_lazy('zones:list_zones')
 
 
-class ZoneUpdateView(UpdateView):
+class ZoneUpdateView(ChainedSelectFormViewMixin, UpdateView):
     pk_url_kwarg = 'id'
     template_name = "zones/update_zone.djhtml"
     form_class = ZoneForm

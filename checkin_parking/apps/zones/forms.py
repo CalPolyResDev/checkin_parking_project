@@ -7,27 +7,26 @@
 """
 
 from clever_selects.form_fields import ModelChoiceField, ChainedModelMultipleChoiceField
-from django.forms.models import ModelForm
+from clever_selects.forms import ChainedChoicesModelForm
 from django.core.urlresolvers import reverse_lazy
 
 from .models import Zone, Community, Building
 
 
-class ZoneForm(ModelForm):
+class ZoneForm(ChainedChoicesModelForm):
     community = ModelChoiceField(queryset=Community.objects.all())
     buildings = ChainedModelMultipleChoiceField('community', reverse_lazy('zones:chained_building'), Building)
 
     def __init__(self, *args, **kwargs):
         super(ZoneForm, self).__init__(*args, **kwargs)
 
-        self.fields["name"].error_messages = {'required': 'A zone name is required.'}
-        self.fields["capacity"].error_messages = {'required': 'A capacity is required.'}
-        self.fields["community"].error_messages = {'required': 'A community is required.'}
-        self.fields["buildings"].error_messages = {'required': 'At least one building must be selected.'}
+        self.fields["name"].error_messages['required'] = 'A zone name is required.'
+        self.fields["capacity"].error_messages['required'] = 'A capacity is required.'
+        self.fields["community"].error_messages['required'] = 'A community is required.'
+        self.fields["buildings"].error_messages['required'] = 'At least one building must be selected.'
 
         if self.instance and self.instance.id:
             self.fields["capacity"].widget.attrs['readonly'] = True
-            self.fields["capacity"].widget.attrs['disabled'] = True
         self.fields["community"].widget.attrs['autocomplete'] = "off"
         self.fields["buildings"].help_text = ""
 

@@ -14,6 +14,7 @@ from django.template.loader import get_template
 import trml2pdf
 
 from ...settings.base import MEDIA_ROOT
+from ..administration.models import AdminSettings
 
 
 def generate_verification_url(reservation_slot, request):
@@ -31,10 +32,11 @@ def generate_pdf_file(reservation_slot, verification_url):
         'zone': reservation_slot.zone.name,
     }
 
-    context['resident_name'] = reservation_slot.resident.full_name
-    context['cal_poly_logo_path'] = Path(MEDIA_ROOT).joinpath('pdf_assets/cp_logo.gif')
+    context['resident'] = reservation_slot.resident
+    context['cal_poly_logo_path'] = Path(MEDIA_ROOT).joinpath('pdf_assets/cp_sa_uh_logo.jpg')
     context['parking'] = parking
     context['qr_code_url'] = verification_url
+    context['timeslot_length'] = AdminSettings.objects.get_settings().timeslot_length
 
     template = get_template('reservations/parking_pass.rml')
 

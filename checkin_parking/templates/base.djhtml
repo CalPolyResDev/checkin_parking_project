@@ -56,7 +56,7 @@
                         <a href="http://www.calpoly.edu/" ><img src="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/images_html/header/cp_logo.jpg" alt="Cal Poly, San Luis Obispo" height="75" width="150" /></a>
                     </div>
                     <div style="width: auto;" id="deptName">
-                        <h2><a href="{% url 'core:home' %}">University Housing - Parking Reservation</a></h2>
+                        <h2><a href="{% url 'core:home' %}">University Housing</a></h2>
 
                         <h3>Embrace Your Unlimited Possibilities</h3>
                     </div>
@@ -102,7 +102,11 @@
                           <li><a href="{% url 'administration:update_maps' %}">Update Parking Maps</a></li>
                         </ul>
                     </li>
-                    <!-- <li><a href="{% url 'statistics:statistics' %}">Statistics</a></li> -->
+                    <li><a>Statistics</a>
+                        <ul>
+                            <li><a href="{% url 'statistics:csv' %}">Download CSV</a></li>
+                        </ul>
+                    </li>
                     <li><a>Settings</a>
                         <ul>
                            <li><a href="{% url 'administration:settings' %}">Edit Settings</a></li>
@@ -127,7 +131,7 @@
                 </ul>
                 <div id="footer_deptinfo">
                     <p>
-                        &copy; 2015 ResNet Development Team
+                        &copy; {% now "Y" %} ResNet Development Team
                         <br />
                         California Polytechnic State University &nbsp;<img src="https://webresource.its.calpoly.edu/cpwebtemplate/5.0.1/common/images_html/footer/footer_separator.jpg" alt="" height="10" width="1" />&nbsp; San Luis Obispo, California 93407
                         <br />

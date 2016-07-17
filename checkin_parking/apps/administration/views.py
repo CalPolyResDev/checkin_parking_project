@@ -12,6 +12,8 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView, UpdateView
 
+from clever_selects.views import ChainedSelectFormViewMixin
+
 from ...settings.base import MEDIA_ROOT
 from ..reservations.models import TimeSlot, ReservationSlot
 from .forms import PDFMapForm, BecomeStudentForm
@@ -21,7 +23,7 @@ from .models import AdminSettings
 class AdminSettingsUpdateView(UpdateView):
     template_name = 'administration/admin_settings.djhtml'
     model = AdminSettings
-    fields = ['reservation_open', 'term_code', 'timeslot_length', 'application_term', 'application_year']
+    fields = ['term_code', 'timeslot_length', 'application_term', 'application_year', 'reservation_close_day']
     success_url = reverse_lazy('administration:settings')
 
     def get_object(self, queryset=None):
@@ -81,15 +83,16 @@ class PDFMapUploadView(FormView):
         return super(FormView, self).form_valid(form)
 
 
-class BecomeStudentView(FormView):
+class BecomeStudentView(ChainedSelectFormViewMixin, FormView):
     template_name = "administration/become_student.djhtml"
     form_class = BecomeStudentForm
     success_url = reverse_lazy('administration:become_student')
 
     def form_valid(self, form):
         user = self.request.user
-        user.building = form.cleaned_data['building'].name
+        user.building = form.cleaned_data['building']
         user.term_type = form.cleaned_data['term_type']
+        user.out_of_state = form.cleaned_data['out_of_state']
         user.save()
 
         return super(BecomeStudentView, self).form_valid(form)

@@ -74,10 +74,15 @@ class CASLDAPBackend(CASBackend):
                     except ObjectDoesNotExist:
                         raise ValidationError("University Housing has no record of {principal_name}.".format(principal_name=principal_name))
                     else:
-                        if not resident.has_valid_and_current_application(application_term=admin_settings.application_term, application_year=admin_settings.application_year):
+                        if not resident.has_current_and_valid_application(application_term=admin_settings.application_term, application_year=admin_settings.application_year):
                             raise ValidationError("{principal_name} does not have a valid housing application.".format(principal_name=principal_name))
 
-                        user.building = Building.objects.get(name=resident.address_dict['building'], community__name=resident.address_dict['community']) if resident.address_dict['building'] else None
+                        try:
+                            user.building = Building.objects.get(name=resident.address_dict['building'].replace('_',' '), community__name=resident.address_dict['community']) if resident.address_dict['building'] else None
+                        except ObjectDoesNotExist:
+                            user.building = None
+                            logger.warning('Could not retrieve building: ' + str(resident.address_dict['building']) + ' with community ' + str(resident.address_dict['community']))
+
                         user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
                         user.out_of_state = resident.is_out_of_state
                 else:
