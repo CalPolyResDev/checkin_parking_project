@@ -67,6 +67,18 @@ class CheckinParkingUser(AbstractBaseUser, PermissionsMixin):
     def dn(self):
         return "CN=" + self.username.split("@", 1)[0] + "," + settings.LDAP_GROUPS_USER_BASE_DN
 
+    @cached_property
+    def is_freshman(self):
+        return True if self.term_type == 'Freshman' else False
+
+    @cached_property
+    def is_continuing(self):
+        return True if self.term_type == 'Continuing' else False
+
+    @cached_property
+    def is_transfer(self):
+        return True if self.term_type == 'Transfer' else False
+
     def email_user(self, subject, message, from_email=None):
         """Sends an email to this user."""
 
