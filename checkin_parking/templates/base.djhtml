@@ -102,7 +102,11 @@
                           <li><a href="{% url 'administration:update_maps' %}">Update Parking Maps</a></li>
                         </ul>
                     </li>
-                    <!-- <li><a href="{% url 'statistics:statistics' %}">Statistics</a></li> -->
+                    <li><a>Statistics</a>
+                        <ul>
+                            <li><a href="{% url 'statistics:csv' %}">Download CSV</a></li>
+                        </ul>
+                    </li>
                     <li><a>Settings</a>
                         <ul>
                            <li><a href="{% url 'administration:settings' %}">Edit Settings</a></li>
