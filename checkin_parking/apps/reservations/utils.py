@@ -32,7 +32,7 @@ def generate_pdf_file(reservation_slot, verification_url):
         'zone': reservation_slot.zone.name,
     }
 
-    context['resident_name'] = reservation_slot.resident.full_name
+    context['resident'] = reservation_slot.resident
     context['cal_poly_logo_path'] = Path(MEDIA_ROOT).joinpath('pdf_assets/cp_sa_uh_logo.jpg')
     context['parking'] = parking
     context['qr_code_url'] = verification_url
