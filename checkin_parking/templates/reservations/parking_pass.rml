@@ -42,7 +42,7 @@
         <h3>Parking Regs. &amp; Tips</h3>
         <ul style="bullet_list">
             <li>Vehicles parked in drop-off zones for more than {{ timeslot_length }} minutes will be cited or towed at the owner's expense.</li>
-            <li>Parking is permitted in designated long-term parking lots and shot-term metered spaces only.</li>
+            <li>Parking is permitted in designated long-term parking lots and short-term metered spaces only.</li>
 {% if resident.is_freshman %}
             <li>Curbside parking is not permitted.</li>
             <li>Parking is never permitted in fire lanes or state vehicle spaces.</li>
