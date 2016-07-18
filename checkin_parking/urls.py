@@ -16,8 +16,11 @@ from django.contrib import admin
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import Group as group_unregistered
 from django.core.exceptions import PermissionDenied
+from django.views.decorators.cache import cache_page
 from django.views.defaults import permission_denied, page_not_found
 from django.views.generic import TemplateView
+
+from django_js_reverse.views import urls_js
 
 from .apps.core.views import handler500
 from .settings.base import MAIN_APP_NAME
@@ -65,6 +68,7 @@ urlpatterns = [
     url(r'^zones/', include(MAIN_APP_NAME + '.apps.zones.urls')),
     url(r'^statistics/', include(MAIN_APP_NAME + '.apps.statistics.urls')),
     url(r'^settings/', include(MAIN_APP_NAME + '.apps.administration.urls')),
+    url(r'^jsreverse/$', cache_page(3600)(urls_js), name='js_reverse'),
     url(r'^', include(MAIN_APP_NAME + '.apps.core.urls')),
 ]
 

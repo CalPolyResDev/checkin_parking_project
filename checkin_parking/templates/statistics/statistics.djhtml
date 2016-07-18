@@ -1,0 +1,75 @@
+{% extends "base.djhtml" %}
+
+{% load staticfiles %}
+
+{% block meta %}
+{{ block.super }}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.min.css" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/jqueryui/jqueryui-1.8.22.cp.css' %}" rel="stylesheet" type="text/css" />
+    
+    <style>
+        td {
+            text-align: right;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div id="mainLeftFull">
+            <h1>Statistics</h1>
+                <h2>At-a-Glance:</h2>
+                    <br />
+                    <table border="1" class="table_directory">
+                        <tbody>
+                            {% for description, value in overall_stats %}
+                            <tr>
+                                <th style="width: 70%;">{{ description }}</th>
+                                <td>{{ value }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                <h2>Charts</h2>
+                    <br />
+                    <h3>By Zone:</h3>
+                    <span id="zone_chart" style="height: 200px;">
+                    </span>
+                    <h3>By Class Level:</h3>
+                    <span id="class_level_chart" style="height: 200px;">
+                    </span>
+                    <h3>By Residency:</h3>
+                    <span id="residency_chart" style="height: 200px;">
+                    </span>
+                    <h3>Options:</h3>
+                    <p>
+                        Date to Display:
+                        <input type="radio" name="display-date" value="all" checked> All
+                        <input type="radio" name="display-date" id="use-custom-date" value="custom"> Custom:
+                        <input type="text" name="custom-display-date" id="custom-display-date">
+                        <button onclick="refreshCharts();">Update</button>
+                    </p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script %}
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.min.js"></script>
+    <script>
+        var spinnerURL = '{% static "images/spinner.gif" %}';
+    </script>    
+    <script src="{% static 'js/statistics.js' %}?v=1.0"></script>
+    <script>
+        $(document).ready(function() {
+            refreshCharts();
+            
+            $("#custom-display-date").datepicker({
+                minDate: 0,
+                dateFormat: 'yy-mm-dd',
+            });
+        });
+    </script>
+{% endblock %}
+

@@ -207,6 +207,7 @@ INSTALLED_APPS = [
     'raven.contrib.django.raven_compat',
     'django_ajax',
     'clever_selects',
+    'django_js_reverse',
     'rmsconnector',
     MAIN_APP_NAME + '.apps.administration',
     MAIN_APP_NAME + '.apps.core',

@@ -12,5 +12,6 @@ django.setup()
 
 # Import any functions with uWSGI decorators here:
 from .apps.reservations import tasks  # noqa
+from .apps.core import tasks  # noqa
 
 application = Sentry(WSGIHandler())

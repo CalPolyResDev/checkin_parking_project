@@ -5,14 +5,18 @@
 .. moduleauthor:: Thomas Willson <thomas.willson@icloud.com>
 
 """
-from datetime import datetime
+from datetime import datetime, timezone
 import csv
 import io
 
 from django.http.response import HttpResponse
 from django.views.generic.base import TemplateView
+from django_datatables_view.mixins import JSONResponseView
 
-from ..reservations.models import ReservationSlot
+from ..administration.forms import CLASS_LEVELS
+from ..reservations.models import ReservationSlot, TimeSlot
+from ..zones.models import Zone
+from .utils import add_overnight_points, generate_series, modify_query_for_date
 
 
 class CSVStatisticsView(TemplateView):
@@ -56,3 +60,107 @@ class CSVStatisticsView(TemplateView):
         response.write(csv_data)
 
         return response
+
+
+class StatisticsPage(TemplateView):
+    template_name = 'statistics/statistics.djhtml'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        reservations_filled = ReservationSlot.objects.filter(resident__isnull=False).count()
+        total_reservation_slots = ReservationSlot.objects.all().count()
+
+        overall_stats = [
+            ('Reservations', reservations_filled),
+            ('Freshman Reservations', ReservationSlot.objects.filter(resident__term_type='Freshman').count()),
+            ('Continuing Reservations', ReservationSlot.objects.filter(resident__term_type='Continuing').count()),
+            ('Transfer Reservations', ReservationSlot.objects.filter(resident__term_type='Transfer').count()),
+            ('% Full', '{:.2%}'.format(reservations_filled / total_reservation_slots)),
+            ('Out-of-State Reservations', ReservationSlot.objects.filter(resident__out_of_state=True).count()),
+            ('Out-of-State Reservations in Out-of-State Only Slots', ReservationSlot.objects.filter(out_of_state=True, resident__isnull=False).count()),
+        ]
+
+        context['overall_stats'] = overall_stats
+
+        return context
+
+
+class ZoneChartData(JSONResponseView):
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        series = []
+
+        for zone in Zone.objects.all():
+            data_points = []
+
+            for timeslot in modify_query_for_date(TimeSlot.objects.filter(reservationslots__zone=zone).distinct().order_by('date', 'time'), kwargs):
+                data_points.append([
+                    datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
+                    timeslot.reservationslots.filter(resident__isnull=False).count(),
+                ])
+
+            add_overnight_points(data_points)
+
+            series.append(generate_series(zone.name, data_points, 'area'))
+
+        context['data'] = series
+
+        return context
+
+
+class ClassLevelChartData(JSONResponseView):
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        series = []
+
+        for class_level in CLASS_LEVELS:
+            data_points = []
+
+            for timeslot in modify_query_for_date(TimeSlot.objects.filter(reservationslots__class_level=class_level).distinct().order_by('date', 'time'), kwargs):
+                data_points.append([
+                    datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
+                    timeslot.reservationslots.filter(resident__isnull=False).count(),
+                ])
+
+            add_overnight_points(data_points)
+
+            series.append(generate_series(class_level, data_points, 'area'))
+
+        context['data'] = series
+
+        return context
+
+
+class ResidencyChartData(JSONResponseView):
+
+    def get_context_data(self, **kwargs):
+        context = {}
+
+        in_state_points = []
+        out_of_state_points = []
+
+        for timeslot in modify_query_for_date(TimeSlot.objects.all().order_by('date', 'time'), kwargs):
+            in_state_points.append([
+                datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
+                timeslot.reservationslots.filter(resident__out_of_state=False).count(),
+            ])
+
+            out_of_state_points.append([
+                datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
+                timeslot.reservationslots.filter(resident__out_of_state=True).count(),
+            ])
+
+        add_overnight_points(in_state_points)
+        add_overnight_points(out_of_state_points)
+
+        series = [
+            generate_series('In State', in_state_points, 'area'),
+            generate_series('Out of State', out_of_state_points, 'area'),
+        ]
+
+        context['data'] = series
+
+        return context

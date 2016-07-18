@@ -104,6 +104,7 @@
                     </li>
                     <li><a>Statistics</a>
                         <ul>
+                            <li><a href="{% url 'statistics:index' %}">View</a></li>
                             <li><a href="{% url 'statistics:csv' %}">Download CSV</a></li>
                         </ul>
                     </li>
@@ -145,6 +146,7 @@
         {% if request %}
             {% clever_selects_js_import %}
         {% endif %}
+        <script src="{% url 'js_reverse' %}" type="text/javascript"></script>
         {% block extra_script %}{% endblock %}
     </body>
 </html>
