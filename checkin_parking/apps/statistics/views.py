@@ -76,7 +76,7 @@ class StatisticsPage(TemplateView):
             ('Freshman Reservations', ReservationSlot.objects.filter(resident__term_type='Freshman').count()),
             ('Continuing Reservations', ReservationSlot.objects.filter(resident__term_type='Continuing').count()),
             ('Transfer Reservations', ReservationSlot.objects.filter(resident__term_type='Transfer').count()),
-            ('% Full', '%.2f%%' % (reservations_filled * 100 / total_reservation_slots)),
+            ('% Full', '{:.2%}'.format(reservations_filled / total_reservation_slots)),
             ('Out-of-State Reservations', ReservationSlot.objects.filter(resident__out_of_state=True).count()),
             ('Out-of-State Reservations in Out-of-State Only Slots', ReservationSlot.objects.filter(out_of_state=True, resident__isnull=False).count()),
         ]
