@@ -6,6 +6,12 @@
 {{ block.super }}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.min.css" rel="stylesheet" type="text/css" />
     <link href="{% static 'css/jqueryui/jqueryui-1.8.22.cp.css' %}" rel="stylesheet" type="text/css" />
+    
+    <style>
+        td {
+            text-align: right;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
