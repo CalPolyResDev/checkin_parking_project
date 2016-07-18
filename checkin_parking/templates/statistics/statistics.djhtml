@@ -6,21 +6,32 @@
     <div id="content">
         <div id="mainLeftFull">
             <h1>Statistics</h1>
-                <h3>At-a-Glance:</h3>
-                <table border="1" class="table_directory">
-                    <tbody>
-                        {% for description, value in overall_stats %}
-                        <tr>
-                            <th style="width: 70%;">{{ description }}</th>
-                            <td>{{ value }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <h3>Interactive:</h3>
-                <span id="chart" style="height: 200px;">
-                    <p style="text-align: center;">Loading... <img style="height: 10px; width: 10px;" src="{% static "images/spinner.gif" %}"></img></p>
-                </span>
+                <h2>At-a-Glance:</h2>
+                    <br />
+                    <table border="1" class="table_directory">
+                        <tbody>
+                            {% for description, value in overall_stats %}
+                            <tr>
+                                <th style="width: 70%;">{{ description }}</th>
+                                <td>{{ value }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                <h2>Charts</h2>
+                    <br />
+                    <h3>By Zone:</h3>
+                    <span id="zone_chart" style="height: 200px;">
+                        <p style="text-align: center;">Loading... <img style="height: 10px; width: 10px;" src="{% static "images/spinner.gif" %}"></img></p>
+                    </span>
+                    <h3>By Class Level:</h3>
+                    <span id="class_level_chart" style="height: 200px;">
+                        <p style="text-align: center;">Loading... <img style="height: 10px; width: 10px;" src="{% static "images/spinner.gif" %}"></img></p>
+                    </span>
+                    <h3>By Residency:</h3>
+                    <span id="residency_chart" style="height: 200px;">
+                        <p style="text-align: center;">Loading... <img style="height: 10px; width: 10px;" src="{% static "images/spinner.gif" %}"></img></p>
+                    </span>
         </div>
     </div>
 {% endblock %}
@@ -30,7 +41,9 @@
     <script src="{% static 'js/statistics.js' %}?v=1.0"></script>
     <script>
         $(document).ready(function() {
-            displayChart('#chart', "{% url 'statistics:chart_data' %}"); 
+            displayChart('#zone_chart', "{% url 'statistics:zone_chart_data' %}");
+            displayChart('#class_level_chart', "{% url 'statistics:class_level_chart_data' %}");
+            displayChart('#residency_chart', "{% url 'statistics:residency_chart_data' %}");
         });
     </script>
 {% endblock %}

@@ -33,7 +33,7 @@ function displayChart(jquerySelector, datasourceURL) {
             },
             yAxis: {
                 title: {
-                    text: null
+                    text: 'Reservation Count'
                 }
             },
             credits: {

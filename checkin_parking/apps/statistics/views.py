@@ -6,18 +6,17 @@
 
 """
 from datetime import datetime, timezone
-from operator import itemgetter
 import csv
 import io
-import statistics
 
 from django.http.response import HttpResponse
 from django.views.generic.base import TemplateView
 from django_datatables_view.mixins import JSONResponseView
 
-from ..administration.models import AdminSettings
+from ..administration.forms import CLASS_LEVELS
 from ..reservations.models import ReservationSlot, TimeSlot
 from ..zones.models import Zone
+from .utils import add_overnight_points, generate_series
 
 
 class CSVStatisticsView(TemplateView):
@@ -87,7 +86,7 @@ class StatisticsPage(TemplateView):
         return context
 
 
-class ChartData(JSONResponseView):
+class ZoneChartData(JSONResponseView):
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -102,26 +101,65 @@ class ChartData(JSONResponseView):
                     timeslot.reservationslots.filter(resident__isnull=False).count(),
                 ])
 
-            # Insert points at beginning and end of day so overnight shows as having 0 reservations
-            points_to_add = []
-            timeslot_length = AdminSettings.objects.get_settings().timeslot_length * 60 * 1000
-            for index in range(1, len(data_points)):
-                if data_points[index][0] - data_points[index - 1][0] > timeslot_length:
-                    points_to_add.append((index, data_points[index - 1][0] + timeslot_length, data_points[index][0] - 1))
+            add_overnight_points(data_points)
 
-            for point in sorted(points_to_add, key=itemgetter(0), reverse=True):
-                data_points.insert(point[0], (point[2], 0))
-                data_points.insert(point[0], (point[1], 0))
+            series.append(generate_series(zone.name, data_points, 'area'))
 
-            series.append({
-                'avg': statistics.mean([point[1] for point in data_points]),
-                'min': min(data_points, key=itemgetter(1))[1],
-                'max': max(data_points, key=itemgetter(1))[1],
-                'last': data_points[-1][1],
-                'name': zone.name,
-                'data': data_points,
-                'type': 'line',
-            })
+        context['data'] = series
+
+        return context
+
+
+class ClassLevelChartData(JSONResponseView):
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        series = []
+
+        for class_level in CLASS_LEVELS:
+            data_points = []
+
+            for timeslot in TimeSlot.objects.filter(reservationslots__class_level=class_level).distinct().order_by('date', 'time'):
+                data_points.append([
+                    datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
+                    timeslot.reservationslots.filter(resident__isnull=False).count(),
+                ])
+
+            add_overnight_points(data_points)
+
+            series.append(generate_series(class_level, data_points, 'area'))
+
+        context['data'] = series
+
+        return context
+
+
+class ResidencyChartData(JSONResponseView):
+
+    def get_context_data(self, **kwargs):
+        context = {}
+
+        in_state_points = []
+        out_of_state_points = []
+
+        for timeslot in TimeSlot.objects.all().order_by('date', 'time'):
+            in_state_points.append([
+                datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
+                timeslot.reservationslots.filter(resident__out_of_state=False).count(),
+            ])
+
+            out_of_state_points.append([
+                datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
+                timeslot.reservationslots.filter(resident__out_of_state=True).count(),
+            ])
+
+        add_overnight_points(in_state_points)
+        add_overnight_points(out_of_state_points)
+
+        series = [
+            generate_series('In State', in_state_points, 'area'),
+            generate_series('Out of State', out_of_state_points, 'area'),
+        ]
 
         context['data'] = series
 
