@@ -13,8 +13,18 @@ if (!String.prototype.format) {
     }
 }
 
+function refreshCharts() {
+    var urlArgs = {date: $('#use-custom-date').prop('checked') ? $('#custom-display-date').val() : ''};
+    console.log(urlArgs);
+    displayChart('#zone_chart', DjangoReverse['statistics:zone_chart_data'](urlArgs));
+    displayChart('#class_level_chart', DjangoReverse['statistics:class_level_chart_data'](urlArgs));
+    displayChart('#residency_chart', DjangoReverse['statistics:residency_chart_data'](urlArgs));
+}
 
-function displayChart(jquerySelector, datasourceURL) {    
+
+function displayChart(jquerySelector, datasourceURL) {
+    $(jquerySelector).html('<p style="text-align: center;">Loading... <img style="height: 10px; width: 10px;" src="' + spinnerURL + '"></img></p>');
+     
     $.get(datasourceURL, function(response) {   
         $(jquerySelector).html('');
         $(jquerySelector).highcharts({

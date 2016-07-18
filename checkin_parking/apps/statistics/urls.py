@@ -18,7 +18,7 @@ app_name = 'statistics'
 urlpatterns = [
     url(r'^$', login_required(administrative_access(StatisticsPage.as_view())), name='index'),
     url(r'^csv/$', login_required(administrative_access(CSVStatisticsView.as_view())), name='csv'),
-    url(r'^zone_chart_data/$', login_required(administrative_access(ZoneChartData.as_view())), name='zone_chart_data'),
-    url(r'^class_level_chart_data/$', login_required(administrative_access(ClassLevelChartData.as_view())), name='class_level_chart_data'),
-    url(r'^residency_chart_data/$', login_required(administrative_access(ResidencyChartData.as_view())), name='residency_chart_data'),
+    url(r'^zone_chart_data/(?P<date>[a-zA-Z0-9-]*)/$', login_required(administrative_access(ZoneChartData.as_view())), name='zone_chart_data'),
+    url(r'^class_level_chart_data/(?P<date>[a-zA-Z0-9-]*)/$', login_required(administrative_access(ClassLevelChartData.as_view())), name='class_level_chart_data'),
+    url(r'^residency_chart_data/(?P<date>[a-zA-Z0-9-]*)/$', login_required(administrative_access(ResidencyChartData.as_view())), name='residency_chart_data'),
 ]

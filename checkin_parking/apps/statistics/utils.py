@@ -6,6 +6,7 @@
 
 """
 
+from datetime import datetime
 from operator import itemgetter
 from statistics import mean
 
@@ -36,3 +37,10 @@ def generate_series(series_name, data_points, display_type):
         'data': data_points,
         'type': display_type,
     }
+
+
+def modify_query_for_date(query, kwargs):
+    if kwargs['date']:
+        query = query.filter(date=datetime.strptime(kwargs['date'], '%Y-%m-%d'))
+
+    return query

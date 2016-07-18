@@ -16,7 +16,7 @@ from django_datatables_view.mixins import JSONResponseView
 from ..administration.forms import CLASS_LEVELS
 from ..reservations.models import ReservationSlot, TimeSlot
 from ..zones.models import Zone
-from .utils import add_overnight_points, generate_series
+from .utils import add_overnight_points, generate_series, modify_query_for_date
 
 
 class CSVStatisticsView(TemplateView):
@@ -95,7 +95,7 @@ class ZoneChartData(JSONResponseView):
         for zone in Zone.objects.all():
             data_points = []
 
-            for timeslot in TimeSlot.objects.filter(reservationslots__zone=zone).distinct().order_by('date', 'time'):
+            for timeslot in modify_query_for_date(TimeSlot.objects.filter(reservationslots__zone=zone).distinct().order_by('date', 'time'), kwargs):
                 data_points.append([
                     datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
                     timeslot.reservationslots.filter(resident__isnull=False).count(),
@@ -119,7 +119,7 @@ class ClassLevelChartData(JSONResponseView):
         for class_level in CLASS_LEVELS:
             data_points = []
 
-            for timeslot in TimeSlot.objects.filter(reservationslots__class_level=class_level).distinct().order_by('date', 'time'):
+            for timeslot in modify_query_for_date(TimeSlot.objects.filter(reservationslots__class_level=class_level).distinct().order_by('date', 'time'), kwargs):
                 data_points.append([
                     datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
                     timeslot.reservationslots.filter(resident__isnull=False).count(),
@@ -142,7 +142,7 @@ class ResidencyChartData(JSONResponseView):
         in_state_points = []
         out_of_state_points = []
 
-        for timeslot in TimeSlot.objects.all().order_by('date', 'time'):
+        for timeslot in modify_query_for_date(TimeSlot.objects.all().order_by('date', 'time'), kwargs):
             in_state_points.append([
                 datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
                 timeslot.reservationslots.filter(resident__out_of_state=False).count(),
