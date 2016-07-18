@@ -104,6 +104,7 @@
                     </li>
                     <li><a>Statistics</a>
                         <ul>
+                            <li><a href="{% url 'statistics:index' %}">View</a></li>
                             <li><a href="{% url 'statistics:csv' %}">Download CSV</a></li>
                         </ul>
                     </li>

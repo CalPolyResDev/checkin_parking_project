@@ -1,0 +1,37 @@
+{% extends "base.djhtml" %}
+
+{% load staticfiles %}
+
+{% block content %}
+    <div id="content">
+        <div id="mainLeftFull">
+            <h1>Statistics</h1>
+                <h3>At-a-Glance:</h3>
+                <table border="1" class="table_directory">
+                    <tbody>
+                        {% for description, value in overall_stats %}
+                        <tr>
+                            <th style="width: 70%;">{{ description }}</th>
+                            <td>{{ value }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <h3>Interactive:</h3>
+                <span id="chart" style="height: 200px;">
+                    <p style="text-align: center;">Loading... <img style="height: 10px; width: 10px;" src="{% static "images/spinner.gif" %}"></img></p>
+                </span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_script %}
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="{% static 'js/statistics.js' %}?v=1.0"></script>
+    <script>
+        $(document).ready(function() {
+            displayChart('#chart', "{% url 'statistics:chart_data' %}"); 
+        });
+    </script>
+{% endblock %}
+
