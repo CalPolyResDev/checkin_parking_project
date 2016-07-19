@@ -47,6 +47,11 @@
                         <input type="radio" name="display-date" value="all" checked> All
                         <input type="radio" name="display-date" id="use-custom-date" value="custom"> Custom:
                         <input type="text" name="custom-display-date" id="custom-display-date">
+                        <br />
+                        Reservation Count Type:
+                        <input type="radio" name="count-type" value="reserved" checked> Reserved
+                        <input type="radio" name="count-type" id="show-remaining" value="remaining"> Remaining
+                        <br /><br />
                         <button onclick="refreshCharts();">Update</button>
                     </p>
         </div>
@@ -60,7 +65,7 @@
     <script>
         var spinnerURL = '{% static "images/spinner.gif" %}';
     </script>    
-    <script src="{% static 'js/statistics.js' %}?v=1.0"></script>
+    <script src="{% static 'js/statistics.js' %}?v=1.1"></script>
     <script>
         $(document).ready(function() {
             refreshCharts();

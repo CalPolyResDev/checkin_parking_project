@@ -89,6 +89,8 @@ class StatisticsPage(TemplateView):
 class ZoneChartData(JSONResponseView):
 
     def get_context_data(self, **kwargs):
+        resident_null = True if kwargs['show_remaining'] == 'True' else False
+
         context = {}
         series = []
 
@@ -98,7 +100,7 @@ class ZoneChartData(JSONResponseView):
             for timeslot in modify_query_for_date(TimeSlot.objects.filter(reservationslots__zone=zone).distinct().order_by('date', 'time'), kwargs):
                 data_points.append([
                     datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
-                    timeslot.reservationslots.filter(resident__isnull=False).count(),
+                    timeslot.reservationslots.filter(resident__isnull=resident_null).count(),
                 ])
 
             add_overnight_points(data_points)
@@ -113,6 +115,8 @@ class ZoneChartData(JSONResponseView):
 class ClassLevelChartData(JSONResponseView):
 
     def get_context_data(self, **kwargs):
+        resident_null = True if kwargs['show_remaining'] == 'True' else False
+
         context = {}
         series = []
 
@@ -122,7 +126,7 @@ class ClassLevelChartData(JSONResponseView):
             for timeslot in modify_query_for_date(TimeSlot.objects.filter(reservationslots__class_level=class_level).distinct().order_by('date', 'time'), kwargs):
                 data_points.append([
                     datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
-                    timeslot.reservationslots.filter(resident__isnull=False).count(),
+                    timeslot.reservationslots.filter(resident__isnull=resident_null).count(),
                 ])
 
             add_overnight_points(data_points)
@@ -137,6 +141,8 @@ class ClassLevelChartData(JSONResponseView):
 class ResidencyChartData(JSONResponseView):
 
     def get_context_data(self, **kwargs):
+        resident_null = True if kwargs['show_remaining'] == 'True' else False
+
         context = {}
 
         in_state_points = []
@@ -145,12 +151,12 @@ class ResidencyChartData(JSONResponseView):
         for timeslot in modify_query_for_date(TimeSlot.objects.all().order_by('date', 'time'), kwargs):
             in_state_points.append([
                 datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
-                timeslot.reservationslots.filter(resident__out_of_state=False).count(),
+                timeslot.reservationslots.filter(resident__isnull=resident_null, out_of_state=False).count(),
             ])
 
             out_of_state_points.append([
                 datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
-                timeslot.reservationslots.filter(resident__out_of_state=True).count(),
+                timeslot.reservationslots.filter(resident__isnull=resident_null, out_of_state=True).count(),
             ])
 
         add_overnight_points(in_state_points)

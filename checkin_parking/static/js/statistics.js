@@ -14,8 +14,11 @@ if (!String.prototype.format) {
 }
 
 function refreshCharts() {
-    var urlArgs = {date: $('#use-custom-date').prop('checked') ? $('#custom-display-date').val() : ''};
-    console.log(urlArgs);
+    var urlArgs = {
+        date: $('#use-custom-date').prop('checked') ? $('#custom-display-date').val() : '',
+        show_remaining: $('#show-remaining').prop('checked') ? 'True' : 'False'
+    };
+
     displayChart('#zone_chart', DjangoReverse['statistics:zone_chart_data'](urlArgs));
     displayChart('#class_level_chart', DjangoReverse['statistics:class_level_chart_data'](urlArgs));
     displayChart('#residency_chart', DjangoReverse['statistics:residency_chart_data'](urlArgs));
