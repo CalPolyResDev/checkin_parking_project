@@ -61,7 +61,14 @@
                 {% for class_level, move_in_slot_list in move_in_slot_dict.items %}
                     <table border="1" class="table_directory">
                         <caption>
-                            <strong>{{ class_level }} Residents</strong><br />
+                            {% if 'Freshman/Transfer' != class_level %}
+                            <strong>{{ class_level }} Residents</strong>
+                            <!-- 2016 Transfer Wording Change Code Below, remove for future years. -->
+                            {% else %}
+                                <strong>Freshman Residents</strong><br />
+                                <strong>Transfer/Graduate Students (Those who requested Winter Break Housing only)</strong>
+                            {% endif %}
+                            <!-- End Wording Change --> 
                         </caption>
                         <tbody>
                             <tr>
