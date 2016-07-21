@@ -122,8 +122,14 @@ class ClassLevelChartData(JSONResponseView):
 
         for class_level in CLASS_LEVELS:
             data_points = []
+            timeslot_kwargs = {}
 
-            for timeslot in modify_query_for_date(TimeSlot.objects.filter(reservationslots__class_level__contains=class_level).distinct().order_by('date', 'time'), kwargs):
+            if not resident_null:
+                timeslot_kwargs['reservationslots__resident__term_type'] = class_level
+            else:
+                timeslot_kwargs['reservationslots__class_level__contains'] = class_level
+
+            for timeslot in modify_query_for_date(TimeSlot.objects.filter(**timeslot_kwargs).distinct().order_by('date', 'time'), kwargs):
                 data_points.append([
                     datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
                     timeslot.reservationslots.filter(resident__isnull=resident_null).count(),
