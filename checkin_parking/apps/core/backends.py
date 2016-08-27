@@ -85,7 +85,7 @@ class CASLDAPBackend(CASBackend):
 
                         user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
                         application = resident.current_and_valid_application(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
-                        slo_days = application.user_defined_text_3 is not None and application.user_defined_text_3.contains('SLO Days 9/17')
+                        slo_days = application.user_defined_text_3 is not None and 'SLO Days 9/17' in application.user_defined_text_3
                         user.out_of_state = resident.is_out_of_state or slo_days
                 else:
                     user.building = None
