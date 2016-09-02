@@ -122,11 +122,19 @@ class ClassLevelChartData(JSONResponseView):
 
         for class_level in CLASS_LEVELS:
             data_points = []
+            timeslot_kwargs = {}
+            reservationslot_kwargs = {'resident__isnull': resident_null}
 
-            for timeslot in modify_query_for_date(TimeSlot.objects.filter(reservationslots__class_level__contains=class_level).distinct().order_by('date', 'time'), kwargs):
+            if not resident_null:
+                timeslot_kwargs['reservationslots__resident__term_type'] = class_level
+                reservationslot_kwargs['resident__term_type'] = class_level
+            else:
+                timeslot_kwargs['reservationslots__class_level__contains'] = class_level
+
+            for timeslot in modify_query_for_date(TimeSlot.objects.filter(**timeslot_kwargs).distinct().order_by('date', 'time'), kwargs):
                 data_points.append([
                     datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
-                    timeslot.reservationslots.filter(resident__isnull=resident_null).count(),
+                    timeslot.reservationslots.filter(**reservationslot_kwargs).distinct().count(),
                 ])
 
             add_overnight_points(data_points)
@@ -148,15 +156,25 @@ class ResidencyChartData(JSONResponseView):
         in_state_points = []
         out_of_state_points = []
 
+        in_state_filter_kwargs = {'resident__isnull': resident_null}
+        out_of_state_filter_kwargs = {'resident__isnull': resident_null}
+
+        if not resident_null:
+            in_state_filter_kwargs['resident__out_of_state'] = False
+            out_of_state_filter_kwargs['resident__out_of_state'] = True
+        else:
+            in_state_filter_kwargs['out_of_state'] = False
+            out_of_state_filter_kwargs['out_of_state'] = True
+
         for timeslot in modify_query_for_date(TimeSlot.objects.all().order_by('date', 'time'), kwargs):
             in_state_points.append([
                 datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
-                timeslot.reservationslots.filter(resident__isnull=resident_null, out_of_state=False).count(),
+                timeslot.reservationslots.filter(**in_state_filter_kwargs).count(),
             ])
 
             out_of_state_points.append([
                 datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
-                timeslot.reservationslots.filter(resident__isnull=resident_null, out_of_state=True).count(),
+                timeslot.reservationslots.filter(**out_of_state_filter_kwargs).count(),
             ])
 
         add_overnight_points(in_state_points)
