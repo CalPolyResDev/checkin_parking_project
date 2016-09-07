@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.db.models.base import Model
 from django.db.models.deletion import SET_NULL
-from django.db.models.fields import CharField, DateField, TimeField, PositiveSmallIntegerField, BooleanField
+from django.db.models.fields import CharField, DateField, TimeField, PositiveSmallIntegerField, BooleanField, DateTimeField
 from django.db.models.fields.related import ForeignKey, OneToOneField
 from django.utils.functional import cached_property
 
@@ -59,6 +59,8 @@ class ReservationSlot(Model):
     resident = OneToOneField(CheckinParkingUser, null=True, blank=True, related_name="reservationslot", verbose_name="Resident", on_delete=SET_NULL)
 
     objects = DefaultRelatedManager(select_related=["timeslot", "zone", "resident"])
+
+    last_scanned = DateTimeField(IsNull = True)
 
     def __str__(self):
         return str(self.timeslot) + " - " + str(self.zone) + ": " + (str(self.resident) if self.resident else "Open")
