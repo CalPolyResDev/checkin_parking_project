@@ -54,11 +54,16 @@ class CASLDAPBackend(CASBackend):
                 principal_name = str(user_info["userPrincipalName"])
 
                 staff_list = [member["userPrincipalName"] for member in ADGroup(settings.LDAP_ADMIN_GROUP).get_tree_members()]
+                scanner_list = [member["userPrincipalName"] for member in ADGroup(settings.LDAP_SCANNER_GROUP).get_tree_members()]
                 developer_list = [member["userPrincipalName"] for member in ADGroup(settings.LDAP_DEVELOPER_GROUP).get_tree_members()]
 
                 # Add admin flag
                 if principal_name in staff_list:
                     user.is_admin = True
+                
+                # Add QR scanner flag (stats will be saved)
+                if principal_name in scanner_list:
+                    user.is_scanner = True
 
                 # Add superuser flags
                 if principal_name in developer_list:

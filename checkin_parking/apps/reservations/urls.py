@@ -9,7 +9,7 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 
-from ...urls import administrative_access
+from ...urls import administrative_access, scanner_access
 from ..core.views import IndexView
 from .ajax import reserve_slot, cancel_reservation, delete_timeslot
 from .views import GenerateReservationSlotsView, ParkingPassPDFView, ParkingPassVerificationView, ReserveView, ViewReservationView, ChangeReservationView, TimeSlotListView
@@ -31,5 +31,6 @@ urlpatterns = [
     url(r'^ajax/cancel/$', login_required(cancel_reservation), name='cancel_reservation'),
 
     url(r'^parking-pass/generate/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
-    url(r'^parking-pass/verify/(?P<reservation_id>\d+)/(?P<user_id>\d+)/$', ParkingPassVerificationView.as_view(), name='verify_parking_pass'),
+    url(r'^parking-pass/verify/(?P<reservation_id>\d+)/(?P<user_id>\d+)/$', login_required(scanner_access(ParkingPassVerificationView.as_view())), name='verify_parking_pass'),
 ]
+#we probably want the old view accessible without being in the checkinparkingscanner ldap group...

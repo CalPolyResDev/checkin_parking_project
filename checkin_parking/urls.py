@@ -52,6 +52,7 @@ def permissions_check(test_func, raise_exception=True):
     return user_passes_test(check_perms)
 
 administrative_access = permissions_check((lambda user: user.is_admin))
+scanner_access = permissions_check((lambda user: user.is_scanner))
 
 admin.autodiscover()
 admin.site.unregister(group_unregistered)
