@@ -21,6 +21,7 @@ from ..administration.models import AdminSettings
 from ..core.managers import DefaultRelatedManager
 from ..core.models import CheckinParkingUser
 from ..zones.models import Zone
+from django.db.models.lookups import IsNull
 
 
 CLASS_LEVELS = [FRESHMAN, TRANSFER, CONTINUING,
@@ -71,7 +72,7 @@ class ReservationSlot(Model):
 
     objects = DefaultRelatedManager(select_related=["timeslot", "zone", "resident"])
 
-    last_scanned = DateTimeField(IsNull = True)
+    last_scanned = DateTimeField(blank = True)
     last_scanned_on_time = NullBooleanField()
 
     def __str__(self):
