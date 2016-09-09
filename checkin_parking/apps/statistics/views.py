@@ -199,35 +199,22 @@ class QRChartData(JSONResponseView):
         on_time_points = []
         off_time_points = []
 
-        on_time_filter_kwargs = {'resident__isnull': resident_null}
-        off_time_filter_kwargs = {'resident__isnull': resident_null}
-
-        if not resident_null:
-            in_state_filter_kwargs['resident__out_of_state'] = False
-            out_of_state_filter_kwargs['resident__out_of_state'] = True
-        else:
-            in_state_filter_kwargs['out_of_state'] = False
-            out_of_state_filter_kwargs['out_of_state'] = True
-
         for timeslot in modify_query_for_date(TimeSlot.objects.all().order_by('date', 'time'), kwargs):
-            in_state_points.append([
+            on_time_points.append([
                 datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
-                timeslot.reservationslots.filter(**in_state_filter_kwargs).count(),
+                timeslot.reservationslots.filter(resident__isnull=resident_null, last_scanned_on_time=True).count(),
             ])
 
-            out_of_state_points.append([
+            off_time_points.append([
                 datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
-                timeslot.reservationslots.filter(**out_of_state_filter_kwargs).count(),
+                timeslot.reservationslots.filter(resident__isnull=resident_null, last_scanned_on_time=False).count(),
             ])
-
-        add_overnight_points(in_state_points)
-        add_overnight_points(out_of_state_points)
 
         series = [
-            generate_series('In State', in_state_points, 'area'),
-            generate_series('Out of State', out_of_state_points, 'area'),
+            generate_series('On-Time Scans', on_time_points, 'area'),
+            generate_series('Off-Time Scans', off_time_points, 'area'),
         ]
 
         context['data'] = series
 
-        return context    
+        return context
