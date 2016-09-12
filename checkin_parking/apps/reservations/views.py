@@ -93,11 +93,10 @@ class ParkingPassVerificationView(TemplateView):
 
         context['parking_pass_valid'] = valid_pass
 
-        reservation_slot.last_scanned = datetime.datetime.now()
-
         if valid_pass:
+            reservation_slot.last_scanned = datetime.now()
             timeslot = reservation_slot.timeslot
-            if timeslot.datetime_obj <= datetime.datetime.now() & timeslot.end_datetime_obj >= datetime.datetime.now():
+            if timeslot.datetime_obj <= datetime.now() & timeslot.end_datetime_obj >= datetime.now():
                 reservation_slot.last_scanned_on_time = True
             else:
                 reservation_slot.last_scanned_on_time = False
