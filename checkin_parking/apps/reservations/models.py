@@ -71,7 +71,7 @@ class ReservationSlot(Model):
 
     objects = DefaultRelatedManager(select_related=["timeslot", "zone", "resident"])
 
-    last_scanned = DateTimeField(null=True)
+    last_scanned = DateTimeField(null=True, blank=True)
     last_scanned_on_time = NullBooleanField()
 
     def __str__(self):
