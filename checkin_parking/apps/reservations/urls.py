@@ -33,4 +33,3 @@ urlpatterns = [
     url(r'^parking-pass/generate/$', login_required(ParkingPassPDFView.as_view()), name='generate_parking_pass'),
     url(r'^parking-pass/verify/(?P<reservation_id>\d+)/(?P<user_id>\d+)/$', login_required(scanner_access(ParkingPassVerificationView.as_view())), name='verify_parking_pass'),
 ]
-#we probably want the old view accessible without being in the checkinparkingscanner ldap group...

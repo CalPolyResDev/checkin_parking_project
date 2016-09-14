@@ -83,6 +83,8 @@ class ParkingPassVerificationView(TemplateView):
         user_id = int(kwargs['user_id'])
         valid_pass = True
         context['scanned_on_time'] = False
+        context['scanned_early'] = False
+        context['num_minutes_early'] = 0
         
         try:
             reservation_slot = ReservationSlot.objects.get(id=reservation_id)
@@ -102,6 +104,10 @@ class ParkingPassVerificationView(TemplateView):
                 context['scanned_on_time'] = True
             else:
                 reservation_slot.last_scanned_on_time = False
+                if timeslot.datetime_obj < datetime.now():
+                    context['scanned_early'] = True
+                    time_delta = datetime.now() - timeslot.datetime_obj
+                    context['num_minutes_early'] = int(round(time_delta.seconds / 60))
             reservation_slot.save()
 
         return context
