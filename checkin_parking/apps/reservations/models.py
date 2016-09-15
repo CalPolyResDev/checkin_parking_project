@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from django.conf import settings
 from django.db.models.base import Model
 from django.db.models.deletion import SET_NULL
-from django.db.models.fields import CharField, DateField, TimeField, PositiveSmallIntegerField, BooleanField
+from django.db.models.fields import CharField, DateField, TimeField, PositiveSmallIntegerField, BooleanField, DateTimeField, NullBooleanField
 from django.db.models.fields.related import ForeignKey, OneToOneField
 from django.utils.functional import cached_property
 
@@ -42,8 +42,19 @@ class TimeSlot(Model):
         return datetime.strftime(combined, settings.PYTHON_DATETIME_FORMAT)
 
     @cached_property
+    def datetime_obj(self):
+        combined = datetime.combine(self.date, self.time)
+        return combined
+
+    @cached_property
     def end_time(self):
         return (datetime.combine(datetime.today(), self.time) + timedelta(minutes=AdminSettings.objects.get_settings().timeslot_length)).time()
+
+    @cached_property
+    def end_datetime_obj(self):
+        combined = datetime.combine(self.date, self.time)
+        combined += timedelta(minutes=AdminSettings.objects.get_settings().timeslot_length)
+        return combined
 
     def __str__(self):
         return self.datetime + " (" + str(self.term_code) + ")"
@@ -59,6 +70,9 @@ class ReservationSlot(Model):
     resident = OneToOneField(CheckinParkingUser, null=True, blank=True, related_name="reservationslot", verbose_name="Resident", on_delete=SET_NULL)
 
     objects = DefaultRelatedManager(select_related=["timeslot", "zone", "resident"])
+
+    last_scanned = DateTimeField(null=True, blank=True)
+    last_scanned_on_time = NullBooleanField()
 
     def __str__(self):
         return str(self.timeslot) + " - " + str(self.zone) + ": " + (str(self.resident) if self.resident else "Open")

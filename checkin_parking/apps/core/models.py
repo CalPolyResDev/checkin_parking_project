@@ -50,6 +50,7 @@ class CheckinParkingUser(AbstractBaseUser, PermissionsMixin):
     is_active = BooleanField(default=True)
     is_staff = BooleanField(default=False)
     is_admin = BooleanField(default=False)
+    is_scanner = BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
     objects = CheckinParkingUserManager()
