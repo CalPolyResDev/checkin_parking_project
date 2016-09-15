@@ -6,6 +6,14 @@
 	        <h1>Parking Pass Verification</h1>
             {% if parking_pass_valid %}
                 <h2 style="font-size: 250%;">VALID</h2>
+                {% if scanned_on_time %}
+                    <h2 style="font-size: 200%;">Scanned within timeslot</h2>
+                {% else %}
+                    <h2 style="color: red; font-size: 200%;">Scanned outside of timeslot</h2>
+                    {% if scanned_early %}
+                        <h2 style="color: green; font-size: 150%;">Resident is {{ num_minutes_early }} minutes early</h2>
+                    {% endif %}
+                {% endif %}
             {% else %}
                 <h2 style="color: red; font-size: 250%;">INVALID</h2>
             {% endif %}

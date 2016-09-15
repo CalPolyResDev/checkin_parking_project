@@ -41,6 +41,9 @@
                     <h3>By Residency:</h3>
                     <span id="residency_chart" style="height: 200px;">
                     </span>
+                    <h3>QR Scanning:</h3>
+                    <span id="qr_chart" style="height: 200px;">
+                    </span>                    
                     <h3>Options:</h3>
                     <p>
                         Date to Display:

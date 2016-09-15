@@ -188,3 +188,33 @@ class ResidencyChartData(JSONResponseView):
         context['data'] = series
 
         return context
+    
+class QRChartData(JSONResponseView):
+
+    def get_context_data(self, **kwargs):
+        resident_null = True if kwargs['show_remaining'] == 'True' else False
+
+        context = {}
+
+        on_time_points = []
+        off_time_points = []
+
+        for timeslot in modify_query_for_date(TimeSlot.objects.all().order_by('date', 'time'), kwargs):
+            on_time_points.append([
+                datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
+                timeslot.reservationslots.filter(resident__isnull=resident_null, last_scanned_on_time=True).count(),
+            ])
+
+            off_time_points.append([
+                datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
+                timeslot.reservationslots.filter(resident__isnull=resident_null, last_scanned_on_time=False).count(),
+            ])
+
+        series = [
+            generate_series('On-Time Scans', on_time_points, 'area'),
+            generate_series('Off-Time Scans', off_time_points, 'area'),
+        ]
+
+        context['data'] = series
+
+        return context
