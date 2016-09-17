@@ -71,10 +71,6 @@ class StatisticsPage(TemplateView):
         reservations_filled = ReservationSlot.objects.filter(resident__isnull=False).count()
         total_reservation_slots = ReservationSlot.objects.all().count()
 
-        #qrstats_num_scanned = ReservationSlot.objects.filter(resident__isnull=False, last_scanned__isnull=False).count()
-        #qrstats_num_scanned_on_time = ReservationSlot.objects.filter(resident__isnull=False, last_scanned_on_time=True).count()
-        #qrstats_num_scanned_off_time = ReservationSlot.objects.filter(resident__isnull=False, last_scanned_on_time=False).count()
-        
         reservation_slots_scanned_off_time = ReservationSlot.objects.filter(resident__isnull=False, last_scanned_on_time=False)
         qrstats_num_scanned_off_time_early = 0
         qrstats_num_scanned_off_time_late = 0
