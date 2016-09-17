@@ -233,3 +233,42 @@ class QRChartData(JSONResponseView):
         context['data'] = series
 
         return context
+
+class OffTimeData(JSONResponseView):
+
+    def get_context_data(self, **kwargs):
+        resident_null = True if kwargs['show_remaining'] == 'True' else False
+
+        context = {}
+        
+        early_points = []
+        late_points = []
+
+        for timeslot in modify_query_for_date(TimeSlot.objects.all().order_by('date', 'time'), kwargs):    
+            reservation_slots_scanned_off_time = timeslot.reservationslots.filter(resident__isnull=resident_null, last_scanned_on_time=False)
+            qrstats_num_scanned_off_time_early = 0
+            qrstats_num_scanned_off_time_late = 0
+            for off_time_scan in reservation_slots_scanned_off_time:
+                if off_time_scan.timeslot.datetime_obj < off_time_scan.last_scanned:
+                    qrstats_num_scanned_off_time_early += 1
+                else:
+                    qrstats_num_scanned_off_time_late += 1
+
+            early_points.append([
+                datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
+                qrstats_num_scanned_off_time_early,
+            ])
+
+            late_points.append([
+                datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
+                qrstats_num_scanned_off_time_late,
+            ])
+
+        series = [
+            generate_series('Scanned before timeslot', early_points, 'area'),
+            generate_series('Scanned after timeslot', late_points, 'area'),
+        ]
+
+        context['data'] = series
+
+        return context

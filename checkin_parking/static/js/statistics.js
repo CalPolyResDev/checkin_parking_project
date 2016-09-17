@@ -23,6 +23,7 @@ function refreshCharts() {
     displayChart('#class_level_chart', DjangoReverse['statistics:class_level_chart_data'](urlArgs));
     displayChart('#residency_chart', DjangoReverse['statistics:residency_chart_data'](urlArgs));
     displayChart('#qr_chart', DjangoReverse['statistics:qr_chart_data'](urlArgs));
+    displayChart('#off_time_chart', DjangoReverse['statistics:off_time_chart_data'](urlArgs));
 }
 
 
