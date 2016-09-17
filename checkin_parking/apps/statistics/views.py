@@ -71,6 +71,16 @@ class StatisticsPage(TemplateView):
         reservations_filled = ReservationSlot.objects.filter(resident__isnull=False).count()
         total_reservation_slots = ReservationSlot.objects.all().count()
 
+        reservation_slots_scanned_off_time = ReservationSlot.objects.filter(resident__isnull=False, last_scanned_on_time=False)
+        qrstats_num_scanned_off_time_early = 0
+        qrstats_num_scanned_off_time_late = 0
+        
+        for off_time_scan in reservation_slots_scanned_off_time:
+            if off_time_scan.timeslot.datetime_obj < off_time_scan.last_scanned:
+                qrstats_num_scanned_off_time_early += 1
+            else:
+                qrstats_num_scanned_off_time_late += 1
+
         overall_stats = [
             ('Reservations', reservations_filled),
             ('Freshman Reservations', ReservationSlot.objects.filter(resident__term_type='Freshman').count()),
@@ -79,6 +89,11 @@ class StatisticsPage(TemplateView):
             ('% Full', '{:.2%}'.format(reservations_filled / total_reservation_slots)),
             ('Out-of-State Reservations', ReservationSlot.objects.filter(resident__out_of_state=True).count()),
             ('Out-of-State Reservations in Out-of-State Only Slots', ReservationSlot.objects.filter(out_of_state=True, resident__isnull=False).count()),
+            ('QRStats Scanned', ReservationSlot.objects.filter(resident__isnull=False, last_scanned__isnull=False).count()),
+            ('QRStats Scanned On-Time', ReservationSlot.objects.filter(resident__isnull=False, last_scanned_on_time=True).count()),
+            ('QRStats Scanned Off-Time', ReservationSlot.objects.filter(resident__isnull=False, last_scanned_on_time=False).count()),
+            ('QRStats Scanned Off-Time & Early', qrstats_num_scanned_off_time_early),
+            ('QRStats Scanned Off-Time & Late', qrstats_num_scanned_off_time_late),
         ]
 
         context['overall_stats'] = overall_stats
