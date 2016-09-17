@@ -60,7 +60,7 @@ class CASLDAPBackend(CASBackend):
                 # Add admin flag
                 if principal_name in staff_list:
                     user.is_admin = True
-                
+
                 # Add QR scanner flag (stats will be saved)
                 if principal_name in scanner_list:
                     user.is_scanner = True
@@ -71,7 +71,7 @@ class CASLDAPBackend(CASBackend):
                     user.is_superuser = True
 
                 # Ensure that non-admins who log in are future residents
-                if not user.is_admin and not user.is_superuser:
+                if not user.is_admin and not user.is_scanner and not user.is_superuser:
                     admin_settings = AdminSettings.objects.get_settings()
 
                     try:
