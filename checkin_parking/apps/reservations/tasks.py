@@ -62,5 +62,6 @@ Please finalize your travel plans based on your final reservation.
 
 Go Mustangs!
 University Housing
+Cal Poly
 """
         message.send()

@@ -39,7 +39,7 @@
             </tbody>
         </table>
         
-        <p><a href="{% url 'reservations:generate_parking_pass' %}">Print your Mustang Move-in Pass now.</a> Your Mustang Move-in Pass will also be emailed to you.</p>
+        <p><a href="{% url 'reservations:generate_parking_pass' %}"><u>Print your Mustang Move-in Pass now.</u></a> Your Mustang Move-in Pass will also be emailed to you.</p>
         
             <!-- <p>The links below are documents that contain your move-in date, time and location as well as instructions and a detailed map with directions to your move-in location. You must print out the parking pass and display it on your vehicle when you enter the 40 minute unloading zones.</p>
             <br /><h3>Information & Parking Pass</h3>
