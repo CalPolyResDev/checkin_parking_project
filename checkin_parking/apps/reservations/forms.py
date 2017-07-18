@@ -24,6 +24,7 @@ class GenerateReservationsForm(Form):
     end_time = TimeField(label='End Time', input_formats=['%H:%M'], error_messages={'required': 'An end time is required'})
     class_level = ChoiceField(label='Class Level', choices=CLASS_LEVEL_CHOICES, initial=CLASS_LEVELS.index("Freshman/Transfer/Continuing"), error_messages={'required': 'A class level is required'})
     out_of_state = BooleanField(label='Out of State?', required=False)
+    assisted_move_in = BooleanField(label='Assisted move in?', required=False)
     zones = ModelMultipleChoiceField(queryset=Zone.objects.all(), error_messages={'required': 'At least one zone must be selected. If there are no zones from which to choose, please create one.'})
 
     error_messages = {

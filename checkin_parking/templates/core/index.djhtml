@@ -74,17 +74,13 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Times</th>
-                                <th>Out of State Only</th>
-                                <th>Community</th>
-                                <th>Building(s)</th>
+                                <th>Move In Type</th>
                             </tr>
                             {% for move_in_slot in move_in_slot_list %}
                             <tr>
                                 <td>{{ move_in_slot.date }}</td>
                                 <td>{{ move_in_slot.time_range }}</td>
-                                <td>{% if move_in_slot.out_of_state %}Yes{% else %}No{% endif %}</td>
-                                <td>{{ move_in_slot.community }}</td>
-                                <td>{{ move_in_slot.buildings }}</td>
+                                <td>{% if move_in_slot.assisted_move_in %}Assisted{% else %}Self-Guided{% endif %}</td>
                             </tr>
                             {% empty %}
                             <tr>

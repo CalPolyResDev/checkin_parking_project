@@ -36,6 +36,7 @@ class GenerateReservationSlotsView(FormView):
         end_time = form.cleaned_data["end_time"]
         class_level = form.cleaned_data["class_level"]
         out_of_state = form.cleaned_data["out_of_state"]
+        assisted_move_in = form.cleaned_data["assisted_move_in"]
         zones = form.cleaned_data["zones"]
 
         admin_settings = AdminSettings.objects.get_settings()
@@ -58,6 +59,7 @@ class GenerateReservationSlotsView(FormView):
                         reservationslot = ReservationSlot()
                         reservationslot.class_level = class_level
                         reservationslot.out_of_state = out_of_state
+                        reservationslot.assisted_move_in = assisted_move_in
                         reservationslot.timeslot = timeslot
                         reservationslot.zone = zone
                         reservationslot.save()
