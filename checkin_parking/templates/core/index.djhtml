@@ -61,14 +61,7 @@
                 {% for class_level, move_in_slot_list in move_in_slot_dict.items %}
                     <table border="1" class="table_directory">
                         <caption>
-                            {% if 'Freshman/Transfer' != class_level %}
                             <strong>{{ class_level }} Residents</strong>
-                            <!-- 2016 Transfer Wording Change Code Below, remove for future years. -->
-                            {% else %}
-                                <strong>Freshman Residents</strong><br />
-                                <strong>Transfer/Graduate Students (Those who requested Winter Break Housing only)</strong>
-                            {% endif %}
-                            <!-- End Wording Change --> 
                         </caption>
                         <tbody>
                             <tr>
@@ -91,7 +84,7 @@
                     </table>
                 {% endfor %}
                 <p>Sign up and edit your reservation anytime between now and <strong>{{ reservation_close_day }}.</strong></p>
-                <p>Forget to sign up or can't decide? You will be assigned to arrive after regular move-in hours on the designated move-in days, Friday – Sunday for new students or Sunday – Wednesday for continuing students.</p>
+                <p>Forget to sign up or can't decide? You will be assigned to arrive after regular move-in hours on the designated move-in days, Friday – Sunday for new students or Sunday – Tuesday for continuing students.</p>
                 <p>Your Mustang Move-in Pass, with your move-in arrival time, will be provided upon sign up. A confirmation including the pass will also be emailed to you. Please finalize your travel plans based on your final reserved arrival time.</p>
 
                 {% if request.user.is_authenticated %}
