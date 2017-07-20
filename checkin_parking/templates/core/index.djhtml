@@ -97,7 +97,7 @@
                 <p>Sign up and edit your reservation anytime between now and <strong>{{ reservation_close_day }}.</strong></p>
                 <p>Forget to sign up or can't decide? University Housing will assign a move-in arrival time for you in September.</p>
                 <p>Your Mustang Move-in Pass, with your move-in arrival time, will be provided upon sign up. A confirmation including the pass will also be emailed to you. Please finalize your travel plans based on your final reserved arrival time.</p>
-                <p><b>Registration is not available at this time. You will receive an email in the next few days with the correct registration time.</b></p>
+                <p style="color:red;"><b>Registration is not available at this time. You will receive an email in the next few days with the correct registration time.</b></p>
 
                 {% if request.user.is_authenticated %}
                     <a href="{% url 'reservations:reserve' %}"><button class="reserveButton">Reserve Now >></button></a>
