@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='adminsettings',
             name='term_code',
-            field=models.PositiveSmallIntegerField(default='2168', verbose_name='Term Code'),
+            field=models.PositiveSmallIntegerField(default='2178', verbose_name='Term Code'),
         ),
     ]
