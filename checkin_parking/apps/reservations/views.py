@@ -60,7 +60,6 @@ class GenerateReservationSlotsView(FormView):
                         reservationslot = ReservationSlot()
                         reservationslot.class_level = class_level
                         reservationslot.out_of_state = out_of_state
-                        reservationslot.assisted_move_in = assisted_move_in
                         reservationslot.timeslot = timeslot
                         reservationslot.zone = zone
                         reservationslot.save()
