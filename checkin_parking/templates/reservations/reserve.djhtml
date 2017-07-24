@@ -19,6 +19,7 @@
                         <th>Date</th>
                         <th>Start Time</th>
                         <th>End Time</th>
+                        <th>Type</th>
                         <th>Reserve</th>
                     </tr>
                     {% for slot in timeslot_list %}
@@ -26,6 +27,7 @@
                         <td>{{ slot.date }}</td>
                         <td>{{ slot.time }}</td>
                         <td>{{ slot.end_time }}</td>
+                        <td>{% if slot.assisted_move_in %}Assisted{% else %}Self-Guided{% endif %}</td>
                         <td><a class="update">Reserve</a></td>
                     </tr>
                     {% empty %}
