@@ -34,6 +34,7 @@ class TimeSlot(Model):
 
     date = DateField(verbose_name="Date")
     time = TimeField(verbose_name="Time")
+    assisted_move_in = BooleanField(default=False, verbose_name="Assisted Move In?")
     term_code = PositiveSmallIntegerField(verbose_name="Term Code")
 
     @cached_property
@@ -65,7 +66,6 @@ class ReservationSlot(Model):
 
     class_level = CharField(max_length=30, default=CLASS_LEVELS.index(FRESHMAN + '/' + TRANSFER + '/' + CONTINUING), choices=CLASS_LEVEL_CHOICES, verbose_name="Class Level")
     out_of_state = BooleanField(default=False, verbose_name="In State?")
-    assisted_move_in = BooleanField(default=False, verbose_name="Assisted Move In?")
     timeslot = ForeignKey(TimeSlot, related_name="reservationslots", verbose_name="Time Slot")
     zone = ForeignKey(Zone, related_name="reservationslots", verbose_name="Zone")
     resident = OneToOneField(CheckinParkingUser, null=True, blank=True, related_name="reservationslot", verbose_name="Resident", on_delete=SET_NULL)
