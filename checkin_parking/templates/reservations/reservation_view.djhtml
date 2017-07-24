@@ -23,6 +23,7 @@
                     <th scope="col">Start Time</th>
                     <th scope="col">End Time</th>
                     <th scope="col">Zone</th>
+                    <th>Type</th>
                     {% if reservation_open %}
                         <th scope="col">Cancel</th>
                     {% endif %}
@@ -32,6 +33,7 @@
                     <td>{{ reservationslot.timeslot.time }}</td>
                     <td>{{ reservationslot.timeslot.end_time }}</td>
                     <td>{{ reservationslot.zone.name }}</td>
+                    <td>{% if slot.assisted_move_in %}Assisted{% else %}Self-Guided{% endif %}</td>
                     {% if reservation_open %}
                     <td onclick="cancel_reservation();"><a class="delete">Cancel</a></td>
                     {% endif %}

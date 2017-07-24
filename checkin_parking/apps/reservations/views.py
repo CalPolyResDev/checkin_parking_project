@@ -50,6 +50,7 @@ class GenerateReservationSlotsView(FormView):
                 timeslot = TimeSlot()
                 timeslot.date = date
                 timeslot.time = start_time
+                timeslot.assisted_move_in = assisted_move_in
                 timeslot.term_code = admin_settings.term_code
                 timeslot.save()
 
