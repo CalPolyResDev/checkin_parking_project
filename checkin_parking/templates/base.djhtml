@@ -69,7 +69,7 @@
             <div id="rightCol">
                 {% if reservation_open or request.user.reservationslot %}
                 <h2>Resident Resources</h2>
-                <ul>
+                <!--<ul>
                     {% if request.user.reservationslot %}
                     <li><a href="{% url 'reservations:view_reservation' %}">View Reservation</a></li>
                         {% if reservation_open %}
@@ -80,7 +80,7 @@
                         <li><a href="{% url 'reservations:reserve' %}">Reserve</a></li>
                         {% endif %}
                     {% endif %}
-                </ul>
+                </ul>-->
                 {% endif %}
                 {% if request.user.is_admin %}
                 <h2>Administrator Resources</h2>
