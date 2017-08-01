@@ -89,11 +89,7 @@ class CASLDAPBackend(CASBackend):
                             logger.warning('Could not retrieve building: ' + str(resident.address_dict['building']) + ' with community ' + str(resident.address_dict['community']))
 
                         user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
-                        # This is some hacky stuff for move in. Remove it for next year.
-                        application = resident.current_and_valid_application(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
-                        slo_days = application.user_defined_text_3 is not None and 'SLO Days 9/16' in application.user_defined_text_3
-                        user.out_of_state = resident.is_out_of_state or slo_days
-                        # End hacky stuff
+                        user.out_of_state = None
                 else:
                     user.building = None
                     user.term_type = None
