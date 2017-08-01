@@ -92,7 +92,6 @@ class BecomeStudentView(ChainedSelectFormViewMixin, FormView):
         user = self.request.user
         user.building = form.cleaned_data['building']
         user.term_type = form.cleaned_data['term_type']
-        user.out_of_state = form.cleaned_data['out_of_state']
         user.save()
 
         return super(BecomeStudentView, self).form_valid(form)

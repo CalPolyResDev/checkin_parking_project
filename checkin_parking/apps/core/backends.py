@@ -89,11 +89,9 @@ class CASLDAPBackend(CASBackend):
                             logger.warning('Could not retrieve building: ' + str(resident.address_dict['building']) + ' with community ' + str(resident.address_dict['community']))
 
                         user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
-                        user.out_of_state = None
                 else:
                     user.building = None
                     user.term_type = None
-                    user.out_of_state = None
 
                 user.full_name = user_info["displayName"]
                 user.first_name = user_info["givenName"]

@@ -8,11 +8,9 @@
         <div id="mainLeftFull">
             <h1>{% if change_reservation %}Change Reservation{% else %}Mustang Move-in Arrival Times{% endif %}</h1>
             <p>Please select a move-in arrival time from the options below:</p>
-            {% if request.user.out_of_state %}
-                <p>
-                    <strong>Out-of-State Students: If you are attening the Saturday SLODays session, please reserve a move-in arrival time on Friday, Sept. 8.</strong>
-                </p>
-            {% endif %}
+            <p>
+                <strong>Out-of-State Students: If you are attening the Saturday SLODays session, please reserve a move-in arrival time on Friday, Sept. 8.</strong>
+            </p>
             <table border="1" class="table_directory">
                 <tbody>
                     <tr>
