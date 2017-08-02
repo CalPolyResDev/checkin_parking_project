@@ -15,7 +15,7 @@ from ..zones.models import Building
 from .models import CheckinParkingUser
 
 
-@cron(-3, -1, -1, -1, -1)
+@cron(0, 2, -1, -1, -1)
 def update_users_buildings():
     def update_user_building(user):
         address_dict = Resident(principal_name=user.email, term_code=AdminSettings.objects.get_settings().term_code)
