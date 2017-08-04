@@ -59,7 +59,9 @@ def sync_user_data():
         residents = []
         for room_booking in room_bookings:
             try:
-                residents.append(Resident(room_booking=room_booking))
+                res = Resident(room_booking=room_booking)
+                print res
+                residents.append(res)
             except UnsupportedCommunityException:
                 pass
             except AttributeError:
