@@ -74,7 +74,7 @@ def sync_user_data():
                                               first_name=resident.first_name, 
                                               last_name=resident.last_name, 
                                               full_name=resident.first_name + " " + resident.last_name, 
-                                              email=resident.principal_name,
+                                              email=resident.email,
                                               building=Building.objects.get(name=resident.address_dict['building'].replace('_', ' '), community__name=resident.address_dict['community']) if resident.address_dict['building'] else None,
                                               term_type=resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year),
                                               out_of_state=None,)
