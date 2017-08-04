@@ -18,6 +18,7 @@ from ..administration.models import AdminSettings
 from ..zones.models import Building, Community
 from ..core.models import CheckinParkingUser
 
+logger = logging.getLogger(__name__)
 
 def namedtuplefetchall(cursor):
     """
@@ -67,11 +68,11 @@ def sync_user_data():
         # Write data to DB
         admin_settings = AdminSettings.objects.get_settings()
         for resident in residents:
-            CheckinParkingUser.objects.create(username=resident.principal_name, 
+            CheckinParkingUser.objects.create(username=resident.email, 
                                               first_name=resident.first_name, 
                                               last_name=resident.last_name, 
                                               full_name=resident.first_name + " " + resident.last_name, 
-                                              email=resident.principal_name,
+                                              email=resident.email,
                                               building=Building.objects.get(name=resident.address_dict['building'].replace('_', ' '), community__name=resident.address_dict['community']) if resident.address_dict['building'] else None,
                                               term_type=resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year),
                                               out_of_state=None,)
