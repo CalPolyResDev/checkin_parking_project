@@ -92,7 +92,7 @@ class CASLDAPBackend(CASBackend):
                         # This is some hacky stuff for move in. Remove it for next year.
                         application = resident.current_and_valid_application(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
                         slo_days = application.user_defined_text_3 is not None and 'SLO Days 9/16' in application.user_defined_text_3
-                        user.out_of_state = resident.is_out_of_state or slo_days
+                        user.out_of_state = None
                         # End hacky stuff
                 else:
                     user.building = None
