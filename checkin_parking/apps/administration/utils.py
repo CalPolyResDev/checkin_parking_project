@@ -60,7 +60,7 @@ def sync_user_data():
         for room_booking in room_bookings:
             try:
                 res = Resident(room_booking=room_booking)
-                print res
+                print(res)
                 residents.append(res)
             except UnsupportedCommunityException:
                 pass
