@@ -51,7 +51,7 @@ class CASLDAPBackend(CASBackend):
             except Exception as msg:
                 logger.exception(msg)
             else:
-                principal_name = str(user.username)
+                principal_name = str(user_info["userPrincipalName"])
 
                 staff_list = [member["userPrincipalName"] for member in ADGroup(settings.LDAP_ADMIN_GROUP).get_tree_members()]
                 scanner_list = [member["userPrincipalName"] for member in ADGroup(settings.LDAP_SCANNER_GROUP).get_tree_members()]
@@ -90,13 +90,15 @@ class CASLDAPBackend(CASBackend):
 
                         user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
                 else:
-                    user.building = None
-                    user.term_type = None
+                    admin_settings = AdminSettings.objects.get_settings()
+                    resident = Resident(principal_name=principal_name, term_code=admin_settings.term_code)
+                    user.building = Building.objects.get(name=resident.address_dict['building'].replace('_', ' '), community__name=resident.address_dict['community']) if resident.address_dict['building'] else None
+                    user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
 
                 user.full_name = user_info["displayName"]
                 user.first_name = user_info["givenName"]
                 user.last_name = user_info["sn"]
-                user.email = user.username
+                user.email = user_info["mail"]
                 user.save()
 
         return user
