@@ -51,7 +51,7 @@ class CASLDAPBackend(CASBackend):
             except Exception as msg:
                 logger.exception(msg)
             else:
-                principal_name = str(user_info["userPrincipalName"])
+                principal_name = str(user.username)
 
                 staff_list = [member["userPrincipalName"] for member in ADGroup(settings.LDAP_ADMIN_GROUP).get_tree_members()]
                 scanner_list = [member["userPrincipalName"] for member in ADGroup(settings.LDAP_SCANNER_GROUP).get_tree_members()]
