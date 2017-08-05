@@ -70,10 +70,8 @@ class CASLDAPBackend(CASBackend):
                     user.is_staff = True
                     user.is_superuser = True
 
-                admin_settings = AdminSettings.objects.get_settings()
-                resident = Resident(principal_name=user.username, term_code=admin_settings.term_code)
-                user.building = Building.objects.get(name=resident.address_dict['building'].replace('_', ' '), community__name=resident.address_dict['community']) if resident.address_dict['building'] else None
-                user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
+                user.building = None
+                user.term_type = None
 
                 logger.warning("Username: " + user.username)
                 logger.warning("Principal Name: " + str(user_info["userPrincipalName"]))
