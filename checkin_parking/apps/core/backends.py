@@ -95,6 +95,9 @@ class CASLDAPBackend(CASBackend):
                     user.building = Building.objects.get(name=resident.address_dict['building'].replace('_', ' '), community__name=resident.address_dict['community']) if resident.address_dict['building'] else None
                     user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
 
+                print("Username: " + user.username)
+                print("Principal Name: " + str(user_info["userPrincipalName"]))
+
                 user.full_name = user_info["displayName"]
                 user.first_name = user_info["givenName"]
                 user.last_name = user_info["sn"]
