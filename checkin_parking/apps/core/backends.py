@@ -96,7 +96,7 @@ class CASLDAPBackend(CASBackend):
                 user.full_name = user_info["displayName"]
                 user.first_name = user_info["givenName"]
                 user.last_name = user_info["sn"]
-                user.email = user_info["mail"]
+                user.email = user.username
                 user.save()
 
         return user
