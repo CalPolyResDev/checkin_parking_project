@@ -70,8 +70,30 @@ class CASLDAPBackend(CASBackend):
                     user.is_staff = True
                     user.is_superuser = True
 
-                user.building = None
-                user.term_type = None
+                # Ensure that non-admins who log in are future residents
+                if not user.is_admin and not user.is_scanner and not user.is_superuser:
+                    admin_settings = AdminSettings.objects.get_settings()
+
+                    try:
+                        resident = Resident(principal_name=principal_name, term_code=admin_settings.term_code)
+                    except ObjectDoesNotExist:
+                        raise ValidationError("University Housing has no record of {principal_name}.".format(principal_name=principal_name))
+                    else:
+                        if not resident.has_current_and_valid_application(application_term=admin_settings.application_term, application_year=admin_settings.application_year):
+                            raise ValidationError("{principal_name} does not have a valid housing application.".format(principal_name=principal_name))
+
+                        try:
+                            user.building = Building.objects.get(name=resident.address_dict['building'].replace('_', ' '), community__name=resident.address_dict['community']) if resident.address_dict['building'] else None
+                        except ObjectDoesNotExist:
+                            user.building = None
+                            logger.warning('Could not retrieve building: ' + str(resident.address_dict['building']) + ' with community ' + str(resident.address_dict['community']))
+
+                        user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
+                else:
+                    admin_settings = AdminSettings.objects.get_settings()
+                    resident = Resident(principal_name=principal_name, term_code=admin_settings.term_code)
+                    user.building = Building.objects.get(name=resident.address_dict['building'].replace('_', ' '), community__name=resident.address_dict['community']) if resident.address_dict['building'] else None
+                    user.term_type = resident.application_term_type(application_term=admin_settings.application_term, application_year=admin_settings.application_year)
 
                 logger.warning("Username: " + user.username)
                 logger.warning("Principal Name: " + str(user_info["userPrincipalName"]))
@@ -79,7 +101,7 @@ class CASLDAPBackend(CASBackend):
                 user.full_name = user_info["displayName"]
                 user.first_name = user_info["givenName"]
                 user.last_name = user_info["sn"]
-                user.email = user.username
+                user.email = user_info["mail"]
                 user.save()
 
         return user
