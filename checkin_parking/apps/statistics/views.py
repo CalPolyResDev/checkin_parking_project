@@ -85,7 +85,7 @@ class StatisticsPage(TemplateView):
             ('Freshman Reservations', ReservationSlot.objects.filter(resident__term_type='Freshman').count()),
             ('Continuing Reservations', ReservationSlot.objects.filter(resident__term_type='Continuing').count()),
             ('Transfer Reservations', ReservationSlot.objects.filter(resident__term_type='Transfer').count()),
-            ('% Full', '{:.2%}'.format(reservations_filled / total_reservation_slots)),
+            ('% Full', '{:.2%}'.format(reservations_filled / total_reservation_slots if total_reservation_slots != 0 else 0)),
             ('QRStats Scanned', ReservationSlot.objects.filter(resident__isnull=False, last_scanned__isnull=False).count()),
             ('QRStats Scanned On-Time', ReservationSlot.objects.filter(resident__isnull=False, last_scanned_on_time=True).count()),
             ('QRStats Scanned Off-Time', ReservationSlot.objects.filter(resident__isnull=False, last_scanned_on_time=False).count()),
