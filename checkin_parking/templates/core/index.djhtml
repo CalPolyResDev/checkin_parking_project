@@ -81,7 +81,7 @@
                             <tr>
                                 <td>{{ move_in_slot.date }}</td>
                                 <td>{{ move_in_slot.time_range }}</td>
-                                <td>{% if move_in_slot.assisted %}Yes{% else %}No{% endif %}</td>
+                                <td>{% if move_in_slot.assisted %}Assisted{% else %}Self-Guided{% endif %}</td>
                                 <td>{{ move_in_slot.community }}</td>
                                 <td>{{ move_in_slot.buildings }}</td>
                             </tr>
