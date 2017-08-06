@@ -35,7 +35,7 @@ class GenerateReservationSlotsView(FormView):
         start_time = form.cleaned_data["start_time"]
         end_time = form.cleaned_data["end_time"]
         class_level = form.cleaned_data["class_level"]
-        out_of_state = form.cleaned_data["out_of_state"]
+        assisted = form.cleaned_data["assisted"]
         zones = form.cleaned_data["zones"]
 
         admin_settings = AdminSettings.objects.get_settings()
@@ -57,7 +57,7 @@ class GenerateReservationSlotsView(FormView):
                     for index in range(zone.capacity):
                         reservationslot = ReservationSlot()
                         reservationslot.class_level = class_level
-                        reservationslot.out_of_state = out_of_state
+                        reservationslot.assisted = assisted
                         reservationslot.timeslot = timeslot
                         reservationslot.zone = zone
                         reservationslot.save()
@@ -147,7 +147,6 @@ class ReserveView(ListView):
     def get_queryset(self, **kwargs):
         building = self.request.user.building
         term_type = self.request.user.term_type
-        out_of_state = self.request.user.out_of_state
 
         if not term_type:
             raise FieldError('Could not retrieve class level. Please call ResNet at (805) 756-5600.')
@@ -160,10 +159,6 @@ class ReserveView(ListView):
         # Show building specific slots as well
         if building:
             queryset = queryset | base_queryset.filter(reservationslots__zone__buildings=building)
-
-        # Don't let in state kids take the good times.
-        if not out_of_state:
-            queryset = queryset.exclude(reservationslots__out_of_state=True)
 
         queryset = queryset.order_by('date', 'time')
 

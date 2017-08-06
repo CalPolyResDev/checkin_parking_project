@@ -48,7 +48,7 @@ class IndexView(TemplateView):
                 "date": date,
                 "time_range": first_reservation.timeslot.time.strftime(settings.PYTHON_TIME_FORMAT) + " - " + delta.strftime(settings.PYTHON_TIME_FORMAT),
                 "community": first_reservation.zone.community.name,
-                "out_of_state": first_reservation.out_of_state,
+                "assisted": first_reservation.assisted,
                 "buildings": ', '.join(first_reservation.zone.buildings.values_list('name', flat=True)),
             })
 
