@@ -52,20 +52,16 @@ def sync_zone_data():
 def sync_user_data():
     with transaction.atomic():
         # Purge User Data
-        CheckinParkingUser.objects.all().delete()
+        # CheckinParkingUser.objects.all().delete()
 
-        # Grab user data from RMS and copy to DB
-        room_bookings = RoomBooking.objects.filter(term__term_id__icontains=get_current_term(), check_out=None)
+        # Grab user data from tsv file and copy to DB
+        f = open("/Users/kylereis/Documents/coding/ResDev/projects/checkin_parking_project/static/resident_emails.tsv","r")
         residents = []
-        for room_booking in room_bookings:
+        for email in f:
             try:
-                res = Resident(room_booking=room_booking)
-                print(res)
-                residents.append(res)
-            except UnsupportedCommunityException:
-                pass
+                residents.append(Resident(principal_name=email.strip(), term_code="2178"))
             except AttributeError:
-                logger.exception(room_booking)
+                logger.exception(email)
 
         logger.debug("Sync Users: Exporting residents. Initiating data migration.")
 
