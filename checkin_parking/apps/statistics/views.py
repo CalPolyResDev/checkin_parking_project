@@ -25,7 +25,7 @@ class CSVStatisticsView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         file = io.StringIO()
-        field_names = ['date', 'time', 'zone', 'out_of_state_only_slot', 'resident_first_name', 'resident_last_name', 'resident_full_name',
+        field_names = ['date', 'time', 'zone', 'resident_first_name', 'resident_last_name', 'resident_full_name',
                        'resident_username', 'resident_class_level', 'resident_out_of_state']
         writer = csv.DictWriter(file, field_names)
         writer.writeheader()
@@ -35,7 +35,6 @@ class CSVStatisticsView(TemplateView):
                 'date': reservation_slot.timeslot.date,
                 'time': reservation_slot.timeslot.time,
                 'zone': reservation_slot.zone.name,
-                'out_of_state_only_slot': reservation_slot.out_of_state,
                 'resident_first_name': reservation_slot.resident.first_name,
                 'resident_last_name': reservation_slot.resident.last_name,
                 'resident_full_name': reservation_slot.resident.full_name,
@@ -87,8 +86,6 @@ class StatisticsPage(TemplateView):
             ('Continuing Reservations', ReservationSlot.objects.filter(resident__term_type='Continuing').count()),
             ('Transfer Reservations', ReservationSlot.objects.filter(resident__term_type='Transfer').count()),
             ('% Full', '{:.2%}'.format(reservations_filled / total_reservation_slots)),
-            ('Out-of-State Reservations', ReservationSlot.objects.filter(resident__out_of_state=True).count()),
-            ('Out-of-State Reservations in Out-of-State Only Slots', ReservationSlot.objects.filter(out_of_state=True, resident__isnull=False).count()),
             ('QRStats Scanned', ReservationSlot.objects.filter(resident__isnull=False, last_scanned__isnull=False).count()),
             ('QRStats Scanned On-Time', ReservationSlot.objects.filter(resident__isnull=False, last_scanned_on_time=True).count()),
             ('QRStats Scanned Off-Time', ReservationSlot.objects.filter(resident__isnull=False, last_scanned_on_time=False).count()),
@@ -159,51 +156,7 @@ class ClassLevelChartData(JSONResponseView):
         context['data'] = series
 
         return context
-
-
-class ResidencyChartData(JSONResponseView):
-
-    def get_context_data(self, **kwargs):
-        resident_null = True if kwargs['show_remaining'] == 'True' else False
-
-        context = {}
-
-        in_state_points = []
-        out_of_state_points = []
-
-        in_state_filter_kwargs = {'resident__isnull': resident_null}
-        out_of_state_filter_kwargs = {'resident__isnull': resident_null}
-
-        if not resident_null:
-            in_state_filter_kwargs['resident__out_of_state'] = False
-            out_of_state_filter_kwargs['resident__out_of_state'] = True
-        else:
-            in_state_filter_kwargs['out_of_state'] = False
-            out_of_state_filter_kwargs['out_of_state'] = True
-
-        for timeslot in modify_query_for_date(TimeSlot.objects.all().order_by('date', 'time'), kwargs):
-            in_state_points.append([
-                datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
-                timeslot.reservationslots.filter(**in_state_filter_kwargs).count(),
-            ])
-
-            out_of_state_points.append([
-                datetime.combine(timeslot.date, timeslot.time).replace(tzinfo=timezone.utc).timestamp() * 1000,
-                timeslot.reservationslots.filter(**out_of_state_filter_kwargs).count(),
-            ])
-
-        add_overnight_points(in_state_points)
-        add_overnight_points(out_of_state_points)
-
-        series = [
-            generate_series('In State', in_state_points, 'area'),
-            generate_series('Out of State', out_of_state_points, 'area'),
-        ]
-
-        context['data'] = series
-
-        return context
-    
+  
 class QRChartData(JSONResponseView):
 
     def get_context_data(self, **kwargs):
