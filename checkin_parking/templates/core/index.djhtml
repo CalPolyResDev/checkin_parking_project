@@ -57,42 +57,16 @@
                     To ensure a safe & convenient move-in experience, residents must have a <strong>Mustang Move-in Pass</strong>. This pass is secured by <strong>signing up for a move-in arrival time</strong> for vehicle unloading, check-in, and
                     long-term parking on the following student move-in dates.
                 </p>
+
                 <h3>Move-in Dates</h3>
-                {% for class_level, move_in_slot_list in move_in_slot_dict.items %}
-                    <table border="1" class="table_directory">
-                        <caption>
-                            {% if 'Freshman/Transfer' != class_level %}
-                                <strong>{{ class_level }} Residents</strong>
-                            <!-- 2016 Transfer Wording Change Code Below, remove for future years. -->
-                            {% else %}
-                                <strong>Freshman/Transfer Residents</strong><br />
-                            {% endif %}
-                            <!-- End Wording Change --> 
-                        </caption>
-                        <tbody>
-                            <tr>
-                                <th>Date</th>
-                                <th>Times</th>
-                                <th>Assisted Move In</th>
-                                <th>Community</th>
-                                <th>Building(s)</th>
-                            </tr>
-                            {% for move_in_slot in move_in_slot_list %}
-                            <tr>
-                                <td>{{ move_in_slot.date }}</td>
-                                <td>{{ move_in_slot.time_range }}</td>
-                                <td>{% if move_in_slot.assisted %}Assisted{% else %}Self-Guided{% endif %}</td>
-                                <td>{{ move_in_slot.community }}</td>
-                                <td>{{ move_in_slot.buildings }}</td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="6">There are currently no available move-in time slots.</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% endfor %}
+                <p><strong>Freshmen and Transfer Residents</strong></p>
+                <p><strong>Friday, Sept. 8 - Sunday, Sept. 10</strong></p>
+                <p>Friday & Saturday are assisted move-in days. Sunday is a self-guided move-in day.</p>
+                <br />
+                <p><strong>Continuing Residents</strong></p>
+                <p><strong>Sunday, Sept. 10 - Tuesday, Sept. 12</strong></p>
+                
+                <p>Sunday & Tuesday are self-guided days. Monday is an assisted move-in day (assistance provided at Poly Canyon Village only).</p>
                 <p>Sign up and edit your reservation anytime between now and <strong>{{ reservation_close_day }}.</strong></p>
                 <p>Forget to sign up or can't decide? University Housing will assign a move-in arrival time for you in September.</p>
                 <p>Your Mustang Move-in Pass, with your move-in arrival time, will be provided upon sign up. A confirmation including the pass will also be emailed to you. Please finalize your travel plans based on your final reserved arrival time.</p>

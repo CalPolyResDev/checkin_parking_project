@@ -22,6 +22,7 @@
         <paraStyle name="additional_note" fontName="Helvetica-Bold" fontSize="15"/>
         <paraStyle name="date" fontName="Helvetica-Bold" fontSize="30"  alignment="center"/>
         <paraStyle name="time_interval" fontName="Helvetica-Bold" fontSize="48" alignment="center"/>
+        <paraStyle name="time_generated" fontName="Helvetica-Bold" fontSize="24" alignment="center"/>
         <paraStyle name="zone_and_building" fontName="Helvetica-Bold" fontSize="42" alignment="center"/>
         <paraStyle name="dashboard_note" fontName="Helvetica-Bold" fontSize="36" alignment="center"/>
         <paraStyle name="important_instruction" fontName="Helvetica-Bold" fontSize="10"/>
@@ -50,7 +51,8 @@
         </ul>
         <para style="date" spaceBefore="1.25in">{{ parking.date }}</para>
         <para style="time_interval" spaceBefore=".05in">{{ parking.start|time:"h:iA" }} - {{ parking.end|time:"h:iA" }}</para>
-        <para style="zone_and_building" spaceBefore=".25in">Zone: {{ parking.zone }}</para>
+        <para style="time_generated" spaceBefore=".03in">Generated: {{ date_generated }}</para>
+        <para style="zone_and_building" spaceBefore=".25in">{{ parking.zone }}</para>
         <para style="dashboard_note" spaceBefore="1in">Bring This Pass with You</para>        
     </story>
     

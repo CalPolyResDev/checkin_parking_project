@@ -8,6 +8,7 @@
 
 from pathlib import Path
 
+from datetime import date as datetime_date, datetime, timedelta
 from django.core.urlresolvers import reverse
 from django.template.context import Context
 from django.template.loader import get_template
@@ -35,6 +36,7 @@ def generate_pdf_file(reservation_slot, verification_url):
     context['resident'] = reservation_slot.resident
     context['cal_poly_logo_path'] = Path(MEDIA_ROOT).joinpath('pdf_assets/cp_sa_uh_logo.jpg')
     context['parking'] = parking
+    context['date_generated'] = datetime_date.today()
     context['qr_code_url'] = verification_url
     context['timeslot_length'] = AdminSettings.objects.get_settings().timeslot_length
 
