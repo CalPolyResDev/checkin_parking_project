@@ -59,14 +59,18 @@
                 </p>
 
                 <h3>Move-in Dates</h3>
-                <p><strong>Freshmen and Transfer Residents</strong></p>
-                <p><strong>Friday, Sept. 8 - Sunday, Sept. 10</strong></p>
-                <p>Friday & Saturday are assisted move-in days. Sunday is a self-guided move-in day.</p>
-                <br />
-                <p><strong>Continuing Residents</strong></p>
-                <p><strong>Sunday, Sept. 10 - Tuesday, Sept. 12</strong></p>
-                
-                <p>Sunday & Tuesday are self-guided days. Monday is an assisted move-in day (assistance provided at Poly Canyon Village only).</p>
+                <p>
+                    <strong>Freshmen and Transfer Residents</strong><br />
+                    <strong>Friday, Sept. 8 - Sunday, Sept. 10</strong><br />
+                    Friday & Saturday are assisted move-in days. Sunday is a self-guided move-in day.
+                </p>
+
+                <p>
+                    <strong>Continuing Residents</strong><br /><br />
+                    <strong>Sunday, Sept. 10 - Tuesday, Sept. 12</strong><br />
+                    Sunday & Tuesday are self-guided days. Monday is an assisted move-in day (assistance provided at Poly Canyon Village only).
+                </p>
+
                 <p>Sign up and edit your reservation anytime between now and <strong>{{ reservation_close_day }}.</strong></p>
                 <p>Forget to sign up or can't decide? University Housing will assign a move-in arrival time for you in September.</p>
                 <p>Your Mustang Move-in Pass, with your move-in arrival time, will be provided upon sign up. A confirmation including the pass will also be emailed to you. Please finalize your travel plans based on your final reserved arrival time.</p>
