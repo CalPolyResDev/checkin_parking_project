@@ -82,8 +82,11 @@
                 {% endif %}
             {% else %}
                 <p> The window to schedule a short-term loading/unloading time for move-in is now closed. If you missed the window, you may move in as follows: </p> 
-                <p> Freshmen:  Friday, Sept. 8, through Sunday, Sept. 10, 6 p.m. - 10 p.m. </p>
-                <p> Continuing Students:  Sunday, Sept. 10, through Tuesday, Sept. 12, 6 p.m. - 10 p.m. or Wednesday, Sept. 13, 8 a.m. - 6 p.m.  </p>
+                <p> 
+                    <strong> Freshmen: </strong><br />
+                    Friday, Sept. 8, through Sunday, Sept. 10, 6 p.m. - 10 p.m. <br />
+                    <strong>Continuing Students: </strong><br />
+                    Sunday, Sept. 10, through Tuesday, Sept. 12, 6 p.m. - 10 p.m. or Wednesday, Sept. 13, 8 a.m. - 6 p.m.  </p>
                 <p> Thank you. </p>
 
                 {% if not request.user.is_authenticated %}<h2>If you reserved a session while reservation was still open, you may view your reservation by <a href="{% url 'core:login' %}">logging in</a>.</h2>{% endif %}
