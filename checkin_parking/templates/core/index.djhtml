@@ -72,7 +72,7 @@
                 </p>
 
                 <p>Sign up and edit your reservation anytime between now and <strong>{{ reservation_close_day }}.</strong></p>
-                <p>Forget to sign up or can't decide? University Housing will assign a move-in arrival time for you in September.</p>
+                <p>Forget to sign up or can't decide? You can arrive after regular move-in hours on the designated move-in days.</p>
                 <p>Your Mustang Move-in Pass, with your move-in arrival time, will be provided upon sign up. A confirmation including the pass will also be emailed to you. Please finalize your travel plans based on your final reserved arrival time.</p>
 
                 {% if request.user.is_authenticated %}
@@ -82,7 +82,8 @@
                 {% endif %}
             {% else %}
                 <p> The window to schedule a short-term loading/unloading time for move-in is now closed. If you missed the window, you may move in as follows: </p> 
-                <p> Freshmen:  Saturday, Sept. 9,  6 p.m. - midnight and Sunday, Sept 10, 6 p.m. - 10 p.m.  Continuing Students:  Wednesday, Sept. 13, 8 a.m. - 6 p.m.  </p>
+                <p> Freshmen:  Friday, Sept. 8, through Sunday, Sept. 10, 6 p.m. - 10 p.m. </p>
+                <p> Continuing Students:  Sunday, Sept. 10, through Tuesday, Sept. 12, 6 p.m. - 10 p.m. or Wednesday, Sept. 13, 8 a.m. - 6 p.m.  </p>
                 <p> Thank you. </p>
 
                 {% if not request.user.is_authenticated %}<h2>If you reserved a session while reservation was still open, you may view your reservation by <a href="{% url 'core:login' %}">logging in</a>.</h2>{% endif %}
