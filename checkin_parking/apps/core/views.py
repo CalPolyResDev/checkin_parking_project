@@ -27,36 +27,6 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(TemplateView, self).get_context_data(**kwargs)
 
-        move_in_slot_dict = defaultdict(list)
-
-        reservation_date_dict = defaultdict(list)
-        reservation_slots = ReservationSlot.objects.filter(resident__isnull=True).distinct().select_related('timeslot', 'zone', 'zone__community')
-
-        timeslot_length = AdminSettings.objects.get_settings().timeslot_length
-
-        for reservation in reservation_slots:
-            reservation_date_dict[reservation.timeslot.date].append(reservation)
-
-        for date, reservation_slots in reservation_date_dict.items():
-            reservation_slots.sort(key=attrgetter("timeslot.time"))
-
-            delta = datetime.combine(datetime_date.today(), reservation_slots[-1].timeslot.time)
-
-            first_reservation = reservation_slots[0]
-
-            move_in_slot_dict[first_reservation.class_level].append({
-                "date": date,
-                "time_range": first_reservation.timeslot.time.strftime(settings.PYTHON_TIME_FORMAT) + " - " + delta.strftime(settings.PYTHON_TIME_FORMAT),
-                "community": first_reservation.zone.community.name,
-                "assisted": first_reservation.assisted,
-                "buildings": ', '.join(first_reservation.zone.buildings.values_list('name', flat=True)),
-            })
-
-        for community, reservation_slots in move_in_slot_dict.items():
-            reservation_slots.sort(key=itemgetter('date'))
-
-        context["move_in_slot_dict"] = dict(move_in_slot_dict)  # Reason for conversion: https://code.djangoproject.com/ticket/16335
-
         return context
 
 

@@ -74,7 +74,6 @@ def sync_user_data():
                                               full_name=resident.first_name + " " + resident.last_name, 
                                               email=resident.email,
                                               building=Building.objects.get(name=resident.address_dict['building'].replace('_', ' '), community__name=resident.address_dict['community']) if resident.address_dict['building'] else None,
-                                              term_type=resident.application_term_type(application_term="FA", application_year="2017"),
-                                              out_of_state=None,)
+                                              term_type=resident.application_term_type(application_term="FA", application_year="2017"),)
 
         logger.debug("Sync Users: Export of residents completed successfully.")

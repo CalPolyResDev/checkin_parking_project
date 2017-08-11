@@ -45,7 +45,6 @@ class CheckinParkingUser(AbstractBaseUser, PermissionsMixin):
     email = EmailField(blank=True, verbose_name='Email Address')
     building = ForeignKey(Building, null=True, blank=True, related_name='residents')
     term_type = CharField(max_length=15, null=True, blank=True, verbose_name='Class Level')
-    out_of_state = NullBooleanField()
 
     is_active = BooleanField(default=True)
     is_staff = BooleanField(default=False)

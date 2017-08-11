@@ -26,7 +26,7 @@ class CSVStatisticsView(TemplateView):
 
         file = io.StringIO()
         field_names = ['date', 'time', 'zone', 'resident_first_name', 'resident_last_name', 'resident_full_name',
-                       'resident_username', 'resident_class_level', 'resident_out_of_state']
+                       'resident_username', 'resident_class_level']
         writer = csv.DictWriter(file, field_names)
         writer.writeheader()
 
@@ -40,7 +40,6 @@ class CSVStatisticsView(TemplateView):
                 'resident_full_name': reservation_slot.resident.full_name,
                 'resident_username': reservation_slot.resident.username,
                 'resident_class_level': reservation_slot.resident.term_type,
-                'resident_out_of_state': reservation_slot.resident.out_of_state,
             }
 
             writer.writerow(entry)
