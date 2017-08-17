@@ -64,7 +64,7 @@ class ReservationSlot(Model):
     """ A parking session."""
 
     class_level = CharField(max_length=30, default=CLASS_LEVELS.index(FRESHMAN + '/' + TRANSFER + '/' + CONTINUING), choices=CLASS_LEVEL_CHOICES, verbose_name="Class Level")
-    assisted = BooleanField(default=False, required=False, verbose_name="assisted?")
+    assisted = BooleanField(default=False, verbose_name="assisted?")
     timeslot = ForeignKey(TimeSlot, related_name="reservationslots", verbose_name="Time Slot")
     zone = ForeignKey(Zone, related_name="reservationslots", verbose_name="Zone")
     resident = OneToOneField(CheckinParkingUser, null=True, blank=True, related_name="reservationslot", verbose_name="Resident", on_delete=SET_NULL)
