@@ -74,7 +74,7 @@ class StatisticsPage(TemplateView):
         qrstats_num_scanned_off_time_late = 0
         
         for off_time_scan in reservation_slots_scanned_off_time:
-            if off_time_scan.timeslot.datetime_obj < off_time_scan.last_scanned:
+            if off_time_scan.timeslot.datetime_obj > off_time_scan.last_scanned:
                 qrstats_num_scanned_off_time_early += 1
             else:
                 qrstats_num_scanned_off_time_late += 1
