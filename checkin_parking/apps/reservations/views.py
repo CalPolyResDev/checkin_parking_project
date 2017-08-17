@@ -106,7 +106,7 @@ class ParkingPassVerificationView(TemplateView):
                 reservation_slot.last_scanned_on_time = False
                 if timeslot.datetime_obj > datetime.now():
                     context['scanned_early'] = True
-                    time_delta = datetime.now() - timeslot.datetime_obj
+                    time_delta = timeslot.datetime_obj - datetime.now()
                     context['num_minutes_early'] = int(round(time_delta.seconds / 60))
             reservation_slot.save()
 
